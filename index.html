@@ -645,7 +645,7 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-function userPath(col){ return \`users/\${currentUser.uid}/\${col}\`; }
+function userPath(col){ return `users/${currentUser.uid}/${col}`; }
 
 // ── ESTADO LOCAL ─────────────────────────────────────────────────────
 const S={
