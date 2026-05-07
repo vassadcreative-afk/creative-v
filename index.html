@@ -305,6 +305,23 @@ textarea{resize:vertical;min-height:72px}
 </head>
 <body>
 
+<!-- TELA DE LOGIN -->
+<div id="login-screen" style="display:flex;position:fixed;inset:0;z-index:9999;background:var(--grad-dark);align-items:center;justify-content:center;flex-direction:column;gap:24px">
+  <div style="text-align:center">
+    <div style="font-size:36px;margin-bottom:8px">✦</div>
+    <div style="font-size:28px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px">Creative V</div>
+    <div style="color:rgba(255,255,255,.45);font-size:14px;margin-top:6px">Gestão de clientes e tarefas</div>
+  </div>
+  <button onclick="doLogin()" style="display:flex;align-items:center;gap:12px;background:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#1A1628;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.2);transition:all .18s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Entrar com Google
+  </button>
+  <div style="color:rgba(255,255,255,.25);font-size:12px">Seus dados ficam protegidos e sincronizados</div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app-root" style="display:none;flex-direction:column;height:100%">
+
 <header>
   <div style="display:flex;align-items:center;gap:8px">
     <button id="menu-btn" onclick="toggleDrawer()">☰</button>
@@ -316,6 +333,11 @@ textarea{resize:vertical;min-height:72px}
     <button class="nav-btn" data-view="calendario" onclick="setView('calendario',this)">Calendário</button>
   </nav>
   <button class="btn-new" onclick="openNewTask()">+ Nova tarefa</button>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <img id="user-avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none" src="" alt="">
+    <span id="user-name" style="color:rgba(255,255,255,.6);font-size:12px;font-weight:600;display:none;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" class="hdr-center"></span>
+    <button onclick="doLogout()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:inherit;font-size:11px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer" title="Sair">Sair</button>
+  </div>
 </header>
 
 <div class="sd-overlay" id="sd-overlay" onclick="toggleDrawer()"></div>
@@ -345,6 +367,10 @@ textarea{resize:vertical;min-height:72px}
           <div class="stat-pill"><div class="stat-num" id="st-e">0</div><div class="stat-lbl">EVENTOS</div></div>
           <div class="stat-pill"><div class="stat-num" id="st-c">0</div><div class="stat-lbl">CLIENTES</div></div>
         </div>
+      </div>
+      <div class="sync-bar" style="margin-top:-10px">
+        <div class="sync-dot on" id="fb-dot" style="background:#E8A870"></div>
+        <div class="sync-lbl" id="fb-lbl">Conectando ao banco de dados...</div>
       </div>
       <div class="sync-bar">
         <div class="sync-dot off" id="sdot"></div>
@@ -564,17 +590,157 @@ textarea{resize:vertical;min-height:72px}
   </div>
 </div>
 
-<script>
-const S={
-  clients:[{id:1,name:'Cliente A',color:'#786FD4'},{id:2,name:'Cliente B',color:'#D097C4'}],
-  tasks:[
-    {id:1,title:'Enviar proposta revisada',clientId:1,priority:'alta',status:'todo',date:td(),notes:'Revisar os valores antes de enviar.',link:''},
-    {id:2,title:'Reunião de alinhamento semanal',clientId:2,priority:'normal',status:'doing',date:td(),notes:'',link:''},
-    {id:3,title:'Revisar contrato de serviço',clientId:1,priority:'baixa',status:'waiting',date:td(),notes:'',link:''},
-    {id:4,title:'Análise de resultados Q2',clientId:2,priority:'normal',status:'todo',date:td(),notes:'Ver métricas do mês anterior.',link:'https://docs.google.com/'},
-  ],
-  calEvents:[],filter:'all',month:new Date(),color:'#786FD4',nextC:3,nextT:5,editingId:null,
+<script type="module">
+// ── FIREBASE ────────────────────────────────────────────────────────
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDo7-tveuX77Rzh1mfed_OSonLmiYrrVi0",
+  authDomain: "creative-v.firebaseapp.com",
+  projectId: "creative-v",
+  storageBucket: "creative-v.firebasestorage.app",
+  messagingSenderId: "187990804568",
+  appId: "1:187990804568:web:2f00073e8494506f15a22d"
 };
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+let unsubTasks = null;
+let unsubClients = null;
+
+// ── LOGIN / LOGOUT ───────────────────────────────────────────────────
+window.doLogin = async function(){
+  try{ await signInWithPopup(auth, provider); }
+  catch(e){ console.error(e); }
+};
+window.doLogout = async function(){
+  if(unsubTasks) unsubTasks();
+  if(unsubClients) unsubClients();
+  await signOut(auth);
+  currentUser = null;
+  S.tasks=[]; S.clients=[]; S.calEvents=[];
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app-root').style.display='none';
+};
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    currentUser = user;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-root').style.display='flex';
+    document.getElementById('user-name').textContent = user.displayName||user.email;
+    const av = document.getElementById('user-avatar');
+    if(user.photoURL){ av.src=user.photoURL; av.style.display='block'; }
+    else { av.style.display='none'; }
+    startListeners();
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app-root').style.display='none';
+  }
+});
+
+function userPath(col){ return \`users/\${currentUser.uid}/\${col}\`; }
+
+// ── ESTADO LOCAL ─────────────────────────────────────────────────────
+const S={
+  clients:[],
+  tasks:[],
+  calEvents:[],filter:'all',month:new Date(),color:'#786FD4',nextC:1,nextT:1,editingId:null,
+};
+
+// ── INDICADOR DE SYNC ────────────────────────────────────────────────
+function setSyncStatus(status){
+  // status: 'loading' | 'ok' | 'error'
+  const dot=document.getElementById('fb-dot');
+  const lbl=document.getElementById('fb-lbl');
+  if(!dot||!lbl)return;
+  if(status==='loading'){dot.style.background='#E8A870';lbl.textContent='Sincronizando...';}
+  else if(status==='ok'){dot.style.background='#70C4A8';lbl.textContent='Dados salvos na nuvem ✓';}
+  else{dot.style.background='#E85D5D';lbl.textContent='Erro ao sincronizar';}
+}
+
+// ── FIREBASE: SALVAR / DELETAR ───────────────────────────────────────
+async function saveTaskDB(t){
+  if(!currentUser)return;
+  try{
+    await setDoc(doc(db,'users',currentUser.uid,'tasks',String(t.id)),t);
+    setSyncStatus('ok');
+  }catch(e){setSyncStatus('error');console.error(e);}
+}
+async function deleteTaskDB(id){
+  if(!currentUser)return;
+  try{
+    await deleteDoc(doc(db,'users',currentUser.uid,'tasks',String(id)));
+    setSyncStatus('ok');
+  }catch(e){setSyncStatus('error');console.error(e);}
+}
+async function saveClientDB(c){
+  if(!currentUser)return;
+  try{
+    await setDoc(doc(db,'users',currentUser.uid,'clients',String(c.id)),c);
+    setSyncStatus('ok');
+  }catch(e){setSyncStatus('error');console.error(e);}
+}
+async function deleteClientDB(id){
+  if(!currentUser)return;
+  try{
+    await deleteDoc(doc(db,'users',currentUser.uid,'clients',String(id)));
+    setSyncStatus('ok');
+  }catch(e){setSyncStatus('error');console.error(e);}
+}
+
+// ── FIREBASE: ESCUTA EM TEMPO REAL ───────────────────────────────────
+function startListeners(){
+  if(unsubTasks) unsubTasks();
+  if(unsubClients) unsubClients();
+  setSyncStatus('loading');
+  unsubTasks = onSnapshot(collection(db,'users',currentUser.uid,'tasks'), snap=>{
+    S.tasks=snap.docs.map(d=>d.data());
+    const ids=S.tasks.map(t=>t.id);
+    S.nextT=ids.length?Math.max(...ids)+1:1;
+    renderAll();
+    setSyncStatus('ok');
+  });
+  unsubClients = onSnapshot(collection(db,'users',currentUser.uid,'clients'), snap=>{
+    S.clients=snap.docs.map(d=>d.data());
+    const ids=S.clients.map(c=>c.id);
+    S.nextC=ids.length?Math.max(...ids)+1:1;
+    renderAll();
+    setSyncStatus('ok');
+  });
+}
+
+// ── EXPOR FUNÇÕES PARA O HTML (onclick global) ────────────────────────
+window.setView=setView;
+window.toggleDrawer=toggleDrawer;
+window.openNewTask=openNewTask;
+window.saveTask=saveTask;
+window.closeModal=closeModal;
+window.openModal=openModal;
+window.openDetail=openDetail;
+window.switchToView=switchToView;
+window.switchToEdit=switchToEdit;
+window.saveEdit=saveEdit;
+window.confirmDelete=confirmDelete;
+window.toggleDone=toggleDone;
+window.changeMonth=changeMonth;
+window.openCalDay=openCalDay;
+window.openNewTaskOnDate=openNewTaskOnDate;
+window.openGoogleCalDay=openGoogleCalDay;
+window.saveClient=saveClient;
+window.pickColor=pickColor;
+window.setFilter=setFilter;
+window.openEditClient=openEditClient;
+window.pickColorEdit=pickColorEdit;
+window.saveEditClient=saveEditClient;
+window.confirmDeleteClient=confirmDeleteClient;
+window.connectGoogle=connectGoogle;
 
 function td(){return new Date().toISOString().split('T')[0]}
 function fmt(s){if(!s)return'';const[,m,d]=s.split('-');return`${d}/${m}`}
@@ -720,7 +886,7 @@ function updateStats(){
   document.getElementById('hero-date').textContent=`${D[n.getDay()]}, ${n.getDate()} de ${M[n.getMonth()]} de ${n.getFullYear()}`;
 }
 
-function toggleDone(id){const t=S.tasks.find(t=>t.id===id);if(t)t.status=t.status==='done'?'todo':'done';renderAll()}
+function toggleDone(id){const t=S.tasks.find(t=>t.id===id);if(t){t.status=t.status==='done'?'todo':'done';setSyncStatus('loading');saveTaskDB(t);}}
 function changeMonth(d){S.month=new Date(S.month.getFullYear(),S.month.getMonth()+d,1);renderCalendar()}
 
 // ── MODALS ─────────────────────────────────────────────────────────
@@ -753,16 +919,18 @@ function openNewTask(){
 function saveTask(){
   const title=document.getElementById('t-title').value.trim();
   if(!title){document.getElementById('t-title').focus();return}
-  S.tasks.push({
+  const t={
     id:S.nextT++,title,
-    clientId:parseInt(document.getElementById('t-client').value),
+    clientId:parseInt(document.getElementById('t-client').value)||null,
     priority:document.getElementById('t-priority').value,
     status:document.getElementById('t-status').value,
     date:document.getElementById('t-date').value||td(),
     notes:document.getElementById('t-notes').value,
     link:document.getElementById('t-link').value.trim(),
-  });
-  closeModal('task');renderAll();
+  };
+  setSyncStatus('loading');
+  saveTaskDB(t);
+  closeModal('task');
 }
 
 // ── DETALHE ────────────────────────────────────────────────────────
@@ -813,13 +981,15 @@ function saveEdit(){
   const title=document.getElementById('e-title').value.trim();
   if(!title){document.getElementById('e-title').focus();return}
   t.title=title;
-  t.clientId=parseInt(document.getElementById('e-client').value);
+  t.clientId=parseInt(document.getElementById('e-client').value)||null;
   t.priority=document.getElementById('e-priority').value;
   t.status=document.getElementById('e-status').value;
   t.date=document.getElementById('e-date').value||td();
   t.notes=document.getElementById('e-notes').value;
   t.link=document.getElementById('e-link').value.trim();
-  closeModal('detail');renderAll();
+  setSyncStatus('loading');
+  saveTaskDB(t);
+  closeModal('detail');
 }
 
 let _deleteConfirming=false,_deleteTimer=null;
@@ -836,8 +1006,10 @@ function confirmDelete(mode){
   } else {
     clearTimeout(_deleteTimer);
     _deleteConfirming=false;
-    S.tasks=S.tasks.filter(t=>t.id!==S.editingId);
-    closeModal('detail');renderAll();
+    const idToDelete=S.editingId;
+    closeModal('detail');
+    setSyncStatus('loading');
+    deleteTaskDB(idToDelete);
   }
 }
 function resetDeleteBtn(btn){
@@ -878,7 +1050,9 @@ function saveEditClient(){
   if(!name){document.getElementById('ec-name').focus();return}
   const c=S.clients.find(cl=>cl.id===_editingClientId);if(!c)return;
   c.name=name;c.color=_editClientColor;
-  closeModal('editclient');renderAll();
+  setSyncStatus('loading');
+  saveClientDB(c);
+  closeModal('editclient');
 }
 function confirmDeleteClient(){
   const btn=document.getElementById('del-client-btn');
@@ -892,9 +1066,13 @@ function confirmDeleteClient(){
     },3000);
   } else {
     clearTimeout(_delClientTimer);_delClientConfirming=false;
-    S.tasks=S.tasks.map(t=>t.clientId===_editingClientId?{...t,clientId:null}:t);
-    S.clients=S.clients.filter(cl=>cl.id!==_editingClientId);
-    closeModal('editclient');renderAll();
+    const idToDel=_editingClientId;
+    // atualiza tarefas que tinham esse cliente
+    const tasksToUpdate=S.tasks.filter(t=>t.clientId===idToDel);
+    tasksToUpdate.forEach(t=>{t.clientId=null;saveTaskDB(t);});
+    setSyncStatus('loading');
+    deleteClientDB(idToDel);
+    closeModal('editclient');
   }
 }
 
@@ -964,9 +1142,11 @@ function openGoogleCalDay(){
 function saveClient(){
   const name=document.getElementById('c-name').value.trim();
   if(!name){document.getElementById('c-name').focus();return}
-  S.clients.push({id:S.nextC++,name,color:S.color});
+  const c={id:S.nextC++,name,color:S.color};
   document.getElementById('c-name').value='';
-  closeModal('client');renderAll();
+  setSyncStatus('loading');
+  saveClientDB(c);
+  closeModal('client');
 }
 function pickColor(el){document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');S.color=el.dataset.color}
 
@@ -994,7 +1174,9 @@ async function fetchEvents(){
   }catch(e){console.error(e)}
 }
 
-renderAll();
+// Iniciar escuta em tempo real do Firebase
+startListeners();
 </script>
+</div><!-- /app-root -->
 </body>
 </html>
