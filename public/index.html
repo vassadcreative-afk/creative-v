@@ -228,12 +228,11 @@ textarea{resize:vertical;min-height:72px}
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:var(--white);border-top:1px solid rgba(120,111,212,.1);z-index:200}
 .bn-inner{display:flex;height:100%}
 .bn-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:8px 4px}
-.bn-icon{line-height:1;transition:transform .15s;display:flex;align-items:center;justify-content:center}
-.bn-icon svg *[stroke]{stroke:var(--gray)}
+.bn-icon{line-height:1;transition:transform .15s,color .15s;display:flex;align-items:center;justify-content:center;color:var(--gray)}
+.bn-icon svg{stroke:currentColor}
 .bn-lbl{font-size:10px;font-weight:600;letter-spacing:.3px;color:var(--gray);font-family:'Space Grotesk',sans-serif;transition:color .15s}
 .bn-btn.active .bn-lbl{color:var(--purple)}
-.bn-btn.active .bn-icon svg *[stroke]{stroke:var(--purple)}
-.bn-btn.active .bn-icon{transform:scale(1.12)}
+.bn-btn.active .bn-icon{transform:scale(1.12);color:var(--purple)}
 
 .fab{display:none;position:fixed;bottom:calc(var(--bottom-h) + 14px);right:18px;width:52px;height:52px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;color:#fff;box-shadow:0 4px 20px rgba(120,111,212,.4);z-index:199;align-items:center;justify-content:center;transition:transform .15s;line-height:1}
 .fab:hover{transform:scale(1.08)}
@@ -499,19 +498,19 @@ textarea{resize:vertical;min-height:72px}
 <nav class="bottom-nav">
   <div class="bn-inner">
     <button class="bn-btn active" data-view="hoje" onclick="setView('hoje',this)">
-      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15,15"/></svg></span>
+      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15,15"/></svg></span>
       <span class="bn-lbl">Hoje</span>
     </button>
     <button class="bn-btn" data-view="quadro" onclick="setView('quadro',this)">
-      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/><rect x="14" y="17" width="7" height="4" rx="1.5"/></svg></span>
+      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/><rect x="14" y="17" width="7" height="4" rx="1.5"/></svg></span>
       <span class="bn-lbl">Quadro</span>
     </button>
     <button class="bn-btn" data-view="calendario" onclick="setView('calendario',this)">
-      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="15" r="1" fill="currentColor"/><circle cx="16" cy="15" r="1" fill="currentColor"/></svg></span>
+      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/></svg></span>
       <span class="bn-lbl">Agenda</span>
     </button>
     <button class="bn-btn" onclick="toggleDrawer()">
-      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg></span>
+      <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg></span>
       <span class="bn-lbl">Clientes</span>
     </button>
   </div>
@@ -802,15 +801,20 @@ onAuthStateChanged(auth, async user => {
 
 // ── GOOGLE CALENDAR - AUTO CONNECT ───────────────────────────────────
 async function tryAutoConnectCalendar(){
+  // Só tenta se já tiver token salvo
+  const savedToken = localStorage.getItem('gcal_token');
+  if(!savedToken){ updateGCalBar('disconnected'); return; }
+  googleAccessToken = savedToken;
   updateGCalBar('connecting');
   try{
-    // Testa se o token ainda é válido buscando eventos
     const ok = await fetchCalendarEvents();
     if(ok){
       updateGCalBar('connected');
     } else {
-      // Token expirou, tenta renovar silenciosamente via GSI
-      await refreshGCalToken();
+      // Token expirou, limpa e pede para o usuário reconectar manualmente
+      localStorage.removeItem('gcal_token');
+      googleAccessToken = null;
+      updateGCalBar('disconnected');
     }
   }catch(e){
     updateGCalBar('disconnected');
@@ -818,29 +822,9 @@ async function tryAutoConnectCalendar(){
 }
 
 async function refreshGCalToken(){
-  try{
-    // Carrega Google Identity Services e tenta token silencioso
-    await loadGSIScript();
-    await loadGAPIScript();
-    const client = google.accounts.oauth2.initTokenClient({
-      client_id: GCAL_CLIENT_ID,
-      scope: GCAL_SCOPE,
-      prompt: '', // sem prompt = silencioso se possível
-      callback: async r => {
-        if(r && r.access_token){
-          googleAccessToken = r.access_token;
-          localStorage.setItem('gcal_token', googleAccessToken);
-          const ok = await fetchCalendarEvents();
-          updateGCalBar(ok ? 'connected' : 'disconnected');
-        } else {
-          updateGCalBar('disconnected');
-        }
-      }
-    });
-    client.requestAccessToken();
-  }catch(e){
-    updateGCalBar('disconnected');
-  }
+  // Não faz refresh automático (causa popup bloqueado no mobile)
+  // Usuário deve clicar em "Conectar" manualmente
+  updateGCalBar('disconnected');
 }
 
 // Conectar manualmente (botão) - pede consentimento
@@ -906,7 +890,17 @@ async function fetchCalendarEvents(){
     const e=new Date(n.getFullYear(),n.getMonth(),n.getDate(),23,59,59).toISOString();
     const url=`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(s)}&timeMax=${encodeURIComponent(e)}&singleEvents=true&orderBy=startTime`;
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${googleAccessToken}` } });
-    if(resp.status===401){ return false; } // token expirado
+    if(resp.status===401){ localStorage.removeItem('gcal_token'); googleAccessToken=null; return false; }
+    if(resp.status===403){
+      // Domínio não autorizado no Google Cloud Console
+      const dot=document.getElementById('sdot');
+      const lbl=document.getElementById('slbl');
+      const btn=document.getElementById('sbtn');
+      if(dot) dot.className='sync-dot off';
+      if(lbl) lbl.innerHTML='Google Calendar: <strong style="color:var(--red)">domínio não autorizado</strong> — adicione <code>creative-v.vercel.app</code> no <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--purple)">Google Cloud Console</a>';
+      if(btn) btn.style.display='none';
+      return false;
+    }
     if(!resp.ok){ return false; }
     const data = await resp.json();
     S.calEvents = data.items||[];
