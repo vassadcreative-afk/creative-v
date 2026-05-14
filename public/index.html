@@ -426,14 +426,20 @@ textarea{resize:vertical;min-height:72px}
 .portal-visible-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(120,111,212,.06);border-radius:10px;border:1.5px solid rgba(120,111,212,.14)}
 .portal-visible-lbl{font-size:13px;color:var(--dark);flex:1}
 
-/* Responsável — input com sugestões */
-.owner-suggestions{display:none;flex-wrap:wrap;gap:6px;margin-bottom:7px}
-.owner-suggestions.open{display:flex}
-.owner-sug-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:var(--lav-light);color:var(--gray);border:1.5px solid transparent;transition:all .13s}
-.owner-sug-chip:hover,.owner-sug-chip.active{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
-.owner-sug-chip.is-me{background:rgba(120,111,212,.1);color:var(--purple-dark)}
-.owner-sug-chip.is-client{background:rgba(232,93,93,.1);color:#c0392b}
+/* Responsável — tags clicáveis */
+.owner-tags{display:flex;gap:6px;flex-wrap:wrap}
+.owner-tag-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--lav-mid);background:var(--lav-light);color:var(--gray);transition:all .14s;white-space:nowrap}
+.owner-tag-btn:hover{border-color:var(--purple);color:var(--purple-dark)}
+.owner-tag-btn.active-me{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
+.owner-tag-btn.active-client{background:rgba(232,93,93,.12);color:#b83232;border-color:#e85d5d}
 .task-owner-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;background:rgba(120,111,212,.12);color:var(--purple-dark)}
+.task-owner-tag.is-client{background:rgba(232,93,93,.1);color:#b83232}
+/* Filtro de responsável */
+.owner-filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;padding:8px 12px;background:var(--white);border-radius:12px;border:1px solid var(--lav-mid)}
+.owner-filter-lbl{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.3px;margin-right:2px}
+.owner-filter-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;background:var(--lav-light);color:var(--gray);transition:all .13s}
+.owner-filter-chip.active{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
+.owner-filter-chip.active-client{background:rgba(232,93,93,.1);color:#b83232;border-color:#e85d5d}
 .portal-new-comment-dot{width:7px;height:7px;border-radius:50%;background:var(--pink);display:inline-block;margin-left:4px;animation:blink 2s infinite}
 
 @media(max-width:639px){
@@ -696,8 +702,7 @@ textarea{resize:vertical;min-height:72px}
     <div class="fg"><label>Link de entrega</label><input type="url" id="t-link" placeholder="https://drive.google.com/..."></div>
     <div class="fg">
       <label>Responsável</label>
-      <div class="owner-suggestions" id="t-owner-suggestions"></div>
-      <input class="input-field" type="text" id="t-owner-name" placeholder="Nome do responsável..." autocomplete="off" oninput="filterOwnerSuggestions('t')" onfocus="showOwnerSuggestions('t')" onblur="setTimeout(()=>hideOwnerSuggestions('t'),150)">
+      <div class="owner-tags" id="t-owner-tags"></div>
     </div>
     <div class="fg"><label>Observações</label><textarea id="t-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
     <div class="fg portal-visible-row" id="t-portal-row" style="display:none">
@@ -775,8 +780,7 @@ textarea{resize:vertical;min-height:72px}
       <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://..."></div>
       <div class="fg">
         <label>Responsável</label>
-        <div class="owner-suggestions" id="e-owner-suggestions"></div>
-        <input class="input-field" type="text" id="e-owner-name" placeholder="Nome do responsável..." autocomplete="off" oninput="filterOwnerSuggestions('e')" onfocus="showOwnerSuggestions('e')" onblur="setTimeout(()=>hideOwnerSuggestions('e'),150)">
+        <div class="owner-tags" id="e-owner-tags"></div>
       </div>
       </div>
       <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
@@ -1265,6 +1269,7 @@ function isOverdue(t){
 }
 
 const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando',done:'Concluído ✓'};
+const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
 // Priority icons (SVG, inline)
 function prioIcon(p, ctx='light'){
@@ -1298,10 +1303,14 @@ function toggleDrawer(){
   document.getElementById('sd-drawer').classList.toggle('open');
 }
 
+// ── PORTAL STATE (declarado aqui para evitar erro de inicialização) ──
+const PORTAL = { clientId:null, taskId:null, ownerId:null, pendingToken:null };
+const MY_NAME = 'Victória';
+
 // ── RENDER ─────────────────────────────────────────────────────────
 function renderAll(){renderLists();renderToday();renderKanban();renderCalendar();updateStats();
   // Portal hooks
-  checkPortalPendingToken();
+  if(typeof checkPortalPendingToken==='function') checkPortalPendingToken();
   if(PORTAL.clientId && sessionStorage.getItem('portal_client')){
     const __pc=S.clients.find(cl=>cl.id===PORTAL.clientId);
     if(__pc)renderPortal(__pc);
@@ -1360,9 +1369,33 @@ function taskCardHTML(t){
 
 function renderToday(){
   const ts=td();
-  const dt=S.tasks.filter(t=>t.date===ts);
+  let dt=S.tasks.filter(t=>t.date===ts);
+  if(S.filter!=='all') dt=dt.filter(t=>t.clientId===S.filter);
+  // Adiciona barra de filtro de responsável acima da lista
   const el=document.getElementById('today-list');
-  el.innerHTML=dt.length?dt.map(t=>taskCardHTML(t)).join('')
+  // Container pai para filtro + lista
+  let filterBar=document.getElementById('today-owner-filter');
+  if(!filterBar){
+    filterBar=document.createElement('div');
+    filterBar.id='today-owner-filter';
+    el.parentNode.insertBefore(filterBar,el);
+  }
+  // Render filtro
+  const allOwners=[...new Set(S.tasks.filter(t=>S.filter==='all'||t.clientId===S.filter).map(t=>t.ownerName||MY_NAME))];
+  if(allOwners.length>1){
+    filterBar.innerHTML=`<div class="owner-filter-bar">
+      <span class="owner-filter-lbl">VER:</span>
+      <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
+      ${allOwners.map(n=>{
+        const isClient=S.clients.some(c=>c.name===n);
+        const active=ownerFilter===n;
+        return `<div class="owner-filter-chip ${active?(isClient?'active active-client':'active'):''}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
+      }).join('')}
+    </div>`;
+  } else { filterBar.innerHTML=''; }
+  // Aplica filtro
+  const filtered=applyOwnerFilter(dt);
+  el.innerHTML=filtered.length?filtered.map(t=>taskCardHTML(t)).join('')
     :`<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>Nenhuma tarefa pra hoje!</div>`;
 
   const evSec=document.getElementById('ev-sec'),evList=document.getElementById('ev-list');
@@ -1479,6 +1512,7 @@ function openNewTask(){
   document.getElementById('t-status').value='todo';
   document.getElementById('t-portal-visible').checked=false;
   setOwner('t','');
+  buildOwnerTags('t', MY_NAME);
   // Mostrar toggle portal se algum cliente tem portal ativo
   const hasPortalClient=S.clients.some(c=>c.portalEnabled);
   document.getElementById('t-portal-row').style.display=hasPortalClient?'flex':'none';
@@ -1524,7 +1558,7 @@ function switchToView(){
   document.getElementById('dv-badges').innerHTML=
     `<span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>`+
     `<span class="d-status">${statusLabel[t.status]||t.status}</span>`+
-    (t.owner?`<span class="task-owner-tag ${t.owner||'eu'}" style="font-size:11px;padding:3px 10px">${ownerLabel[t.owner]||'👤 Eu'}</span>`:'');
+    (t.ownerName&&t.ownerName!==MY_NAME?`<span class="task-owner-tag" style="font-size:11px;padding:3px 10px">👤 ${t.ownerName}</span>`:'');
 
   document.getElementById('dv-title').textContent=t.title;
 
@@ -1550,7 +1584,8 @@ function switchToEdit(){
   document.getElementById('e-notes').value=t.notes||'';
   document.getElementById('e-link').value=t.link||'';
   document.getElementById('e-portal-visible').checked=t.portalVisible||false;
-  setOwner('e', t.ownerName||'');
+  setOwner('e', t.ownerName||MY_NAME);
+  buildOwnerTags('e', t.ownerName||MY_NAME);
   const hasPortalClient=S.clients.some(c=>c.portalEnabled);
   document.getElementById('e-portal-row').style.display=hasPortalClient?'flex':'none';
 }
@@ -1621,6 +1656,10 @@ function openEditClient(id){
   if(btn){btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir`;btn.className='btn btn-danger';}
   _delClientConfirming=false;clearTimeout(_delClientTimer);
   openModal('editclient');
+}
+function pickColor(el){
+  document.querySelectorAll('#c-swatches .swatch').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel'); S.color=el.dataset.color;
 }
 function pickColorEdit(el){
   document.querySelectorAll('#ec-swatches .swatch').forEach(s=>s.classList.remove('sel'));
@@ -1732,44 +1771,81 @@ function saveClient(){
   closeModal('client');
 }
 // ── RESPONSÁVEL ───────────────────────────────────────────────────────
-const MY_NAME = 'Victória';
 
-function getOwnerSuggestions(prefix){
+// ownerName salvo na tarefa: 'Victória', nome do cliente, ou nome customizado
+// ownerFilter: null = todos, 'Victória' = só minhas, nome = só daquela pessoa
+let ownerFilter = null;
+
+function buildOwnerTags(prefix, currentOwner){
   const clientSel=document.getElementById(prefix+'-client');
   const clientId=clientSel?parseInt(clientSel.value):null;
   const client=S.clients.find(c=>c.id===clientId);
-  const sugs=[{label:MY_NAME,val:MY_NAME,cls:'is-me'}];
-  if(client) sugs.push({label:client.name,val:client.name,cls:'is-client'});
+  // Opções: Victória sempre, + nome do cliente se houver, + outros já usados
+  const opts=[{label:'👤 Victória',val:MY_NAME,cls:'active-me'}];
+  if(client) opts.push({label:`🏢 ${client.name}`,val:client.name,cls:'active-client'});
   const used=[...new Set(S.tasks.map(t=>t.ownerName).filter(n=>n&&n!==MY_NAME&&(!client||n!==client.name)))];
-  used.forEach(n=>sugs.push({label:n,val:n,cls:''}));
-  return sugs;
+  used.slice(0,3).forEach(n=>opts.push({label:`👥 ${n}`,val:n,cls:'active-me'}));
+
+  const cur=currentOwner||MY_NAME;
+  const box=document.getElementById(prefix+'-owner-tags');
+  if(!box)return;
+  box.innerHTML=opts.map(o=>`
+    <div class="owner-tag-btn ${cur===o.val?o.cls:''}" onclick="selectOwnerTag('${prefix}','${o.val}',this,'${o.cls}')">${o.label}</div>
+  `).join('');
+  // Guardar valor atual
+  box.dataset.value=cur;
 }
-function showOwnerSuggestions(prefix){
-  const box=document.getElementById(prefix+'-owner-suggestions');
-  const input=document.getElementById(prefix+'-owner-name');
-  const sugs=getOwnerSuggestions(prefix);
-  const cur=input.value.trim().toLowerCase();
-  const filtered=cur?sugs.filter(s=>s.label.toLowerCase().includes(cur)):sugs;
-  if(!filtered.length){box.classList.remove('open');return;}
-  box.innerHTML=filtered.map(s=>`<div class="owner-sug-chip ${s.cls}" onmousedown="selectOwner('${prefix}','${s.val}')">${s.label}</div>`).join('');
-  box.classList.add('open');
+
+function selectOwnerTag(prefix,val,el,cls){
+  const box=document.getElementById(prefix+'-owner-tags');
+  box.querySelectorAll('.owner-tag-btn').forEach(b=>b.className='owner-tag-btn');
+  el.classList.add(cls);
+  box.dataset.value=val;
 }
-function filterOwnerSuggestions(prefix){showOwnerSuggestions(prefix);}
-function hideOwnerSuggestions(prefix){document.getElementById(prefix+'-owner-suggestions').classList.remove('open');}
-function selectOwner(prefix,val){document.getElementById(prefix+'-owner-name').value=val;document.getElementById(prefix+'-owner-suggestions').classList.remove('open');}
-function getOwner(prefix){return document.getElementById(prefix+'-owner-name').value.trim()||MY_NAME;}
-function setOwner(prefix,val){document.getElementById(prefix+'-owner-name').value=(val&&val!==MY_NAME)?val:'';}
-function ownerTag(name){if(!name||name===MY_NAME)return '';return `<span class="task-owner-tag">${name}</span>`;}
-function ownerDisplayName(t){return t.ownerName||MY_NAME;}
+
+function getOwner(prefix){
+  const box=document.getElementById(prefix+'-owner-tags');
+  return box?box.dataset.value||MY_NAME:MY_NAME;
+}
+function setOwner(prefix,val){
+  buildOwnerTags(prefix, val||MY_NAME);
+}
+
+function ownerTag(name){
+  if(!name||name===MY_NAME)return '';
+  const isClient=S.clients.some(c=>c.name===name);
+  return `<span class="task-owner-tag ${isClient?'is-client':''}">${isClient?'🏢':'👥'} ${name}</span>`;
+}
+
+// Barra de filtro por responsável (admin view)
+function renderOwnerFilterBar(containerId){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  const names=[MY_NAME,...new Set(S.tasks.map(t=>t.ownerName).filter(n=>n&&n!==MY_NAME))];
+  if(names.length<2){container.innerHTML='';return;}
+  container.innerHTML=`<div class="owner-filter-bar">
+    <span class="owner-filter-lbl">VER:</span>
+    <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
+    ${names.map(n=>{
+      const isClient=S.clients.some(c=>c.name===n);
+      const cls=ownerFilter===n?(isClient?'active active-client':'active'):'';
+      return `<div class="owner-filter-chip ${cls}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
+    }).join('')}
+  </div>`;
+}
+
+function setOwnerFilter(name){
+  ownerFilter=name;
+  renderAll();
+}
+
+// Filtrar tarefas pelo ownerFilter
+function applyOwnerFilter(tasks){
+  if(!ownerFilter)return tasks;
+  return tasks.filter(t=>(t.ownerName||MY_NAME)===ownerFilter);
+}
 
 // ── PORTAL DO CLIENTE ─────────────────────────────────────────────────
-
-// Estado do portal
-const PORTAL = {
-  clientId: null,
-  taskId: null,
-  ownerId: null, // uid do dono do app
-};
 
 // Detecta ?portal=TOKEN na URL e abre o portal
 (function initPortal(){
@@ -2098,10 +2174,8 @@ window.portalToggleDoneInline=function(id){
 // Expor funções do portal
 window.togglePortalLinkDisplay=togglePortalLinkDisplay;
 window.copyPortalLink=copyPortalLink;
-window.showOwnerSuggestions=showOwnerSuggestions;
-window.filterOwnerSuggestions=filterOwnerSuggestions;
-window.hideOwnerSuggestions=hideOwnerSuggestions;
-window.selectOwner=selectOwner;
+window.selectOwnerTag=selectOwnerTag;
+window.setOwnerFilter=setOwnerFilter;
 
 
 
