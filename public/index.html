@@ -1610,6 +1610,7 @@ function saveEditClient(){
   c.portalPassword=document.getElementById('ec-portal-password').value.trim();
   setSyncStatus('loading');
   saveClientDB(c);
+  if(c.portalEnabled) savePortalSnapshot(c.id);
   closeModal('editclient');
 }
 function confirmDeleteClient(){
@@ -1723,101 +1724,29 @@ const PORTAL = {
   if(!token) return;
   PORTAL.pendingToken=token;
   document.getElementById('client-portal').classList.add('active');
-  // Busca o owner e clientes do Firestore diretamente (sem auth)
   bootstrapPortal(token);
 })();
 
-// Busca dados do portal direto no Firestore (não precisa de login Google)
-async function bootstrapPortal(token){
-  try{
-    // Importa getDocs e query para buscar sem auth
-    const {collection:col2, getDocs, query:q2} = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-
-    // Busca todos os users para encontrar quem tem esse cliente com portal ativo
-    // Na prática, o token embute o clientId — precisamos varrer users para achar o owner
-    const clientId=decodePortalToken(token);
-    if(!clientId){
-      showPortalError('Link inválido.');
-      return;
-    }
-    PORTAL.clientId=clientId;
-
-    // Busca a coleção raiz de users
-    const usersSnap=await getDocs(col2(db,'users'));
-    let foundOwner=null, foundClient=null, foundTasks=[];
-
-    for(const userDoc of usersSnap.docs){
-      const uid=userDoc.id;
-      // Busca clientes deste user
-      const clientsSnap=await getDocs(col2(db,'users',uid,'clients'));
-      const clients=clientsSnap.docs.map(d=>d.data());
-      const match=clients.find(c=>c.id===clientId && c.portalEnabled);
-      if(match){
-        foundOwner=uid;
-        foundClient=match;
-        // Busca tarefas
-        const tasksSnap=await getDocs(col2(db,'users',uid,'tasks'));
-        foundTasks=tasksSnap.docs.map(d=>d.data());
-        break;
-      }
-    }
-
-    if(!foundClient){
-      showPortalError('Portal não encontrado ou desativado.');
-      return;
-    }
-
-    PORTAL.ownerId=foundOwner;
-    // Injeta dados no estado local para o portal usar
-    S.clients=[foundClient];
-    S.tasks=foundTasks;
-
-    // Mostra tela de login do portal
-    document.getElementById('portal-client-name-title').textContent=foundClient.name;
-    document.getElementById('portal-login-screen').style.display='flex';
-
-    // Se já tinha sessão salva
-    const sess=sessionStorage.getItem('portal_client');
-    if(sess && parseInt(sess)===foundClient.id){
-      showPortalMain(foundClient);
-    }
-
-  }catch(e){
-    console.error('Portal bootstrap error:',e);
-    showPortalError('Erro ao carregar portal. Tente recarregar.');
-  }
-}
-
 function showPortalError(msg){
-  const screen=document.getElementById('portal-login-screen');
-  screen.style.display='flex';
+  document.getElementById('portal-login-screen').style.display='flex';
   const err=document.getElementById('portal-login-err');
   err.textContent=msg;
   err.classList.add('show');
 }
 
-// Salva task via Firestore usando o ownerId do portal
-async function saveTaskDBPortal(t){
-  if(!PORTAL.ownerId) return;
-  const {doc:doc2,setDoc:setDoc2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-  try{
-    await setDoc2(doc2(db,'users',PORTAL.ownerId,'tasks',String(t.id)),t);
-  }catch(e){console.error(e);}
-}
+// Chamado após carregar clientes do Firebase (admin logado) — no-op pois portal carrega via bootstrapPortal
+function checkPortalPendingToken(){}
 
-// Chamado após carregar clientes do Firebase (para usuário admin logado)
-function checkPortalPendingToken(){
-  // Só executa se o portal não foi inicializado via bootstrapPortal
-  if(!PORTAL.pendingToken || PORTAL.ownerId) return;
+// Gera token incluindo uid do dono
+function encodePortalToken(clientId){
+  const uid=currentUser?currentUser.uid:'';
+  return btoa('crv:'+uid+':'+clientId+':portal');
 }
-
-// Gera token a partir do clientId (simples, suficiente para este uso)
-function encodePortalToken(id){ return btoa('crv:'+id+':portal'); }
 function decodePortalToken(token){
   try{
     const s=atob(token);
     const parts=s.split(':');
-    if(parts[0]==='crv'&&parts[2]==='portal') return parseInt(parts[1]);
+    if(parts[0]==='crv'&&parts[3]==='portal') return {uid:parts[1],clientId:parseInt(parts[2])};
   }catch(e){}
   return null;
 }
@@ -1825,6 +1754,77 @@ function decodePortalToken(token){
 function getPortalLink(clientId){
   const base=location.origin+location.pathname;
   return `${base}?portal=${encodePortalToken(clientId)}`;
+}
+
+// Salva snapshot público dos dados do portal no Firestore
+// Path: portalSnapshots/{uid}__{clientId}  (leitura pública, escrita só autenticada)
+async function savePortalSnapshot(clientId){
+  if(!currentUser)return;
+  const c=S.clients.find(cl=>cl.id===clientId);
+  if(!c||!c.portalEnabled)return;
+  const tasks=S.tasks.filter(t=>t.clientId===clientId&&t.portalVisible);
+  const snapData={client:c,tasks,updatedAt:Date.now()};
+  try{
+    await setDoc(doc(db,'portalSnapshots',currentUser.uid+'__'+clientId),snapData);
+  }catch(e){console.error('savePortalSnapshot:',e);}
+}
+
+// Detecta ?portal=TOKEN na URL e abre o portal
+(function initPortal(){
+  const params=new URLSearchParams(location.search);
+  const token=params.get('portal');
+  if(!token) return;
+  PORTAL.pendingToken=token;
+  document.getElementById('client-portal').classList.add('active');
+  bootstrapPortal(token);
+})();
+
+async function bootstrapPortal(token){
+  const decoded=decodePortalToken(token);
+  if(!decoded){showPortalError('Link inválido.');return;}
+  const {uid,clientId}=decoded;
+  PORTAL.clientId=clientId;
+  PORTAL.ownerId=uid;
+
+  try{
+    const {doc:doc2,getDoc:getDoc2,collection:col2,getDocs:getDocs2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    // Lê o cliente direto pelo path exato
+    const clientRef=doc2(db,'users',uid,'clients',String(clientId));
+    const clientDoc=await getDoc2(clientRef);
+
+    if(!clientDoc.exists()||!clientDoc.data().portalEnabled){
+      showPortalError('Portal não encontrado ou desativado.');return;
+    }
+
+    const clientData=clientDoc.data();
+    S.clients=[clientData];
+
+    // Lê todas as tarefas do user (só as portalVisible passam pelo filtro)
+    const tasksSnap=await getDocs2(col2(db,'users',uid,'tasks'));
+    S.tasks=tasksSnap.docs.map(d=>d.data());
+
+    document.getElementById('portal-client-name-title').textContent=clientData.name;
+    document.getElementById('portal-login-screen').style.display='flex';
+
+    const sess=sessionStorage.getItem('portal_client');
+    if(sess&&parseInt(sess)===clientId) showPortalMain(clientData);
+
+  }catch(e){
+    console.error('Portal bootstrap error:',e);
+    showPortalError('Erro ao carregar portal. Tente recarregar.');
+  }
+}
+
+// Salva task diretamente na coleção do owner (via portal)
+async function saveTaskDBPortal(t){
+  if(!PORTAL.ownerId)return;
+  const idx=S.tasks.findIndex(x=>x.id===t.id);
+  if(idx>-1)S.tasks[idx]=t; else S.tasks.push(t);
+  try{
+    const {doc:doc2,setDoc:setDoc2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc2(doc2(db,'users',PORTAL.ownerId,'tasks',String(t.id)),t);
+  }catch(e){console.error('saveTaskDBPortal:',e);}
 }
 
 function togglePortalLinkDisplay(clientOverride){
