@@ -426,16 +426,14 @@ textarea{resize:vertical;min-height:72px}
 .portal-visible-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(120,111,212,.06);border-radius:10px;border:1.5px solid rgba(120,111,212,.14)}
 .portal-visible-lbl{font-size:13px;color:var(--dark);flex:1}
 
-/* Responsável / owner tag */
-.owner-picker{display:flex;gap:6px;flex-wrap:wrap}
-.owner-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .15s;background:var(--lav-light);color:var(--gray)}
-.owner-chip.sel-eu{background:rgba(120,111,212,.18);color:var(--purple-dark);border-color:var(--purple)}
-.owner-chip.sel-cliente{background:rgba(232,93,93,.15);color:#c0392b;border-color:#e85d5d}
-.owner-chip.sel-equipe{background:rgba(112,196,168,.18);color:#1a7a5e;border-color:var(--green)}
-.task-owner-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px}
-.task-owner-tag.eu{background:rgba(120,111,212,.12);color:var(--purple-dark)}
-.task-owner-tag.cliente{background:rgba(232,93,93,.12);color:#c0392b}
-.task-owner-tag.equipe{background:rgba(112,196,168,.18);color:#1a7a5e}
+/* Responsável — input com sugestões */
+.owner-suggestions{display:none;flex-wrap:wrap;gap:6px;margin-bottom:7px}
+.owner-suggestions.open{display:flex}
+.owner-sug-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:var(--lav-light);color:var(--gray);border:1.5px solid transparent;transition:all .13s}
+.owner-sug-chip:hover,.owner-sug-chip.active{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
+.owner-sug-chip.is-me{background:rgba(120,111,212,.1);color:var(--purple-dark)}
+.owner-sug-chip.is-client{background:rgba(232,93,93,.1);color:#c0392b}
+.task-owner-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;background:rgba(120,111,212,.12);color:var(--purple-dark)}
 .portal-new-comment-dot{width:7px;height:7px;border-radius:50%;background:var(--pink);display:inline-block;margin-left:4px;animation:blink 2s infinite}
 
 @media(max-width:639px){
@@ -698,11 +696,8 @@ textarea{resize:vertical;min-height:72px}
     <div class="fg"><label>Link de entrega</label><input type="url" id="t-link" placeholder="https://drive.google.com/..."></div>
     <div class="fg">
       <label>Responsável</label>
-      <div class="owner-picker" id="t-owner-picker">
-        <div class="owner-chip sel-eu" data-owner="eu" onclick="pickOwner('t','eu')">👤 Eu</div>
-        <div class="owner-chip" data-owner="cliente" onclick="pickOwner('t','cliente')">🏢 Cliente</div>
-        <div class="owner-chip" data-owner="equipe" onclick="pickOwner('t','equipe')">👥 Equipe</div>
-      </div>
+      <div class="owner-suggestions" id="t-owner-suggestions"></div>
+      <input class="input-field" type="text" id="t-owner-name" placeholder="Nome do responsável..." autocomplete="off" oninput="filterOwnerSuggestions('t')" onfocus="showOwnerSuggestions('t')" onblur="setTimeout(()=>hideOwnerSuggestions('t'),150)">
     </div>
     <div class="fg"><label>Observações</label><textarea id="t-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
     <div class="fg portal-visible-row" id="t-portal-row" style="display:none">
@@ -780,11 +775,9 @@ textarea{resize:vertical;min-height:72px}
       <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://..."></div>
       <div class="fg">
         <label>Responsável</label>
-        <div class="owner-picker" id="e-owner-picker">
-          <div class="owner-chip sel-eu" data-owner="eu" onclick="pickOwner('e','eu')">👤 Eu</div>
-          <div class="owner-chip" data-owner="cliente" onclick="pickOwner('e','cliente')">🏢 Cliente</div>
-          <div class="owner-chip" data-owner="equipe" onclick="pickOwner('e','equipe')">👥 Equipe</div>
-        </div>
+        <div class="owner-suggestions" id="e-owner-suggestions"></div>
+        <input class="input-field" type="text" id="e-owner-name" placeholder="Nome do responsável..." autocomplete="off" oninput="filterOwnerSuggestions('e')" onfocus="showOwnerSuggestions('e')" onblur="setTimeout(()=>hideOwnerSuggestions('e'),150)">
+      </div>
       </div>
       <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
       <div class="fg portal-visible-row" id="e-portal-row" style="display:none">
@@ -1359,7 +1352,7 @@ function taskCardHTML(t){
         </span>`:''}
         ${t.link?`<span style="font-size:10px;color:var(--purple);font-weight:700;display:inline-flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> link</span>`:''}
         ${t.portalVisible?`<span class="task-portal-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> portal</span>`:''}
-        ${t.owner&&t.owner!=='eu'?ownerTag(t.owner):''}
+        ${ownerTag(t.ownerName)}
       </div>
     </div>
   </div>`;
@@ -1417,7 +1410,7 @@ function renderKanban(){
           <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${pB[t.priority]};color:${pC[t.priority]};display:inline-flex;align-items:center;gap:3px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
           ${t.date?`<span class="k-date ${col.isOverdue?'late':''}">${fmt(t.date)}</span>`:''}
           ${t.link?`<span style="font-size:11px;display:inline-flex"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>`:''}
-          ${t.owner&&t.owner!=='eu'?ownerTag(t.owner):''}
+          ${ownerTag(t.ownerName)}
         </div></div>`;}).join('')}
       ${!col.isOverdue?`<button class="add-col" onclick="openNewTask()">+ adicionar</button>`:''}
     </div>`;
@@ -1485,7 +1478,7 @@ function openNewTask(){
   document.getElementById('t-priority').value='normal';
   document.getElementById('t-status').value='todo';
   document.getElementById('t-portal-visible').checked=false;
-  setOwner('t','eu');
+  setOwner('t','');
   // Mostrar toggle portal se algum cliente tem portal ativo
   const hasPortalClient=S.clients.some(c=>c.portalEnabled);
   document.getElementById('t-portal-row').style.display=hasPortalClient?'flex':'none';
@@ -1504,7 +1497,7 @@ function saveTask(){
     notes:document.getElementById('t-notes').value,
     link:document.getElementById('t-link').value.trim(),
     portalVisible:document.getElementById('t-portal-visible').checked,
-    owner:getOwner('t'),
+    ownerName:getOwner('t'),
     comments:[],
   };
   setSyncStatus('loading');
@@ -1557,7 +1550,7 @@ function switchToEdit(){
   document.getElementById('e-notes').value=t.notes||'';
   document.getElementById('e-link').value=t.link||'';
   document.getElementById('e-portal-visible').checked=t.portalVisible||false;
-  setOwner('e', t.owner||'eu');
+  setOwner('e', t.ownerName||'');
   const hasPortalClient=S.clients.some(c=>c.portalEnabled);
   document.getElementById('e-portal-row').style.display=hasPortalClient?'flex':'none';
 }
@@ -1574,7 +1567,7 @@ function saveEdit(){
   t.notes=document.getElementById('e-notes').value;
   t.link=document.getElementById('e-link').value.trim();
   t.portalVisible=document.getElementById('e-portal-visible').checked;
-  t.owner=getOwner('e');
+  t.ownerName=getOwner('e');
   if(!t.comments)t.comments=[];
   setSyncStatus('loading');
   saveTaskDB(t);
@@ -1738,30 +1731,36 @@ function saveClient(){
   saveClientDB(c);
   closeModal('client');
 }
-function pickOwner(prefix, val){
-  document.querySelectorAll(`#${prefix}-owner-picker .owner-chip`).forEach(c=>{
-    c.className='owner-chip';
-    if(c.dataset.owner===val) c.classList.add('sel-'+val);
-  });
-}
-function getOwner(prefix){
-  const sel=document.querySelector(`#${prefix}-owner-picker .owner-chip[class*="sel-"]`);
-  return sel?sel.dataset.owner:'eu';
-}
-function setOwner(prefix, val){
-  document.querySelectorAll(`#${prefix}-owner-picker .owner-chip`).forEach(c=>{
-    c.className='owner-chip';
-    if(c.dataset.owner===val) c.classList.add('sel-'+val);
-  });
-}
+// ── RESPONSÁVEL ───────────────────────────────────────────────────────
+const MY_NAME = 'Victória';
 
-const ownerLabel={eu:'👤 Eu',cliente:'🏢 Cliente',equipe:'👥 Equipe'};
-const ownerClass={eu:'eu',cliente:'cliente',equipe:'equipe'};
-
-function ownerTag(owner){
-  if(!owner||owner==='eu') return '';
-  return `<span class="task-owner-tag ${ownerClass[owner]||'eu'}">${ownerLabel[owner]||owner}</span>`;
+function getOwnerSuggestions(prefix){
+  const clientSel=document.getElementById(prefix+'-client');
+  const clientId=clientSel?parseInt(clientSel.value):null;
+  const client=S.clients.find(c=>c.id===clientId);
+  const sugs=[{label:MY_NAME,val:MY_NAME,cls:'is-me'}];
+  if(client) sugs.push({label:client.name,val:client.name,cls:'is-client'});
+  const used=[...new Set(S.tasks.map(t=>t.ownerName).filter(n=>n&&n!==MY_NAME&&(!client||n!==client.name)))];
+  used.forEach(n=>sugs.push({label:n,val:n,cls:''}));
+  return sugs;
 }
+function showOwnerSuggestions(prefix){
+  const box=document.getElementById(prefix+'-owner-suggestions');
+  const input=document.getElementById(prefix+'-owner-name');
+  const sugs=getOwnerSuggestions(prefix);
+  const cur=input.value.trim().toLowerCase();
+  const filtered=cur?sugs.filter(s=>s.label.toLowerCase().includes(cur)):sugs;
+  if(!filtered.length){box.classList.remove('open');return;}
+  box.innerHTML=filtered.map(s=>`<div class="owner-sug-chip ${s.cls}" onmousedown="selectOwner('${prefix}','${s.val}')">${s.label}</div>`).join('');
+  box.classList.add('open');
+}
+function filterOwnerSuggestions(prefix){showOwnerSuggestions(prefix);}
+function hideOwnerSuggestions(prefix){document.getElementById(prefix+'-owner-suggestions').classList.remove('open');}
+function selectOwner(prefix,val){document.getElementById(prefix+'-owner-name').value=val;document.getElementById(prefix+'-owner-suggestions').classList.remove('open');}
+function getOwner(prefix){return document.getElementById(prefix+'-owner-name').value.trim()||MY_NAME;}
+function setOwner(prefix,val){document.getElementById(prefix+'-owner-name').value=(val&&val!==MY_NAME)?val:'';}
+function ownerTag(name){if(!name||name===MY_NAME)return '';return `<span class="task-owner-tag">${name}</span>`;}
+function ownerDisplayName(t){return t.ownerName||MY_NAME;}
 
 // ── PORTAL DO CLIENTE ─────────────────────────────────────────────────
 
@@ -1996,6 +1995,7 @@ function renderPortal(c){
           ${t.title}
         </div>
         <div class="portal-task-meta">
+          ${t.ownerName?`<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(120,111,212,.1);color:var(--purple-dark)">👤 ${t.ownerName}</span>`:''}
           ${t.link?`<a class="portal-task-link" href="${t.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Ver entrega</a>`:''}
           ${dateStr}
           ${commentCount?`<span style="font-size:10px;color:var(--gray);display:inline-flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${commentCount}</span>`:''}
@@ -2098,7 +2098,10 @@ window.portalToggleDoneInline=function(id){
 // Expor funções do portal
 window.togglePortalLinkDisplay=togglePortalLinkDisplay;
 window.copyPortalLink=copyPortalLink;
-window.pickOwner=pickOwner;
+window.showOwnerSuggestions=showOwnerSuggestions;
+window.filterOwnerSuggestions=filterOwnerSuggestions;
+window.hideOwnerSuggestions=hideOwnerSuggestions;
+window.selectOwner=selectOwner;
 
 
 
