@@ -1269,7 +1269,6 @@ function isOverdue(t){
 }
 
 const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando',done:'Concluído ✓'};
-const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
 // Priority icons (SVG, inline)
 function prioIcon(p, ctx='light'){
@@ -1547,11 +1546,11 @@ function openDetail(id,e){
   openModal('detail');
 }
 
-const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
 function switchToView(){
   const t=S.tasks.find(t=>t.id===S.editingId);if(!t)return;
   const c=S.clients.find(cl=>cl.id===t.clientId);
+  const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
   document.getElementById('detail-view').style.display='block';
   document.getElementById('detail-edit').style.display='none';
 
@@ -1702,6 +1701,7 @@ function confirmDeleteClient(){
 // ── CALENDAR DAY MODAL ────────────────────────────────────────────────
 let _calDayDate=null;
 function openCalDay(ds){
+  const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
   _calDayDate=ds;
   const [y,m,d]=ds.split('-');
   const MN=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
