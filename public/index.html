@@ -342,9 +342,10 @@ textarea{resize:vertical;min-height:72px}
 .portal-login-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px 28px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;align-items:center}
 .portal-login-logo{font-size:22px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.4px;display:flex;align-items:center;gap:8px}
 .portal-login-sub{color:rgba(255,255,255,.45);font-size:13px;text-align:center;margin-top:-8px}
-.portal-login-field{width:100%;padding:12px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#fff;background:rgba(255,255,255,.08);outline:none;transition:border-color .15s}
-.portal-login-field:focus{border-color:var(--purple-light)}
-.portal-login-field::placeholder{color:rgba(255,255,255,.3)}
+.portal-login-field{width:100%;padding:12px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#fff !important;background:rgba(255,255,255,.08);outline:none;transition:border-color .15s;-webkit-text-fill-color:#fff !important}
+.portal-login-field:focus{border-color:var(--purple-light);background:rgba(255,255,255,.12)}
+.portal-login-field::placeholder{color:rgba(255,255,255,.4) !important}
+.portal-login-field:-webkit-autofill,.portal-login-field:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 100px #2D2545 inset !important;-webkit-text-fill-color:#fff !important;border-color:var(--purple-light)}
 .portal-login-btn{width:100%;padding:13px;border-radius:12px;background:var(--grad);border:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px}
 .portal-login-btn:hover{box-shadow:0 4px 20px rgba(120,111,212,.5);transform:translateY(-1px)}
 .portal-login-err{color:#ffb3b3;font-size:12px;font-weight:600;text-align:center;display:none}
@@ -1782,20 +1783,56 @@ function copyPortalLink(){
 }
 
 window.portalLogin=function(){
-  const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
-  if(!c) return;
-  const input=document.getElementById('portal-pw-input').value;
+  const input=document.getElementById('portal-pw-input');
   const err=document.getElementById('portal-login-err');
-  if(!c.portalPassword || input===c.portalPassword){
+  const typedPw=input.value;
+
+  // Se clientes ainda não carregaram, aguarda e tenta de novo
+  if(!S.clients.length){
+    input.disabled=true;
+    document.querySelector('.portal-login-btn').textContent='Aguardando...';
+    let attempts=0;
+    const wait=setInterval(()=>{
+      attempts++;
+      if(S.clients.length){
+        clearInterval(wait);
+        input.disabled=false;
+        document.querySelector('.portal-login-btn').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Entrar`;
+        input.value=typedPw;
+        doPortalAuth(typedPw);
+      } else if(attempts>30){
+        clearInterval(wait);
+        input.disabled=false;
+        document.querySelector('.portal-login-btn').innerHTML=`Entrar`;
+        err.textContent='Erro de conexão. Recarregue a página.';
+        err.classList.add('show');
+      }
+    },300);
+    return;
+  }
+  doPortalAuth(typedPw);
+};
+
+function doPortalAuth(typedPw){
+  const err=document.getElementById('portal-login-err');
+  const input=document.getElementById('portal-pw-input');
+  const c=S.clients.find(cl=>cl.id===PORTAL.clientId && cl.portalEnabled);
+  if(!c){
+    err.textContent='Link inválido ou portal desativado.';
+    err.classList.add('show');
+    return;
+  }
+  if(!c.portalPassword || typedPw===c.portalPassword){
     err.classList.remove('show');
     sessionStorage.setItem('portal_client',c.id);
     showPortalMain(c);
   } else {
+    err.textContent='Senha incorreta. Tente novamente.';
     err.classList.add('show');
-    document.getElementById('portal-pw-input').value='';
-    document.getElementById('portal-pw-input').focus();
+    input.value='';
+    input.focus();
   }
-};
+}
 
 window.portalLogout=function(){
   sessionStorage.removeItem('portal_client');
