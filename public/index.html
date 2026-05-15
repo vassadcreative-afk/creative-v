@@ -322,16 +322,21 @@ textarea{resize:vertical;min-height:72px}
   .fab{display:flex}
   .modal{max-width:100%}
 }
-@media(max-width:375px){
-  header{padding:0 12px}
-  .logo{font-size:14px}
-  main{padding:12px 12px calc(var(--bottom-h) + 16px)}
-  .hero{padding:14px 16px}
-  .hero-title{font-size:14px}
-  .stat-num{font-size:16px}
-  .cal-cell{min-height:48px;padding:4px 3px;border-radius:6px}
-  .cal-num{font-size:11px;width:20px;height:20px}
-}
+/* Search bar no header */
+.hdr-search-wrap{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px 11px;min-width:180px;max-width:240px;transition:all .18s}
+.hdr-search-wrap:focus-within{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.25)}
+.hdr-search{background:none;border:none;outline:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;width:100%;min-width:0}
+.hdr-search::placeholder{color:rgba(255,255,255,.35)}
+.hdr-search-clear{background:none;border:none;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
+.hdr-search-clear:hover{color:rgba(255,255,255,.8)}
+/* Task code badge */
+.task-code{font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 6px;border-radius:5px;background:rgba(120,111,212,.1);color:var(--purple-dark);font-family:'Space Grotesk',monospace;display:inline-block}
+/* Portal search */
+.portal-search-wrap{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--lav-mid);border-radius:12px;padding:9px 14px;margin-bottom:12px;transition:border-color .15s}
+.portal-search-wrap:focus-within{border-color:var(--purple)}
+.portal-search-input{background:none;border:none;outline:none;color:var(--dark);font-family:'Space Grotesk',sans-serif;font-size:13px;width:100%}
+.portal-search-input::placeholder{color:var(--gray)}
+@media(max-width:639px){.hdr-search-wrap{display:none}}
 
 /* ===== PORTAL DO CLIENTE ===== */
 #client-portal{display:none;position:fixed;inset:0;z-index:10000;background:var(--lav-light);flex-direction:column;overflow:hidden}
@@ -538,6 +543,11 @@ textarea{resize:vertical;min-height:72px}
     <button class="nav-btn" data-view="quadro" onclick="setView('quadro',this)">Quadro</button>
     <button class="nav-btn" data-view="calendario" onclick="setView('calendario',this)">Calendário</button>
   </nav>
+  <div class="hdr-search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="admin-search" class="hdr-search" type="text" placeholder="Pesquisar tarefas..." oninput="applySearch()" onkeydown="if(event.key==='Escape')clearSearch()">
+    <button id="admin-search-clear" class="hdr-search-clear" onclick="clearSearch()" style="display:none">×</button>
+  </div>
   <button class="btn-new" onclick="openNewTask()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova tarefa
@@ -1219,6 +1229,8 @@ function startListeners(){
     S.nextT=ids.length?Math.max(...ids)+1:1;
     renderAll();
     setSyncStatus('ok');
+    // Migra tarefas antigas sem código (só roda se clientes já carregaram)
+    if(S.clients.length) migrateTaskCodes();
   });
   unsubClients = onSnapshot(collection(db,'users',currentUser.uid,'clients'), snap=>{
     S.clients=snap.docs.map(d=>d.data());
@@ -1226,6 +1238,8 @@ function startListeners(){
     S.nextC=ids.length?Math.max(...ids)+1:1;
     renderAll();
     setSyncStatus('ok');
+    // Migra tarefas antigas sem código (só roda se tarefas já carregaram)
+    if(S.tasks.length) migrateTaskCodes();
   });
 }
 
@@ -1350,7 +1364,7 @@ function taskCardHTML(t){
       ${done?`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>`:''}
     </div>
     <div class="t-body">
-      <div class="t-ttl ${done?'struck':''}">${t.title}</div>
+      <div class="t-ttl ${done?'struck':''}">${t.code?`<span class="task-code">${t.code}</span> `:''}${t.title}</div>
       <div class="t-meta">
         ${c?`<span class="tag" style="background:${c.color}">${c.name}</span>`:''}
         <span class="badge ${t.priority}" style="gap:4px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
@@ -1370,6 +1384,7 @@ function renderToday(){
   const ts=td();
   let dt=S.tasks.filter(t=>t.date===ts);
   if(S.filter!=='all') dt=dt.filter(t=>t.clientId===S.filter);
+  dt=filterBySearch(dt);
   // Adiciona barra de filtro de responsável acima da lista
   const el=document.getElementById('today-list');
   // Container pai para filtro + lista
@@ -1422,7 +1437,7 @@ function renderKanban(){
   document.getElementById('board-filters').innerHTML=
     `<div class="chip ${S.filter==='all'?'active':''}" onclick="setFilter('all')">Todos</div>`+
     S.clients.map(c=>`<div class="chip ${S.filter==c.id?'active':''}" onclick="setFilter(${c.id})">${c.name}</div>`).join('');
-  const ft=S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter);
+  const ft=filterBySearch(S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter));
   const pB={alta:'#FFE8E8',normal:'rgba(120,111,212,.12)',baixa:'#E8F7F2'};
   const pC={alta:'#B02020',normal:'#5A52B0',baixa:'#1E8060'};
   const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
@@ -1433,10 +1448,12 @@ function renderKanban(){
     } else {
       ct=ft.filter(t=>t.status===col.id && !isOverdue(t));
     }
+    // Ordenar por data de entrega
+    ct=ct.slice().sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
     return`<div class="k-col ${col.isOverdue?'overdue':''}">
       <div class="k-hdr"><div class="k-dot" style="background:${col.color}"></div><div class="k-name">${col.label}</div><div class="k-cnt ${col.isOverdue&&ct.length?'overdue-cnt':''}">${ct.length}</div></div>
       ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="k-card ${col.isOverdue?'overdue-card':''}" onclick="openDetail(${t.id},event)">
-        <div class="k-card-ttl">${t.title}</div>
+        <div class="k-card-ttl">${t.code?`<span class="task-code" style="display:inline-block;margin-bottom:3px">${t.code}</span><br>`:''}${t.title}</div>
         <div class="k-card-foot">
           ${c?`<span class="tag" style="background:${c.color};font-size:10px;padding:2px 7px">${c.name}</span>`:''}
           <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${pB[t.priority]};color:${pC[t.priority]};display:inline-flex;align-items:center;gap:3px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
@@ -1518,12 +1535,64 @@ function openNewTask(){
   openModal('task');
 }
 
+function clientInitials(c){
+  if(!c) return '??';
+  return c.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
+}
+
+function generateTaskCode(clientId){
+  const c=S.clients.find(cl=>cl.id===clientId);
+  if(!c) return null;
+  const prefix=clientInitials(c);
+  // Pega todos os códigos existentes deste cliente e acha o próximo número
+  const existing=S.tasks
+    .filter(t=>t.clientId===clientId && t.code && t.code.startsWith(prefix))
+    .map(t=>parseInt(t.code.replace(prefix,''))||0);
+  const next=existing.length?Math.max(...existing)+1:1;
+  return `${prefix}${String(next).padStart(4,'0')}`;
+}
+
+// Migração: gera código para tarefas antigas que não têm
+async function migrateTaskCodes(){
+  if(!currentUser) return;
+  // Agrupa tarefas sem código por cliente, ordenadas por id (ordem de criação)
+  const needCode=S.tasks.filter(t=>!t.code);
+  if(!needCode.length) return;
+
+  // Para cada cliente, pega a sequência atual e atribui códigos
+  const byClient={};
+  needCode.sort((a,b)=>a.id-b.id).forEach(t=>{
+    if(!byClient[t.clientId]) byClient[t.clientId]=[];
+    byClient[t.clientId].push(t);
+  });
+
+  for(const [clientId, tasks] of Object.entries(byClient)){
+    const c=S.clients.find(cl=>cl.id===parseInt(clientId));
+    if(!c) continue;
+    const prefix=clientInitials(c);
+    // Número mais alto já existente para este cliente
+    const existing=S.tasks
+      .filter(t=>t.clientId===parseInt(clientId)&&t.code&&t.code.startsWith(prefix))
+      .map(t=>parseInt(t.code.replace(prefix,''))||0);
+    let next=existing.length?Math.max(...existing)+1:1;
+
+    for(const t of tasks){
+      t.code=`${prefix}${String(next).padStart(4,'0')}`;
+      next++;
+      await saveTaskDB(t);
+    }
+  }
+  console.log(`Migração: ${needCode.length} tarefas receberam código.`);
+}
+
 function saveTask(){
   const title=document.getElementById('t-title').value.trim();
   if(!title){document.getElementById('t-title').focus();return}
+  const clientId=parseInt(document.getElementById('t-client').value)||null;
   const t={
     id:S.nextT++,title,
-    clientId:parseInt(document.getElementById('t-client').value)||null,
+    clientId,
+    code:generateTaskCode(clientId),
     priority:document.getElementById('t-priority').value,
     status:document.getElementById('t-status').value,
     date:document.getElementById('t-date').value||td(),
@@ -1555,7 +1624,8 @@ function switchToView(){
   document.getElementById('detail-edit').style.display='none';
 
   document.getElementById('dv-badges').innerHTML=
-    `<span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>`+
+    `${t.code?`<span class="task-code" style="font-size:10px;padding:3px 9px">${t.code}</span>`:''}
+    <span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>`+
     `<span class="d-status">${statusLabel[t.status]||t.status}</span>`+
     (t.ownerName&&t.ownerName!==MY_NAME?`<span class="task-owner-tag" style="font-size:11px;padding:3px 10px">👤 ${t.ownerName}</span>`:'');
 
@@ -1770,7 +1840,37 @@ function saveClient(){
   saveClientDB(c);
   closeModal('client');
 }
-// ── RESPONSÁVEL ───────────────────────────────────────────────────────
+// ── PESQUISA ──────────────────────────────────────────────────────────
+let searchQuery = '';
+
+function applySearch(){
+  const input=document.getElementById('admin-search');
+  searchQuery=input?input.value.trim().toLowerCase():'';
+  const clear=document.getElementById('admin-search-clear');
+  if(clear) clear.style.display=searchQuery?'block':'none';
+  renderAll();
+}
+
+function clearSearch(){
+  const input=document.getElementById('admin-search');
+  if(input) input.value='';
+  searchQuery='';
+  const clear=document.getElementById('admin-search-clear');
+  if(clear) clear.style.display='none';
+  renderAll();
+}
+
+function filterBySearch(tasks){
+  if(!searchQuery) return tasks;
+  return tasks.filter(t=>{
+    const c=S.clients.find(cl=>cl.id===t.clientId);
+    return (t.title||'').toLowerCase().includes(searchQuery)
+      || (t.code||'').toLowerCase().includes(searchQuery)
+      || (t.notes||'').toLowerCase().includes(searchQuery)
+      || (c&&c.name.toLowerCase().includes(searchQuery))
+      || (t.ownerName||'').toLowerCase().includes(searchQuery);
+  });
+}
 
 // ownerName salvo na tarefa: 'Victória', nome do cliente, ou nome customizado
 // ownerFilter: null = todos, 'Victória' = só minhas, nome = só daquela pessoa
@@ -2020,22 +2120,35 @@ function showPortalMain(c){
   renderPortal(c);
 }
 
+let portalSearch='';
+let portalOwnerFilter=null;
+
 function renderPortal(c){
-  const tasks=S.tasks.filter(t=>t.clientId===c.id && t.portalVisible);
+  let tasks=S.tasks.filter(t=>t.clientId===c.id && t.portalVisible);
+  // Ordenar por data de entrega
+  tasks=tasks.slice().sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
   const total=tasks.length;
   const done=tasks.filter(t=>t.status==='done').length;
   const pct=total?Math.round(done/total*100):0;
+
+  // Aplicar filtros de busca e responsável
+  let filtered=tasks;
+  if(portalSearch) filtered=filtered.filter(t=>(t.title||'').toLowerCase().includes(portalSearch)||(t.code||'').toLowerCase().includes(portalSearch)||(t.notes||'').toLowerCase().includes(portalSearch));
+  if(portalOwnerFilter) filtered=filtered.filter(t=>(t.ownerName||MY_NAME)===portalOwnerFilter);
 
   const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando aprovação',done:'Concluído ✓'};
   const pLabels={alta:'🔴 Alta',normal:'🟣 Normal',baixa:'🟢 Baixa'};
 
   // Agrupar por status
   const groups=[
-    {id:'doing',label:'Em andamento',tasks:tasks.filter(t=>t.status==='doing')},
-    {id:'waiting',label:'Aguardando aprovação',tasks:tasks.filter(t=>t.status==='waiting')},
-    {id:'todo',label:'A fazer',tasks:tasks.filter(t=>t.status==='todo')},
-    {id:'done',label:'Concluído',tasks:tasks.filter(t=>t.status==='done')},
+    {id:'doing',label:'Em andamento',tasks:filtered.filter(t=>t.status==='doing')},
+    {id:'waiting',label:'Aguardando aprovação',tasks:filtered.filter(t=>t.status==='waiting')},
+    {id:'todo',label:'A fazer',tasks:filtered.filter(t=>t.status==='todo')},
+    {id:'done',label:'Concluído',tasks:filtered.filter(t=>t.status==='done')},
   ].filter(g=>g.tasks.length);
+
+  // Owners únicos nas tarefas deste cliente
+  const owners=[...new Set(tasks.map(t=>t.ownerName||MY_NAME))];
 
   let html=`
     <div style="margin-bottom:6px">
@@ -2050,10 +2163,25 @@ function renderPortal(c){
         <div class="portal-progress-bar"><div class="portal-progress-fill" style="width:${pct}%"></div></div>
         <div style="font-size:10px;color:var(--gray);margin-top:4px;text-align:right">${done} de ${total} concluídas</div>
       </div>
-    </div>`;
+    </div>
+    <div class="portal-search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="portal-search-input" type="text" placeholder="Pesquisar tarefas..." value="${portalSearch}" oninput="setPortalSearch(this.value,'${c.id}')">
+    </div>
+    ${owners.length>1?`<div class="owner-filter-bar" style="margin-bottom:12px">
+      <span class="owner-filter-lbl">RESPONSÁVEL:</span>
+      <div class="owner-filter-chip ${!portalOwnerFilter?'active':''}" onclick="setPortalOwnerFilter(null,'${c.id}')">Todos</div>
+      ${owners.map(n=>{
+        const isMe=n===MY_NAME;
+        const active=portalOwnerFilter===n;
+        return `<div class="owner-filter-chip ${active?(isMe?'active':'active active-client'):''}" onclick="setPortalOwnerFilter('${n}','${c.id}')">${isMe?'👤':'🏢'} ${n}</div>`;
+      }).join('')}
+    </div>`:''}`;
 
   if(!total){
     html+=`<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>Nenhuma tarefa compartilhada ainda.</div>`;
+  } else if(!filtered.length){
+    html+=`<div class="empty-st"><div class="empty-icon">🔍</div>Nenhuma tarefa encontrada.</div>`;
   }
 
   groups.forEach(g=>{
@@ -2068,7 +2196,7 @@ function renderPortal(c){
           <div class="portal-check ${t.status==='done'?'done':''}" onclick="event.stopPropagation();portalToggleDoneInline(${t.id})">
             ${t.status==='done'?`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>`:''}
           </div>
-          ${t.title}
+          ${t.code?`<span style="font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 6px;border-radius:5px;background:rgba(120,111,212,.1);color:var(--purple-dark);margin-right:2px">${t.code}</span>`:''}${t.title}
         </div>
         <div class="portal-task-meta">
           ${t.ownerName?`<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(120,111,212,.1);color:var(--purple-dark)">👤 ${t.ownerName}</span>`:''}
@@ -2176,6 +2304,19 @@ window.togglePortalLinkDisplay=togglePortalLinkDisplay;
 window.copyPortalLink=copyPortalLink;
 window.selectOwnerTag=selectOwnerTag;
 window.setOwnerFilter=setOwnerFilter;
+window.applySearch=applySearch;
+window.clearSearch=clearSearch;
+
+window.setPortalSearch=function(val, cid){
+  portalSearch=val.trim().toLowerCase();
+  const c=S.clients.find(cl=>cl.id===parseInt(cid)||cl.id===PORTAL.clientId);
+  if(c) renderPortal(c);
+};
+window.setPortalOwnerFilter=function(name, cid){
+  portalOwnerFilter=name;
+  const c=S.clients.find(cl=>cl.id===parseInt(cid)||cl.id===PORTAL.clientId);
+  if(c) renderPortal(c);
+};
 
 
 
