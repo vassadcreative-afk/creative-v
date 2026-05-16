@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Teste Z-API — Creative V</title>
+<style>
+  body { font-family: sans-serif; max-width: 500px; margin: 60px auto; padding: 20px; background: #f5f5f5; }
+  h2 { color: #333; }
+  label { display: block; margin-top: 14px; font-size: 13px; color: #555; font-weight: 600; }
+  input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-top: 4px; box-sizing: border-box; }
+  button { margin-top: 20px; width: 100%; padding: 14px; background: #25D366; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  button:hover { background: #1ebe5d; }
+  #resultado { margin-top: 20px; padding: 14px; border-radius: 10px; font-size: 13px; display: none; white-space: pre-wrap; word-break: break-all; }
+  .ok { background: #e6f9ee; color: #1a7a3f; border: 1px solid #a3e4b7; }
+  .erro { background: #fde8e8; color: #9b1c1c; border: 1px solid #f5aca6; }
+</style>
+</head>
+<body>
+  <h2>🧪 Teste Z-API — Creative V</h2>
+  <p style="color:#666;font-size:13px">Preencha os campos e clique em Enviar para testar a integração.</p>
+
+  <label>URL do seu app (Vercel)</label>
+  <input id="url" value="https://creative-v.vercel.app" />
+
+  <label>WA_INTERNAL_KEY (a senha que você definiu no Vercel)</label>
+  <input id="key" placeholder="ex: creativev2026secret" />
+
+  <label>Número WhatsApp para teste (com DDI+DDD)</label>
+  <input id="phone" placeholder="ex: 5541999999999" />
+
+  <button onclick="testar()">📱 Enviar mensagem de teste</button>
+
+  <div id="resultado"></div>
+
+<script>
+async function testar() {
+  const url = document.getElementById('url').value.trim();
+  const key = document.getElementById('key').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const res = document.getElementById('resultado');
+
+  if (!key || !phone) {
+    res.style.display = 'block';
+    res.className = 'erro';
+    res.textContent = '⚠️ Preencha todos os campos!';
+    return;
+  }
+
+  res.style.display = 'block';
+  res.className = '';
+  res.textContent = '⏳ Enviando...';
+
+  try {
+    const r = await fetch(`${url}/api/whatsapp/notify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-key': key
+      },
+      body: JSON.stringify({
+        to: phone,
+        type: 'manual',
+        task: { message: 'Integração Z-API funcionando! 🎉\n\nEste é um teste do Creative V.' },
+        client: { name: 'Teste' }
+      })
+    });
+    const data = await r.json();
+    if (r.ok) {
+      res.className = 'ok';
+      res.textContent = '✅ Sucesso! Mensagem enviada.\n\n' + JSON.stringify(data, null, 2);
+    } else {
+      res.className = 'erro';
+      res.textContent = '❌ Erro ' + r.status + '\n\n' + JSON.stringify(data, null, 2);
+    }
+  } catch (e) {
+    res.className = 'erro';
+    res.textContent = '❌ Erro de conexão:\n' + e.message;
+  }
+}
+</script>
+</body>
+</html>
