@@ -2175,16 +2175,6 @@ function applyOwnerFilter(tasks){
 
 // ── PORTAL DO CLIENTE ─────────────────────────────────────────────────
 
-// Detecta ?portal=TOKEN na URL e abre o portal
-(function initPortal(){
-  const params=new URLSearchParams(location.search);
-  const token=params.get('portal');
-  if(!token) return;
-  PORTAL.pendingToken=token;
-  document.getElementById('client-portal').classList.add('active');
-  bootstrapPortal(token);
-})();
-
 function showPortalError(msg){
   document.getElementById('portal-login-screen').style.display='flex';
   const err=document.getElementById('portal-login-err');
@@ -2233,6 +2223,11 @@ async function savePortalSnapshot(clientId){
   const token=params.get('portal');
   if(!token) return;
   PORTAL.pendingToken=token;
+  // Esconde login do admin e mostra só o portal do cliente
+  const ls=document.getElementById('login-screen');
+  if(ls) ls.style.display='none';
+  const ar=document.getElementById('app-root');
+  if(ar) ar.style.display='none';
   document.getElementById('client-portal').classList.add('active');
   bootstrapPortal(token);
 })();
@@ -2652,10 +2647,9 @@ window.clearNotifications=function(){
   renderNotifications();
 };
 
-// Hide badge when viewing notifications tab
-const _origSetView=setView;
-// Patch setView to hide badge on notificacoes
-function setView(v){
+// Hide badge when viewing notifications tab — patch via wrapper (avoid redeclaration)
+const _origSetView = window.setView;
+window.setView = function(v){
   _origSetView(v);
   if(v==='notificacoes'){
     ['notif-badge','notif-badge-hdr'].forEach(id=>{
@@ -2665,10 +2659,10 @@ function setView(v){
     renderNotifications();
     const waInput=document.getElementById('admin-wa-input');
     if(waInput && adminWaNumber) waInput.value=adminWaNumber;
+    const waKeyInput=document.getElementById('admin-wa-key-input');
+    if(waKeyInput && waInternalKey) waKeyInput.value=waInternalKey;
   }
-}
-// Re-expose
-window.setView=setView;
+};
 
 // ── TOAST NOTIFICATIONS ───────────────────────────────────────────
 let _toastTimer=null;
