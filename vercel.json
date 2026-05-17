@@ -2,18 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/whatsapp/notify.js",
+      "src": "server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/whatsapp/notify",
-      "dest": "/api/whatsapp/notify.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "server.js"
     }
   ]
 }
