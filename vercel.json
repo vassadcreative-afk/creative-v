@@ -1,27 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/whatsapp/notify.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "^/api/whatsapp/notify",
-      "dest": "/api/whatsapp/notify.js"
-    },
-    {
-      "src": "^/public/(.*)",
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server.js"
-    }
+  "rewrites": [
+    { "source": "/api/whatsapp/notify", "destination": "/api/whatsapp/notify.js" },
+    { "source": "/(.*)", "destination": "/public/index.html" }
   ]
 }
