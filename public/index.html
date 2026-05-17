@@ -322,168 +322,15 @@ textarea{resize:vertical;min-height:72px}
   .fab{display:flex}
   .modal{max-width:100%}
 }
-/* Search bar no header */
-.hdr-search-wrap{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px 11px;min-width:180px;max-width:240px;transition:all .18s}
-.hdr-search-wrap:focus-within{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.25)}
-.hdr-search{background:none;border:none;outline:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;width:100%;min-width:0}
-.hdr-search::placeholder{color:rgba(255,255,255,.35)}
-.hdr-search-clear{background:none;border:none;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
-.hdr-search-clear:hover{color:rgba(255,255,255,.8)}
-/* Task code badge */
-.task-code{font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 6px;border-radius:5px;background:rgba(120,111,212,.1);color:var(--purple-dark);font-family:'Space Grotesk',monospace;display:inline-block}
-/* Portal search */
-.portal-search-wrap{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--lav-mid);border-radius:12px;padding:9px 14px;margin-bottom:12px;transition:border-color .15s}
-.portal-search-wrap:focus-within{border-color:var(--purple)}
-.portal-search-input{background:none;border:none;outline:none;color:var(--dark);font-family:'Space Grotesk',sans-serif;font-size:13px;width:100%}
-.portal-search-input::placeholder{color:var(--gray)}
-@media(max-width:639px){.hdr-search-wrap{display:none}}
-</style>
-#client-portal{display:none;position:fixed;inset:0;z-index:10000;background:var(--lav-light);flex-direction:column;overflow:hidden}
-#client-portal.active{display:flex}
-
-/* Portal login */
-.portal-login{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:20px;background:var(--grad-dark);padding:24px}
-.portal-login-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px 28px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;align-items:center}
-.portal-login-logo{font-size:22px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.4px;display:flex;align-items:center;gap:8px}
-.portal-login-sub{color:rgba(255,255,255,.45);font-size:13px;text-align:center;margin-top:-8px}
-.portal-login-field{width:100%;padding:12px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#fff !important;background:rgba(255,255,255,.08);outline:none;transition:border-color .15s;-webkit-text-fill-color:#fff !important}
-.portal-login-field:focus{border-color:var(--purple-light);background:rgba(255,255,255,.12)}
-.portal-login-field::placeholder{color:rgba(255,255,255,.4) !important}
-.portal-login-field:-webkit-autofill,.portal-login-field:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 100px #2D2545 inset !important;-webkit-text-fill-color:#fff !important;border-color:var(--purple-light)}
-.portal-login-btn{width:100%;padding:13px;border-radius:12px;background:var(--grad);border:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px}
-.portal-login-btn:hover{box-shadow:0 4px 20px rgba(120,111,212,.5);transform:translateY(-1px)}
-.portal-login-err{color:#ffb3b3;font-size:12px;font-weight:600;text-align:center;display:none}
-.portal-login-err.show{display:block}
-
-/* Portal header */
-.portal-header{height:56px;background:var(--grad-dark);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
-.portal-logo{font-size:16px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.3px;display:flex;align-items:center;gap:7px}
-.portal-client-badge{background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,.7)}
-.portal-logout{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:5px}
-.portal-logout:hover{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.25)}
-
-/* Portal body */
-.portal-body{flex:1;overflow-y:auto;padding:20px}
-.portal-section{margin-bottom:24px}
-.portal-section-title{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.portal-progress{background:rgba(120,111,212,.08);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap}
-.portal-stat{text-align:center;flex:1;min-width:60px}
-.portal-stat-num{font-size:22px;font-weight:700;color:var(--purple)}
-.portal-stat-lbl{font-size:10px;font-weight:600;color:var(--gray);letter-spacing:.5px;margin-top:2px}
-.portal-progress-bar{width:100%;height:8px;background:rgba(120,111,212,.15);border-radius:99px;overflow:hidden;margin-top:4px}
-.portal-progress-fill{height:100%;background:var(--grad);border-radius:99px;transition:width .6s ease}
-
-/* Portal task card */
-.portal-task{background:var(--white);border-radius:12px;padding:14px 16px;margin-bottom:8px;border-left:4px solid var(--purple);box-shadow:0 2px 12px rgba(120,111,212,.08);cursor:pointer;transition:all .18s}
-.portal-task:hover{box-shadow:0 4px 20px rgba(120,111,212,.16);transform:translateY(-1px)}
-.portal-task.alta{border-left-color:var(--red)}
-.portal-task.baixa{border-left-color:var(--green)}
-.portal-task.done-task{opacity:.6}
-.portal-task-title{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.portal-task-title.struck{text-decoration:line-through;color:var(--gray)}
-.portal-task-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.portal-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--lav-mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
-.portal-check.done{background:var(--grad);border-color:transparent}
-.portal-task-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--purple);text-decoration:none;background:rgba(120,111,212,.08);padding:3px 9px;border-radius:20px;transition:all .15s}
-.portal-task-link:hover{background:rgba(120,111,212,.18)}
-
-/* Portal comment */
-.portal-comment-section{margin-top:8px;padding-top:8px;border-top:1px solid var(--lav-light)}
-.portal-comment-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
-.portal-comment-item{background:var(--lav-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dark);line-height:1.5}
-.portal-comment-meta{font-size:10px;color:var(--gray);margin-top:3px}
-.portal-comment-form{display:flex;gap:6px}
-.portal-comment-input{flex:1;padding:8px 11px;border:1.5px solid rgba(120,111,212,.18);border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--dark);background:var(--white);outline:none;transition:border-color .15s}
-.portal-comment-input:focus{border-color:var(--purple)}
-.portal-comment-send{background:var(--grad);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* Portal modal de detalhe */
-.portal-detail-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,40,.62);backdrop-filter:blur(5px);z-index:10500;align-items:flex-end;justify-content:center}
-.portal-detail-overlay.open{display:flex}
-.portal-detail-modal{background:var(--white);width:100%;max-width:500px;border-radius:24px 24px 0 0;padding:24px 24px 36px;max-height:88vh;overflow-y:auto}
-.portal-detail-header{background:var(--grad-dark);border-radius:14px;padding:18px 20px;margin-bottom:16px}
-.portal-detail-title{color:#fff;font-size:17px;font-weight:700;line-height:1.35;margin:8px 0}
-
-/* Admin: configurações do portal no modal de editar cliente */
-.portal-config-box{background:rgba(120,111,212,.06);border-radius:12px;padding:14px;margin-top:4px;display:flex;flex-direction:column;gap:10px}
-.portal-config-title{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--purple);text-transform:uppercase;display:flex;align-items:center;gap:6px}
-.portal-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.portal-toggle-lbl{font-size:12px;color:var(--dark)}
-.portal-toggle{position:relative;width:40px;height:22px;flex-shrink:0}
-.portal-toggle input{opacity:0;width:0;height:0}
-.portal-toggle-slider{position:absolute;inset:0;background:var(--lav-mid);border-radius:99px;cursor:pointer;transition:.25s}
-.portal-toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s}
-.portal-toggle input:checked+.portal-toggle-slider{background:var(--purple)}
-.portal-toggle input:checked+.portal-toggle-slider:before{transform:translateX(18px)}
-.portal-link-display{background:var(--lav-light);border-radius:8px;padding:9px 12px;font-size:11px;color:var(--gray);word-break:break-all;display:flex;align-items:center;gap:8px}
-.portal-link-copy{background:var(--purple);border:none;border-radius:6px;padding:5px 10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
-.portal-link-copy:hover{background:var(--purple-dark)}
-.portal-pw-row{display:flex;flex-direction:column;gap:4px}
-.portal-pw-input{width:100%;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:var(--white);outline:none;transition:border-color .15s}
-.portal-pw-input:focus{border-color:var(--purple)}
-.portal-pw-hint{font-size:10px;color:var(--gray)}
-
-/* Admin: badge de visibilidade na tarefa */
-.task-portal-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(120,111,212,.12);color:var(--purple-dark);display:inline-flex;align-items:center;gap:3px}
-
-/* Portal: nova tarefa do cliente toggle */
-.portal-visible-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(120,111,212,.06);border-radius:10px;border:1.5px solid rgba(120,111,212,.14)}
-.portal-visible-lbl{font-size:13px;color:var(--dark);flex:1}
-
-/* Responsável — tags clicáveis */
-.owner-tags{display:flex;gap:6px;flex-wrap:wrap}
-.owner-tag-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--lav-mid);background:var(--lav-light);color:var(--gray);transition:all .14s;white-space:nowrap}
-.owner-tag-btn:hover{border-color:var(--purple);color:var(--purple-dark)}
-.owner-tag-btn.active-me{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
-.owner-tag-btn.active-client{background:rgba(232,93,93,.12);color:#b83232;border-color:#e85d5d}
-.task-owner-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;background:rgba(120,111,212,.12);color:var(--purple-dark)}
-.task-owner-tag.is-client{background:rgba(232,93,93,.1);color:#b83232}
-/* Filtro de responsável */
-.owner-filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;padding:8px 12px;background:var(--white);border-radius:12px;border:1px solid var(--lav-mid)}
-.owner-filter-lbl{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.3px;margin-right:2px}
-.owner-filter-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;background:var(--lav-light);color:var(--gray);transition:all .13s}
-.owner-filter-chip.active{background:rgba(120,111,212,.15);color:var(--purple-dark);border-color:var(--purple)}
-.owner-filter-chip.active-client{background:rgba(232,93,93,.1);color:#b83232;border-color:#e85d5d}
-.portal-new-comment-dot{width:7px;height:7px;border-radius:50%;background:var(--pink);display:inline-block;margin-left:4px;animation:blink 2s infinite}
-
-/* DRAG & DROP KANBAN */
-.k-card.dragging{opacity:.45;transform:scale(.97);box-shadow:0 8px 28px rgba(120,111,212,.3)}
-.k-col.drag-over{background:rgba(120,111,212,.07);outline:2px dashed var(--purple);outline-offset:-4px}
-.k-col.drag-over .k-card{transform:none}
-
-/* DEPENDENCY COLORS */
-.k-card.has-dep{border:1.5px solid var(--orange);background:linear-gradient(135deg,var(--lav-light),#fff8f0)}
-.task-card.has-dep{border-left-color:var(--orange)!important}
-.dep-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--orange-bg);color:var(--orange-txt);display:inline-flex;align-items:center;gap:3px;flex-shrink:0}
-
-/* NOTIFICATION TOAST */
-.notif-toast{position:fixed;bottom:calc(var(--bottom-h,0px) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;border-radius:12px;padding:12px 18px;font-size:13px;font-weight:600;z-index:9000;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transition:all .3s;pointer-events:none;max-width:340px;white-space:nowrap}
-.notif-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.notif-toast.success{border-left:4px solid var(--green)}
-.notif-toast.info{border-left:4px solid var(--purple)}
-.notif-toast.warn{border-left:4px solid var(--orange)}
-
-/* NOTIFICATION HISTORY CARDS */
-.notif-card{background:var(--white);border-radius:var(--rsm);padding:13px 16px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh);border-left:4px solid var(--purple)}
-.notif-card.notif-action{border-left-color:var(--green)}
-.notif-card.notif-client{border-left-color:var(--pink)}
-.notif-card.notif-warn{border-left-color:var(--orange)}
-.notif-card-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
-.notif-card-body{flex:1;min-width:0}
-.notif-card-title{font-size:13px;font-weight:700;color:var(--dark)}
-.notif-card-sub{font-size:11px;color:var(--gray);margin-top:2px}
-.notif-card-time{font-size:10px;color:var(--gray);font-weight:600;flex-shrink:0}
-
-/* WHATSAPP BUTTON */
-.btn-wa{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;background:#25D366;border:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
-.btn-wa:hover{background:#1ebe5a;box-shadow:0 4px 14px rgba(37,211,102,.35)}
-.portal-signal-btn{width:100%;padding:12px;border-radius:12px;background:var(--grad);border:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px}
-.portal-signal-btn:hover{box-shadow:0 4px 20px rgba(120,111,212,.45)}
-.portal-deliver-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--lav-light)}
-
-@media(max-width:639px){
-  .portal-body{padding:14px}
-  .portal-progress{gap:10px}
+@media(max-width:375px){
+  header{padding:0 12px}
+  .logo{font-size:14px}
+  main{padding:12px 12px calc(var(--bottom-h) + 16px)}
+  .hero{padding:14px 16px}
+  .hero-title{font-size:14px}
+  .stat-num{font-size:16px}
+  .cal-cell{min-height:48px;padding:4px 3px;border-radius:6px}
+  .cal-num{font-size:11px;width:20px;height:20px}
 }
 </style>
 </head>
@@ -501,44 +348,6 @@ textarea{resize:vertical;min-height:72px}
 
 <!-- TELA DE LOGIN -->
 <div id="login-screen" style="display:flex;position:fixed;inset:0;z-index:9999;background:var(--grad-dark);align-items:center;justify-content:center;flex-direction:column;gap:24px">
-
-<!-- ===== PORTAL DO CLIENTE ===== -->
-<div id="client-portal">
-  <!-- LOGIN DO PORTAL -->
-  <div id="portal-login-screen" class="portal-login">
-    <div class="portal-login-card">
-      <div class="portal-login-logo">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z" stroke="url(#iconGrad)" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        Creative V
-      </div>
-      <div id="portal-client-name-title" style="color:#fff;font-size:16px;font-weight:700;text-align:center"></div>
-      <div class="portal-login-sub">Portal do cliente · Acesso restrito</div>
-      <input class="portal-login-field" type="password" id="portal-pw-input" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')portalLogin()">
-      <div class="portal-login-err" id="portal-login-err">Senha incorreta. Tente novamente.</div>
-      <button class="portal-login-btn" onclick="portalLogin()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Entrar
-      </button>
-    </div>
-  </div>
-
-  <!-- PAINEL DO PORTAL -->
-  <div id="portal-main" style="display:none;flex-direction:column;height:100%">
-    <div class="portal-header">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z" stroke="url(#iconGrad)" stroke-width="1.8" stroke-linejoin="round"/></svg>
-      <div class="portal-logo">Creative V</div>
-      <div class="portal-client-badge" id="portal-client-badge">Cliente</div>
-      <button class="portal-logout" onclick="portalLogout()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Sair
-      </button>
-    </div>
-    <div class="portal-body" id="portal-body">
-      <!-- Renderizado via JS -->
-    </div>
-  </div>
-</div>
-<!-- /PORTAL DO CLIENTE -->
   <div style="text-align:center">
     <div style="display:flex;justify-content:center;margin-bottom:10px">
       <!-- Sparkle icon -->
@@ -576,13 +385,7 @@ textarea{resize:vertical;min-height:72px}
     <button class="nav-btn active" data-view="hoje" onclick="setView('hoje',this)">Hoje</button>
     <button class="nav-btn" data-view="quadro" onclick="setView('quadro',this)">Quadro</button>
     <button class="nav-btn" data-view="calendario" onclick="setView('calendario',this)">Calendário</button>
-    <button class="nav-btn" data-view="notificacoes" onclick="setView('notificacoes',this)" style="position:relative">Avisos<span id="notif-badge-hdr" style="display:none;position:absolute;top:4px;right:6px;width:7px;height:7px;border-radius:50%;background:#E85D5D"></span></button>
   </nav>
-  <div class="hdr-search-wrap">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input id="admin-search" class="hdr-search" type="text" placeholder="Pesquisar tarefas..." oninput="applySearch()" onkeydown="if(event.key==='Escape')clearSearch()">
-    <button id="admin-search-clear" class="hdr-search-clear" onclick="clearSearch()" style="display:none">×</button>
-  </div>
   <button class="btn-new" onclick="openNewTask()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova tarefa
@@ -666,10 +469,7 @@ textarea{resize:vertical;min-height:72px}
     <div class="view" id="view-quadro">
       <div class="board-toolbar">
         <div class="sec-title" style="font-size:15px">Quadro de tarefas</div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <div class="filters" id="board-filters"></div>
-          <div id="kanban-owner-filter" style="display:flex;gap:5px;flex-wrap:wrap;align-items:center"></div>
-        </div>
+        <div class="filters" id="board-filters"></div>
       </div>
       <div class="kanban-scroll"><div class="kanban-board" id="kanban"></div></div>
     </div>
@@ -692,31 +492,6 @@ textarea{resize:vertical;min-height:72px}
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
-
-    <!-- VIEW: NOTIFICAÇÕES -->
-    <div class="view" id="view-notificacoes">
-      <div class="hero" style="padding:18px 20px">
-        <div>
-          <div class="hero-title" style="font-size:17px">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Avisos & Histórico
-          </div>
-          <div class="hero-date" id="notif-subtitle" style="margin-top:4px">Ações recentes do sistema</div>
-        </div>
-        <button onclick="clearNotifications()" style="background:rgba(255,255,255,.1);border:none;border-radius:10px;padding:8px 14px;color:rgba(255,255,255,.6);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer">Limpar tudo</button>
-      </div>
-      <div id="notif-list" style="display:flex;flex-direction:column;gap:8px"></div>
-      <!-- Admin WA Config -->
-      <div style="margin-top:16px;background:var(--white);border-radius:var(--rsm);padding:14px 16px;box-shadow:var(--sh)">
-        <div class="sec-title" style="margin-bottom:10px;font-size:13px">⚙️ Configurações de notificação</div>
-        <label style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Seu número WhatsApp (para receber entregas)</label>
-        <div style="display:flex;gap:8px">
-          <input type="tel" id="admin-wa-input" placeholder="Ex: 5541999990000" style="flex:1;padding:10px 13px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--dark);background:var(--lav-light);outline:none">
-          <button onclick="setAdminWaNumber(document.getElementById('admin-wa-input').value)" class="btn btn-primary" style="flex:0 0 auto;padding:10px 16px">Salvar</button>
-        </div>
-        <div style="font-size:11px;color:var(--gray);margin-top:6px">Quando o cliente entrega algo pelo portal, você recebe mensagem no WhatsApp.</div>
-      </div>
-    </div>
   </main>
 </div>
 
@@ -733,10 +508,6 @@ textarea{resize:vertical;min-height:72px}
     <button class="bn-btn" data-view="calendario" onclick="setView('calendario',this)">
       <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/></svg></span>
       <span class="bn-lbl">Agenda</span>
-    </button>
-    <button class="bn-btn" data-view="notificacoes" onclick="setView('notificacoes',this)">
-      <span class="bn-icon" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notif-badge" style="display:none;position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red)"></span></span>
-      <span class="bn-lbl">Avisos</span>
     </button>
     <button class="bn-btn" onclick="toggleDrawer()">
       <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg></span>
@@ -777,19 +548,7 @@ textarea{resize:vertical;min-height:72px}
       </div>
     </div>
     <div class="fg"><label>Link de entrega</label><input type="url" id="t-link" placeholder="https://drive.google.com/..."></div>
-    <div class="fg">
-      <label>Responsável</label>
-      <div class="owner-tags" id="t-owner-tags"></div>
-    </div>
     <div class="fg"><label>Observações</label><textarea id="t-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
-    <div class="fg"><label>Depende de (ID da tarefa)</label><input type="text" id="t-depends" placeholder="Ex: #12, #15"></div>
-    <div class="fg portal-visible-row" id="t-portal-row" style="display:none">
-      <span class="portal-visible-lbl">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        Visível no portal do cliente
-      </span>
-      <label class="portal-toggle"><input type="checkbox" id="t-portal-visible"><span class="portal-toggle-slider"></span></label>
-    </div>
     <div class="modal-acts">
       <button class="btn btn-ghost" onclick="closeModal('task')">Cancelar</button>
       <button class="btn btn-primary" onclick="saveTask()">
@@ -817,15 +576,10 @@ textarea{resize:vertical;min-height:72px}
         <label>Observações</label>
         <div class="detail-notes-box" id="dv-notes"></div>
       </div>
-      <div id="dv-dep-info" style="display:none;margin-bottom:14px"></div>
-      <div class="modal-acts" style="flex-wrap:wrap;gap:6px">
-        <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')" style="flex:0 0 auto;padding:11px 14px">
+      <div class="modal-acts">
+        <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
           Excluir
-        </button>
-        <button id="dv-wa-btn" class="btn-wa" onclick="signalClientWa(S.editingId)" style="display:none;flex-shrink:0">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Sinalizar via WA
         </button>
         <button class="btn btn-ghost" onclick="closeModal('detail')">Fechar</button>
         <button class="btn btn-primary" onclick="switchToEdit()">
@@ -861,20 +615,7 @@ textarea{resize:vertical;min-height:72px}
         </div>
       </div>
       <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://..."></div>
-      <div class="fg">
-        <label>Responsável</label>
-        <div class="owner-tags" id="e-owner-tags"></div>
-      </div>
-      </div>
       <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
-      <div class="fg"><label>Depende de (ID da tarefa)</label><input type="text" id="e-depends" placeholder="Ex: #12, #15"></div>
-      <div class="fg portal-visible-row" id="e-portal-row" style="display:none">
-        <span class="portal-visible-lbl">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Visível no portal do cliente
-        </span>
-        <label class="portal-toggle"><input type="checkbox" id="e-portal-visible"><span class="portal-toggle-slider"></span></label>
-      </div>
       <div class="modal-acts">
         <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
@@ -932,37 +673,6 @@ textarea{resize:vertical;min-height:72px}
         <div class="swatch" data-color="#9B70E8" style="background:#9B70E8" onclick="pickColorEdit(this)"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>WhatsApp do cliente</label>
-      <input type="tel" id="ec-wa-number" placeholder="Ex: 5541999990000 (com DDI)">
-    </div>
-    <div class="fg">
-      <label>Portal do cliente</label>
-      <div class="portal-config-box">
-        <div class="portal-config-title">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Acesso do cliente
-        </div>
-        <div class="portal-toggle-row">
-          <span class="portal-toggle-lbl">Ativar portal para este cliente</span>
-          <label class="portal-toggle"><input type="checkbox" id="ec-portal-enabled" onchange="togglePortalLinkDisplay()"><span class="portal-toggle-slider"></span></label>
-        </div>
-        <div id="ec-portal-link-section" style="display:none;flex-direction:column;gap:8px">
-          <div class="portal-pw-row">
-            <div class="portal-pw-hint">Senha de acesso do portal</div>
-            <input class="portal-pw-input" type="text" id="ec-portal-password" placeholder="Ex: svicero2025">
-          </div>
-          <div>
-            <div class="portal-pw-hint" style="margin-bottom:4px">Link do portal</div>
-            <div class="portal-link-display">
-              <span id="ec-portal-link-text" style="flex:1;font-size:10px"></span>
-              <button class="portal-link-copy" onclick="copyPortalLink()">Copiar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="modal-acts">
       <button class="btn btn-danger" id="del-client-btn" onclick="confirmDeleteClient()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
@@ -994,32 +704,6 @@ textarea{resize:vertical;min-height:72px}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Nova tarefa
       </button>
-    </div>
-  </div>
-</div>
-
-<!-- PORTAL: MODAL DE DETALHE DA TAREFA -->
-<div class="portal-detail-overlay" id="portal-detail-overlay" onclick="if(event.target===this)closePortalDetail()">
-  <div class="portal-detail-modal">
-    <span class="modal-handle"></span>
-    <div class="portal-detail-header" id="portal-detail-header"></div>
-    <div id="portal-detail-body"></div>
-    <div class="portal-comment-section">
-      <div class="portal-section-title" style="font-size:12px;margin-bottom:8px">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Comentários
-      </div>
-      <div class="portal-comment-list" id="portal-comment-list"></div>
-      <div class="portal-comment-form">
-        <input class="portal-comment-input" id="portal-comment-input" type="text" placeholder="Deixe um comentário..." onkeydown="if(event.key==='Enter')submitPortalComment()">
-        <button class="portal-comment-send" onclick="submitPortalComment()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
-        </button>
-      </div>
-    </div>
-    <div style="margin-top:14px;display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="closePortalDetail()" style="flex:1">Fechar</button>
-      <button class="btn btn-primary" id="portal-done-btn" onclick="portalToggleDone()" style="flex:1"></button>
     </div>
   </div>
 </div>
@@ -1307,8 +991,6 @@ function startListeners(){
     S.nextT=ids.length?Math.max(...ids)+1:1;
     renderAll();
     setSyncStatus('ok');
-    // Migra tarefas antigas sem código (só roda se clientes já carregaram)
-    if(S.clients.length) migrateTaskCodes();
   });
   unsubClients = onSnapshot(collection(db,'users',currentUser.uid,'clients'), snap=>{
     S.clients=snap.docs.map(d=>d.data());
@@ -1316,8 +998,6 @@ function startListeners(){
     S.nextC=ids.length?Math.max(...ids)+1:1;
     renderAll();
     setSyncStatus('ok');
-    // Migra tarefas antigas sem código (só roda se tarefas já carregaram)
-    if(S.tasks.length) migrateTaskCodes();
   });
 }
 
@@ -1394,19 +1074,8 @@ function toggleDrawer(){
   document.getElementById('sd-drawer').classList.toggle('open');
 }
 
-// ── PORTAL STATE (declarado aqui para evitar erro de inicialização) ──
-const PORTAL = { clientId:null, taskId:null, ownerId:null, pendingToken:null };
-const MY_NAME = 'Victória';
-
 // ── RENDER ─────────────────────────────────────────────────────────
-function renderAll(){renderLists();renderToday();renderKanban();renderCalendar();updateStats();
-  // Portal hooks
-  if(typeof checkPortalPendingToken==='function') checkPortalPendingToken();
-  if(PORTAL.clientId && sessionStorage.getItem('portal_client')){
-    const __pc=S.clients.find(cl=>cl.id===PORTAL.clientId);
-    if(__pc)renderPortal(__pc);
-  }
-}
+function renderAll(){renderLists();renderToday();renderKanban();renderCalendar();updateStats()}
 
 function clientHTML(){
   const all=`<div class="c-item ${S.filter==='all'?'active':''}" onclick="setFilter('all')">
@@ -1442,7 +1111,7 @@ function taskCardHTML(t){
       ${done?`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>`:''}
     </div>
     <div class="t-body">
-      <div class="t-ttl ${done?'struck':''}">${t.code?`<span class="task-code">${t.code}</span> `:''}${t.title}</div>
+      <div class="t-ttl ${done?'struck':''}">${t.title}</div>
       <div class="t-meta">
         ${c?`<span class="tag" style="background:${c.color}">${c.name}</span>`:''}
         <span class="badge ${t.priority}" style="gap:4px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
@@ -1451,8 +1120,6 @@ function taskCardHTML(t){
           ${fmt(t.date)}${late?' · atrasada':''}
         </span>`:''}
         ${t.link?`<span style="font-size:10px;color:var(--purple);font-weight:700;display:inline-flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> link</span>`:''}
-        ${t.portalVisible?`<span class="task-portal-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> portal</span>`:''}
-        ${ownerTag(t.ownerName)}
       </div>
     </div>
   </div>`;
@@ -1460,34 +1127,9 @@ function taskCardHTML(t){
 
 function renderToday(){
   const ts=td();
-  let dt=S.tasks.filter(t=>t.date===ts);
-  if(S.filter!=='all') dt=dt.filter(t=>t.clientId===S.filter);
-  dt=filterBySearch(dt);
-  // Adiciona barra de filtro de responsável acima da lista
+  const dt=S.tasks.filter(t=>t.date===ts);
   const el=document.getElementById('today-list');
-  // Container pai para filtro + lista
-  let filterBar=document.getElementById('today-owner-filter');
-  if(!filterBar){
-    filterBar=document.createElement('div');
-    filterBar.id='today-owner-filter';
-    el.parentNode.insertBefore(filterBar,el);
-  }
-  // Render filtro
-  const allOwners=[...new Set(S.tasks.filter(t=>S.filter==='all'||t.clientId===S.filter).map(t=>t.ownerName||MY_NAME))];
-  if(allOwners.length>1){
-    filterBar.innerHTML=`<div class="owner-filter-bar">
-      <span class="owner-filter-lbl">VER:</span>
-      <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
-      ${allOwners.map(n=>{
-        const isClient=S.clients.some(c=>c.name===n);
-        const active=ownerFilter===n;
-        return `<div class="owner-filter-chip ${active?(isClient?'active active-client':'active'):''}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
-      }).join('')}
-    </div>`;
-  } else { filterBar.innerHTML=''; }
-  // Aplica filtro
-  const filtered=applyOwnerFilter(dt);
-  el.innerHTML=filtered.length?filtered.map(t=>taskCardHTML(t)).join('')
+  el.innerHTML=dt.length?dt.map(t=>taskCardHTML(t)).join('')
     :`<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>Nenhuma tarefa pra hoje!</div>`;
 
   const evSec=document.getElementById('ev-sec'),evList=document.getElementById('ev-list');
@@ -1515,21 +1157,10 @@ function renderKanban(){
   document.getElementById('board-filters').innerHTML=
     `<div class="chip ${S.filter==='all'?'active':''}" onclick="setFilter('all')">Todos</div>`+
     S.clients.map(c=>`<div class="chip ${S.filter==c.id?'active':''}" onclick="setFilter(${c.id})">${c.name}</div>`).join('');
-
-  // Kanban owner filter bar
-  const allOwners=[...new Set(S.tasks.map(t=>t.ownerName||MY_NAME))];
-  const kofEl=document.getElementById('kanban-owner-filter');
-  if(kofEl && allOwners.length>1){
-    kofEl.innerHTML=`<span class="owner-filter-lbl" style="font-size:10px">👤</span>`+
-      `<div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>`+
-      allOwners.map(n=>`<div class="owner-filter-chip ${ownerFilter===n?'active':''}" onclick="setOwnerFilter('${n}')">${n===MY_NAME?'👤':'👥'} ${n}</div>`).join('');
-  } else if(kofEl){ kofEl.innerHTML=''; }
-
-  const ft=applyOwnerFilter(filterBySearch(S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter)));
+  const ft=S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter);
   const pB={alta:'#FFE8E8',normal:'rgba(120,111,212,.12)',baixa:'#E8F7F2'};
   const pC={alta:'#B02020',normal:'#5A52B0',baixa:'#1E8060'};
   const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
-
   document.getElementById('kanban').innerHTML=cols.map(col=>{
     let ct;
     if(col.isOverdue){
@@ -1537,31 +1168,16 @@ function renderKanban(){
     } else {
       ct=ft.filter(t=>t.status===col.id && !isOverdue(t));
     }
-    ct=ct.slice().sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
-    return`<div class="k-col ${col.isOverdue?'overdue':''}" data-col="${col.id}"
-      ondragover="event.preventDefault();this.classList.add('drag-over')"
-      ondragleave="this.classList.remove('drag-over')"
-      ondrop="kanbanDrop(event,'${col.id}',this)">
+    return`<div class="k-col ${col.isOverdue?'overdue':''}">
       <div class="k-hdr"><div class="k-dot" style="background:${col.color}"></div><div class="k-name">${col.label}</div><div class="k-cnt ${col.isOverdue&&ct.length?'overdue-cnt':''}">${ct.length}</div></div>
-      ${ct.map(t=>{
-        const c=S.clients.find(cl=>cl.id===t.clientId);
-        const hasDep=t.dependsOn&&t.dependsOn.trim();
-        const depBlocked=hasDep&&checkDepsBlocked(t);
-        return`<div class="k-card ${col.isOverdue?'overdue-card':''} ${hasDep?'has-dep':''}" 
-          draggable="true"
-          data-task-id="${t.id}"
-          ondragstart="kanbanDragStart(event,${t.id})"
-          ondragend="kanbanDragEnd(event)"
-          onclick="openDetail(${t.id},event)">
-          <div class="k-card-ttl">${t.code?`<span class="task-code" style="display:inline-block;margin-bottom:3px">${t.code}</span><br>`:''}${t.title}</div>
-          <div class="k-card-foot">
-            ${c?`<span class="tag" style="background:${c.color};font-size:10px;padding:2px 7px">${c.name}</span>`:''}
-            <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${pB[t.priority]};color:${pC[t.priority]};display:inline-flex;align-items:center;gap:3px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
-            ${t.date?`<span class="k-date ${col.isOverdue?'late':''}">${fmt(t.date)}</span>`:''}
-            ${hasDep?`<span class="dep-badge">🔗 ${depBlocked?'bloqueada':'depende'}</span>`:''}
-            ${t.link?`<span style="font-size:11px;display:inline-flex"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>`:''}
-            ${ownerTag(t.ownerName)}
-          </div></div>`;}).join('')}
+      ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="k-card ${col.isOverdue?'overdue-card':''}" onclick="openDetail(${t.id},event)">
+        <div class="k-card-ttl">${t.title}</div>
+        <div class="k-card-foot">
+          ${c?`<span class="tag" style="background:${c.color};font-size:10px;padding:2px 7px">${c.name}</span>`:''}
+          <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${pB[t.priority]};color:${pC[t.priority]};display:inline-flex;align-items:center;gap:3px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
+          ${t.date?`<span class="k-date ${col.isOverdue?'late':''}">${fmt(t.date)}</span>`:''}
+          ${t.link?`<span style="font-size:11px;display:inline-flex"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>`:''}
+        </div></div>`;}).join('')}
       ${!col.isOverdue?`<button class="add-col" onclick="openNewTask()">+ adicionar</button>`:''}
     </div>`;
   }).join('');
@@ -1627,86 +1243,23 @@ function openNewTask(){
   document.getElementById('t-link').value='';
   document.getElementById('t-priority').value='normal';
   document.getElementById('t-status').value='todo';
-  document.getElementById('t-portal-visible').checked=false;
-  setOwner('t','');
-  buildOwnerTags('t', MY_NAME);
-  // Mostrar toggle portal se algum cliente tem portal ativo
-  const hasPortalClient=S.clients.some(c=>c.portalEnabled);
-  document.getElementById('t-portal-row').style.display=hasPortalClient?'flex':'none';
   openModal('task');
-}
-
-function clientInitials(c){
-  if(!c) return '??';
-  return c.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
-}
-
-function generateTaskCode(clientId){
-  const c=S.clients.find(cl=>cl.id===clientId);
-  if(!c) return null;
-  const prefix=clientInitials(c);
-  // Pega todos os códigos existentes deste cliente e acha o próximo número
-  const existing=S.tasks
-    .filter(t=>t.clientId===clientId && t.code && t.code.startsWith(prefix))
-    .map(t=>parseInt(t.code.replace(prefix,''))||0);
-  const next=existing.length?Math.max(...existing)+1:1;
-  return `${prefix}${String(next).padStart(4,'0')}`;
-}
-
-// Migração: gera código para tarefas antigas que não têm
-async function migrateTaskCodes(){
-  if(!currentUser) return;
-  // Agrupa tarefas sem código por cliente, ordenadas por id (ordem de criação)
-  const needCode=S.tasks.filter(t=>!t.code);
-  if(!needCode.length) return;
-
-  // Para cada cliente, pega a sequência atual e atribui códigos
-  const byClient={};
-  needCode.sort((a,b)=>a.id-b.id).forEach(t=>{
-    if(!byClient[t.clientId]) byClient[t.clientId]=[];
-    byClient[t.clientId].push(t);
-  });
-
-  for(const [clientId, tasks] of Object.entries(byClient)){
-    const c=S.clients.find(cl=>cl.id===parseInt(clientId));
-    if(!c) continue;
-    const prefix=clientInitials(c);
-    // Número mais alto já existente para este cliente
-    const existing=S.tasks
-      .filter(t=>t.clientId===parseInt(clientId)&&t.code&&t.code.startsWith(prefix))
-      .map(t=>parseInt(t.code.replace(prefix,''))||0);
-    let next=existing.length?Math.max(...existing)+1:1;
-
-    for(const t of tasks){
-      t.code=`${prefix}${String(next).padStart(4,'0')}`;
-      next++;
-      await saveTaskDB(t);
-    }
-  }
-  console.log(`Migração: ${needCode.length} tarefas receberam código.`);
 }
 
 function saveTask(){
   const title=document.getElementById('t-title').value.trim();
   if(!title){document.getElementById('t-title').focus();return}
-  const clientId=parseInt(document.getElementById('t-client').value)||null;
   const t={
     id:S.nextT++,title,
-    clientId,
-    code:generateTaskCode(clientId),
+    clientId:parseInt(document.getElementById('t-client').value)||null,
     priority:document.getElementById('t-priority').value,
     status:document.getElementById('t-status').value,
     date:document.getElementById('t-date').value||td(),
     notes:document.getElementById('t-notes').value,
     link:document.getElementById('t-link').value.trim(),
-    dependsOn:document.getElementById('t-depends').value.trim(),
-    portalVisible:document.getElementById('t-portal-visible').checked,
-    ownerName:getOwner('t'),
-    comments:[],
   };
   setSyncStatus('loading');
   saveTaskDB(t);
-  addNotification('action',`Tarefa criada: "${t.title}"`,'','✅');
   closeModal('task');
 }
 
@@ -1718,19 +1271,17 @@ function openDetail(id,e){
   openModal('detail');
 }
 
+const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
 function switchToView(){
   const t=S.tasks.find(t=>t.id===S.editingId);if(!t)return;
   const c=S.clients.find(cl=>cl.id===t.clientId);
-  const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
   document.getElementById('detail-view').style.display='block';
   document.getElementById('detail-edit').style.display='none';
 
   document.getElementById('dv-badges').innerHTML=
-    `${t.code?`<span class="task-code" style="font-size:10px;padding:3px 9px">${t.code}</span>`:''}
-    <span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>`+
-    `<span class="d-status">${statusLabel[t.status]||t.status}</span>`+
-    (t.ownerName&&t.ownerName!==MY_NAME?`<span class="task-owner-tag" style="font-size:11px;padding:3px 10px">👤 ${t.ownerName}</span>`:'');
+    `<span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>`+
+    `<span class="d-status">${statusLabel[t.status]||t.status}</span>`;
 
   document.getElementById('dv-title').textContent=t.title;
 
@@ -1742,26 +1293,8 @@ function switchToView(){
     ?`<div class="detail-link-box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ccc8f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <a href="${t.link}" target="_blank" rel="noopener">${t.link}</a></div>`:'';
 
   document.getElementById('dv-notes').textContent=t.notes||'—';
-
-  // Dependency info
-  const depEl=document.getElementById('dv-dep-info');
-  if(depEl){
-    if(t.dependsOn&&t.dependsOn.trim()){
-      const blocked=checkDepsBlocked(t);
-      depEl.style.display='block';
-      depEl.innerHTML=`<div style="background:${blocked?'var(--orange-bg)':'var(--green-bg)'};border-radius:10px;padding:9px 13px;font-size:12px;color:${blocked?'var(--orange-txt)':'var(--green-txt)'};font-weight:600;display:flex;align-items:center;gap:6px">
-        ${blocked?'🔗 Bloqueada: depende de tarefas não concluídas ('+t.dependsOn+')':'✅ Dependências concluídas ('+t.dependsOn+')'}
-      </div>`;
-    } else { depEl.style.display='none'; }
-  }
-
-  // WA button — show only if client has wa number
-  const waBtn=document.getElementById('dv-wa-btn');
-  if(waBtn){
-    const hasWa=c&&c.waNumber;
-    waBtn.style.display=hasWa?'inline-flex':'none';
-  }
 }
+
 function switchToEdit(){
   const t=S.tasks.find(t=>t.id===S.editingId);if(!t)return;
   document.getElementById('detail-view').style.display='none';
@@ -1773,12 +1306,6 @@ function switchToEdit(){
   document.getElementById('e-date').value=t.date;
   document.getElementById('e-notes').value=t.notes||'';
   document.getElementById('e-link').value=t.link||'';
-  document.getElementById('e-depends').value=t.dependsOn||'';
-  document.getElementById('e-portal-visible').checked=t.portalVisible||false;
-  setOwner('e', t.ownerName||MY_NAME);
-  buildOwnerTags('e', t.ownerName||MY_NAME);
-  const hasPortalClient=S.clients.some(c=>c.portalEnabled);
-  document.getElementById('e-portal-row').style.display=hasPortalClient?'flex':'none';
 }
 
 function saveEdit(){
@@ -1792,10 +1319,6 @@ function saveEdit(){
   t.date=document.getElementById('e-date').value||td();
   t.notes=document.getElementById('e-notes').value;
   t.link=document.getElementById('e-link').value.trim();
-  t.dependsOn=document.getElementById('e-depends').value.trim();
-  t.portalVisible=document.getElementById('e-portal-visible').checked;
-  t.ownerName=getOwner('e');
-  if(!t.comments)t.comments=[];
   setSyncStatus('loading');
   saveTaskDB(t);
   closeModal('detail');
@@ -1837,22 +1360,13 @@ function openEditClient(id){
   const c=S.clients.find(cl=>cl.id===id);if(!c)return;
   _editingClientId=id;_editClientColor=c.color;
   document.getElementById('ec-name').value=c.name;
-  document.getElementById('ec-wa-number').value=c.waNumber||'';
   document.querySelectorAll('#ec-swatches .swatch').forEach(s=>{
     s.classList.toggle('sel',s.dataset.color===c.color);
   });
-  // Portal config
-  document.getElementById('ec-portal-enabled').checked=c.portalEnabled||false;
-  document.getElementById('ec-portal-password').value=c.portalPassword||'';
-  togglePortalLinkDisplay(c);
   const btn=document.getElementById('del-client-btn');
   if(btn){btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir`;btn.className='btn btn-danger';}
   _delClientConfirming=false;clearTimeout(_delClientTimer);
   openModal('editclient');
-}
-function pickColor(el){
-  document.querySelectorAll('#c-swatches .swatch').forEach(s=>s.classList.remove('sel'));
-  el.classList.add('sel'); S.color=el.dataset.color;
 }
 function pickColorEdit(el){
   document.querySelectorAll('#ec-swatches .swatch').forEach(s=>s.classList.remove('sel'));
@@ -1863,12 +1377,8 @@ function saveEditClient(){
   if(!name){document.getElementById('ec-name').focus();return}
   const c=S.clients.find(cl=>cl.id===_editingClientId);if(!c)return;
   c.name=name;c.color=_editClientColor;
-  c.waNumber=document.getElementById('ec-wa-number').value.trim();
-  c.portalEnabled=document.getElementById('ec-portal-enabled').checked;
-  c.portalPassword=document.getElementById('ec-portal-password').value.trim();
   setSyncStatus('loading');
   saveClientDB(c);
-  if(c.portalEnabled) savePortalSnapshot(c.id);
   closeModal('editclient');
 }
 function confirmDeleteClient(){
@@ -1896,7 +1406,6 @@ function confirmDeleteClient(){
 // ── CALENDAR DAY MODAL ────────────────────────────────────────────────
 let _calDayDate=null;
 function openCalDay(ds){
-  const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
   _calDayDate=ds;
   const [y,m,d]=ds.split('-');
   const MN=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -1965,719 +1474,7 @@ function saveClient(){
   saveClientDB(c);
   closeModal('client');
 }
-// ── PESQUISA ──────────────────────────────────────────────────────────
-let searchQuery = '';
-
-function applySearch(){
-  const input=document.getElementById('admin-search');
-  searchQuery=input?input.value.trim().toLowerCase():'';
-  const clear=document.getElementById('admin-search-clear');
-  if(clear) clear.style.display=searchQuery?'block':'none';
-  renderAll();
-}
-
-function clearSearch(){
-  const input=document.getElementById('admin-search');
-  if(input) input.value='';
-  searchQuery='';
-  const clear=document.getElementById('admin-search-clear');
-  if(clear) clear.style.display='none';
-  renderAll();
-}
-
-function filterBySearch(tasks){
-  if(!searchQuery) return tasks;
-  return tasks.filter(t=>{
-    const c=S.clients.find(cl=>cl.id===t.clientId);
-    return (t.title||'').toLowerCase().includes(searchQuery)
-      || (t.code||'').toLowerCase().includes(searchQuery)
-      || (t.notes||'').toLowerCase().includes(searchQuery)
-      || (c&&c.name.toLowerCase().includes(searchQuery))
-      || (t.ownerName||'').toLowerCase().includes(searchQuery);
-  });
-}
-
-// ownerName salvo na tarefa: 'Victória', nome do cliente, ou nome customizado
-// ownerFilter: null = todos, 'Victória' = só minhas, nome = só daquela pessoa
-let ownerFilter = null;
-
-function buildOwnerTags(prefix, currentOwner){
-  const clientSel=document.getElementById(prefix+'-client');
-  const clientId=clientSel?parseInt(clientSel.value):null;
-  const client=S.clients.find(c=>c.id===clientId);
-  // Opções: Victória sempre, + nome do cliente se houver, + outros já usados
-  const opts=[{label:'👤 Victória',val:MY_NAME,cls:'active-me'}];
-  if(client) opts.push({label:`🏢 ${client.name}`,val:client.name,cls:'active-client'});
-  const used=[...new Set(S.tasks.map(t=>t.ownerName).filter(n=>n&&n!==MY_NAME&&(!client||n!==client.name)))];
-  used.slice(0,3).forEach(n=>opts.push({label:`👥 ${n}`,val:n,cls:'active-me'}));
-
-  const cur=currentOwner||MY_NAME;
-  const box=document.getElementById(prefix+'-owner-tags');
-  if(!box)return;
-  box.innerHTML=opts.map(o=>`
-    <div class="owner-tag-btn ${cur===o.val?o.cls:''}" onclick="selectOwnerTag('${prefix}','${o.val}',this,'${o.cls}')">${o.label}</div>
-  `).join('');
-  // Guardar valor atual
-  box.dataset.value=cur;
-}
-
-function selectOwnerTag(prefix,val,el,cls){
-  const box=document.getElementById(prefix+'-owner-tags');
-  box.querySelectorAll('.owner-tag-btn').forEach(b=>b.className='owner-tag-btn');
-  el.classList.add(cls);
-  box.dataset.value=val;
-}
-
-function getOwner(prefix){
-  const box=document.getElementById(prefix+'-owner-tags');
-  return box?box.dataset.value||MY_NAME:MY_NAME;
-}
-function setOwner(prefix,val){
-  buildOwnerTags(prefix, val||MY_NAME);
-}
-
-function ownerTag(name){
-  if(!name||name===MY_NAME)return '';
-  const isClient=S.clients.some(c=>c.name===name);
-  return `<span class="task-owner-tag ${isClient?'is-client':''}">${isClient?'🏢':'👥'} ${name}</span>`;
-}
-
-// Barra de filtro por responsável (admin view)
-function renderOwnerFilterBar(containerId){
-  const container=document.getElementById(containerId);
-  if(!container)return;
-  const names=[MY_NAME,...new Set(S.tasks.map(t=>t.ownerName).filter(n=>n&&n!==MY_NAME))];
-  if(names.length<2){container.innerHTML='';return;}
-  container.innerHTML=`<div class="owner-filter-bar">
-    <span class="owner-filter-lbl">VER:</span>
-    <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
-    ${names.map(n=>{
-      const isClient=S.clients.some(c=>c.name===n);
-      const cls=ownerFilter===n?(isClient?'active active-client':'active'):'';
-      return `<div class="owner-filter-chip ${cls}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
-    }).join('')}
-  </div>`;
-}
-
-function setOwnerFilter(name){
-  ownerFilter=name;
-  renderAll();
-}
-
-// Filtrar tarefas pelo ownerFilter
-function applyOwnerFilter(tasks){
-  if(!ownerFilter)return tasks;
-  return tasks.filter(t=>(t.ownerName||MY_NAME)===ownerFilter);
-}
-
-// ── PORTAL DO CLIENTE ─────────────────────────────────────────────────
-
-// Detecta ?portal=TOKEN na URL e abre o portal
-(function initPortal(){
-  const params=new URLSearchParams(location.search);
-  const token=params.get('portal');
-  if(!token) return;
-  PORTAL.pendingToken=token;
-  document.getElementById('client-portal').classList.add('active');
-  bootstrapPortal(token);
-})();
-
-function showPortalError(msg){
-  document.getElementById('portal-login-screen').style.display='flex';
-  const err=document.getElementById('portal-login-err');
-  err.textContent=msg;
-  err.classList.add('show');
-}
-
-// Chamado após carregar clientes do Firebase (admin logado) — no-op pois portal carrega via bootstrapPortal
-function checkPortalPendingToken(){}
-
-// Gera token incluindo uid do dono
-function encodePortalToken(clientId){
-  const uid=currentUser?currentUser.uid:'';
-  return btoa('crv:'+uid+':'+clientId+':portal');
-}
-function decodePortalToken(token){
-  try{
-    const s=atob(token);
-    const parts=s.split(':');
-    if(parts[0]==='crv'&&parts[3]==='portal') return {uid:parts[1],clientId:parseInt(parts[2])};
-  }catch(e){}
-  return null;
-}
-
-function getPortalLink(clientId){
-  const base=location.origin+location.pathname;
-  return `${base}?portal=${encodePortalToken(clientId)}`;
-}
-
-// Salva snapshot público dos dados do portal no Firestore
-// Path: portalSnapshots/{uid}__{clientId}  (leitura pública, escrita só autenticada)
-async function savePortalSnapshot(clientId){
-  if(!currentUser)return;
-  const c=S.clients.find(cl=>cl.id===clientId);
-  if(!c||!c.portalEnabled)return;
-  const tasks=S.tasks.filter(t=>t.clientId===clientId&&t.portalVisible);
-  const snapData={client:c,tasks,updatedAt:Date.now()};
-  try{
-    await setDoc(doc(db,'portalSnapshots',currentUser.uid+'__'+clientId),snapData);
-  }catch(e){console.error('savePortalSnapshot:',e);}
-}
-
-// Detecta ?portal=TOKEN na URL e abre o portal
-(function initPortal(){
-  const params=new URLSearchParams(location.search);
-  const token=params.get('portal');
-  if(!token) return;
-  PORTAL.pendingToken=token;
-  document.getElementById('client-portal').classList.add('active');
-  bootstrapPortal(token);
-})();
-
-async function bootstrapPortal(token){
-  const decoded=decodePortalToken(token);
-  if(!decoded){showPortalError('Link inválido.');return;}
-  const {uid,clientId}=decoded;
-  PORTAL.clientId=clientId;
-  PORTAL.ownerId=uid;
-
-  try{
-    const {doc:doc2,getDoc:getDoc2,collection:col2,getDocs:getDocs2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-
-    // Lê o cliente direto pelo path exato
-    const clientRef=doc2(db,'users',uid,'clients',String(clientId));
-    const clientDoc=await getDoc2(clientRef);
-
-    if(!clientDoc.exists()||!clientDoc.data().portalEnabled){
-      showPortalError('Portal não encontrado ou desativado.');return;
-    }
-
-    const clientData=clientDoc.data();
-    S.clients=[clientData];
-
-    // Lê todas as tarefas do user (só as portalVisible passam pelo filtro)
-    const tasksSnap=await getDocs2(col2(db,'users',uid,'tasks'));
-    S.tasks=tasksSnap.docs.map(d=>d.data());
-
-    document.getElementById('portal-client-name-title').textContent=clientData.name;
-    document.getElementById('portal-login-screen').style.display='flex';
-
-    const sess=sessionStorage.getItem('portal_client');
-    if(sess&&parseInt(sess)===clientId) showPortalMain(clientData);
-
-  }catch(e){
-    console.error('Portal bootstrap error:',e);
-    showPortalError('Erro ao carregar portal. Tente recarregar.');
-  }
-}
-
-// Salva task diretamente na coleção do owner (via portal)
-async function saveTaskDBPortal(t){
-  if(!PORTAL.ownerId)return;
-  const idx=S.tasks.findIndex(x=>x.id===t.id);
-  if(idx>-1)S.tasks[idx]=t; else S.tasks.push(t);
-  try{
-    const {doc:doc2,setDoc:setDoc2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    await setDoc2(doc2(db,'users',PORTAL.ownerId,'tasks',String(t.id)),t);
-  }catch(e){console.error('saveTaskDBPortal:',e);}
-}
-
-function togglePortalLinkDisplay(clientOverride){
-  const enabled=document.getElementById('ec-portal-enabled').checked;
-  const section=document.getElementById('ec-portal-link-section');
-  section.style.display=enabled?'flex':'none';
-  if(enabled){
-    const id=clientOverride?.id || _editingClientId;
-    if(id) document.getElementById('ec-portal-link-text').textContent=getPortalLink(id);
-  }
-}
-
-function copyPortalLink(){
-  const link=document.getElementById('ec-portal-link-text').textContent;
-  navigator.clipboard.writeText(link).then(()=>{
-    const btn=document.querySelector('.portal-link-copy');
-    const prev=btn.textContent;
-    btn.textContent='Copiado!';
-    setTimeout(()=>btn.textContent=prev,1500);
-  });
-}
-
-window.portalLogin=function(){
-  const input=document.getElementById('portal-pw-input');
-  const err=document.getElementById('portal-login-err');
-  const typedPw=input.value;
-  doPortalAuth(typedPw);
-};
-
-function doPortalAuth(typedPw){
-  const err=document.getElementById('portal-login-err');
-  const input=document.getElementById('portal-pw-input');
-  const c=S.clients.find(cl=>cl.id===PORTAL.clientId && cl.portalEnabled);
-  if(!c){
-    err.textContent='Portal não encontrado ou desativado.';
-    err.classList.add('show');
-    return;
-  }
-  if(!c.portalPassword || typedPw===c.portalPassword){
-    err.classList.remove('show');
-    sessionStorage.setItem('portal_client',c.id);
-    showPortalMain(c);
-  } else {
-    err.textContent='Senha incorreta. Tente novamente.';
-    err.classList.add('show');
-    input.value='';
-    input.focus();
-  }
-}
-
-window.portalLogout=function(){
-  sessionStorage.removeItem('portal_client');
-  document.getElementById('portal-login-screen').style.display='flex';
-  document.getElementById('portal-main').style.display='none';
-  document.getElementById('portal-pw-input').value='';
-};
-
-function showPortalMain(c){
-  document.getElementById('portal-login-screen').style.display='none';
-  const pm=document.getElementById('portal-main');
-  pm.style.display='flex';
-  document.getElementById('portal-client-badge').textContent=c.name;
-  renderPortal(c);
-}
-
-let portalSearch='';
-let portalOwnerFilter=null;
-
-function renderPortal(c){
-  let tasks=S.tasks.filter(t=>t.clientId===c.id && t.portalVisible);
-  // Ordenar por data de entrega
-  tasks=tasks.slice().sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
-  const total=tasks.length;
-  const done=tasks.filter(t=>t.status==='done').length;
-  const pct=total?Math.round(done/total*100):0;
-
-  // Aplicar filtros de busca e responsável
-  let filtered=tasks;
-  if(portalSearch) filtered=filtered.filter(t=>(t.title||'').toLowerCase().includes(portalSearch)||(t.code||'').toLowerCase().includes(portalSearch)||(t.notes||'').toLowerCase().includes(portalSearch));
-  if(portalOwnerFilter) filtered=filtered.filter(t=>(t.ownerName||MY_NAME)===portalOwnerFilter);
-
-  const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando aprovação',done:'Concluído ✓'};
-  const pLabels={alta:'🔴 Alta',normal:'🟣 Normal',baixa:'🟢 Baixa'};
-
-  // Agrupar por status
-  const groups=[
-    {id:'doing',label:'Em andamento',tasks:filtered.filter(t=>t.status==='doing')},
-    {id:'waiting',label:'Aguardando aprovação',tasks:filtered.filter(t=>t.status==='waiting')},
-    {id:'todo',label:'A fazer',tasks:filtered.filter(t=>t.status==='todo')},
-    {id:'done',label:'Concluído',tasks:filtered.filter(t=>t.status==='done')},
-  ].filter(g=>g.tasks.length);
-
-  // Owners únicos nas tarefas deste cliente
-  const owners=[...new Set(tasks.map(t=>t.ownerName||MY_NAME))];
-
-  let html=`
-    <div style="margin-bottom:6px">
-      <div style="font-size:18px;font-weight:700;color:var(--dark)">Olá, ${c.name}! 👋</div>
-      <div style="font-size:13px;color:var(--gray);margin-top:3px">Aqui está o progresso das suas demandas.</div>
-    </div>
-    <div class="portal-progress">
-      <div class="portal-stat"><div class="portal-stat-num">${total}</div><div class="portal-stat-lbl">TAREFAS</div></div>
-      <div class="portal-stat"><div class="portal-stat-num">${done}</div><div class="portal-stat-lbl">CONCLUÍDAS</div></div>
-      <div class="portal-stat"><div class="portal-stat-num">${pct}%</div><div class="portal-stat-lbl">PROGRESSO</div></div>
-      <div style="width:100%">
-        <div class="portal-progress-bar"><div class="portal-progress-fill" style="width:${pct}%"></div></div>
-        <div style="font-size:10px;color:var(--gray);margin-top:4px;text-align:right">${done} de ${total} concluídas</div>
-      </div>
-    </div>
-    <div class="portal-search-wrap">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="portal-search-input" id="portal-search-input" type="text" placeholder="Pesquisar tarefas..." value="${portalSearch}">
-      ${portalSearch?`<button onclick="clearPortalSearch('${c.id}')" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px;padding:0;line-height:1;flex-shrink:0">×</button>`:''}
-    </div>
-    ${owners.length>1?`<div class="owner-filter-bar" style="margin-bottom:12px">
-      <span class="owner-filter-lbl">RESPONSÁVEL:</span>
-      <div class="owner-filter-chip ${!portalOwnerFilter?'active':''}" onclick="setPortalOwnerFilter(null,'${c.id}')">Todos</div>
-      ${owners.map(n=>{
-        const isMe=n===MY_NAME;
-        const active=portalOwnerFilter===n;
-        return `<div class="owner-filter-chip ${active?(isMe?'active':'active active-client'):''}" onclick="setPortalOwnerFilter('${n}','${c.id}')">${isMe?'👤':'🏢'} ${n}</div>`;
-      }).join('')}
-    </div>`:''}`;
-
-  if(!total){
-    html+=`<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>Nenhuma tarefa compartilhada ainda.</div>`;
-  } else if(!filtered.length){
-    html+=`<div class="empty-st"><div class="empty-icon">🔍</div>Nenhuma tarefa encontrada.</div>`;
-  }
-
-  groups.forEach(g=>{
-    html+=`<div class="portal-section">
-      <div class="portal-section-title">${g.label} <span style="background:rgba(120,111,212,.12);color:var(--purple-dark);font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700">${g.tasks.length}</span></div>`;
-    g.tasks.forEach(t=>{
-      const comments=t.comments||[];
-      const commentCount=comments.length;
-      const dateStr=t.date?`<span style="font-size:10px;color:var(--gray);display:inline-flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${fmt(t.date)}</span>`:'';
-      html+=`<div class="portal-task ${t.priority} ${t.status==='done'?'done-task':''}" onclick="openPortalDetail(${t.id})">
-        <div class="portal-task-title ${t.status==='done'?'struck':''}">
-          <div class="portal-check ${t.status==='done'?'done':''}" onclick="event.stopPropagation();portalToggleDoneInline(${t.id})">
-            ${t.status==='done'?`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>`:''}
-          </div>
-          ${t.code?`<span style="font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 6px;border-radius:5px;background:rgba(120,111,212,.1);color:var(--purple-dark);margin-right:2px">${t.code}</span>`:''}${t.title}
-        </div>
-        <div class="portal-task-meta">
-          ${t.ownerName?`<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(120,111,212,.1);color:var(--purple-dark)">👤 ${t.ownerName}</span>`:''}
-          ${t.link?`<a class="portal-task-link" href="${t.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Ver entrega</a>`:''}
-          ${dateStr}
-          ${commentCount?`<span style="font-size:10px;color:var(--gray);display:inline-flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${commentCount}</span>`:''}
-        </div>
-      </div>`;
-    });
-    html+=`</div>`;
-  });
-
-  document.getElementById('portal-body').innerHTML=html;
-  // Attach search input event (evita perda de foco ao remontar o DOM)
-  const psi=document.getElementById('portal-search-input');
-  if(psi){
-    psi.addEventListener('input',function(){
-      portalSearch=this.value.trim().toLowerCase();
-      const c2=S.clients.find(cl=>cl.id===PORTAL.clientId);
-      if(c2) renderPortal(c2);
-      // Refocar após re-render
-      setTimeout(()=>{const el=document.getElementById('portal-search-input');if(el){el.focus();const len=el.value.length;el.setSelectionRange(len,len);}},0);
-    });
-    psi.focus();
-    const len=psi.value.length;psi.setSelectionRange(len,len);
-  }
-}
-
-let _portalDetailId=null;
-window.openPortalDetail=function(id){
-  const t=S.tasks.find(t=>t.id===id);if(!t)return;
-  _portalDetailId=id;
-  const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando aprovação',done:'Concluído ✓'};
-  const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
-
-  document.getElementById('portal-detail-header').innerHTML=`
-    <div class="detail-badge-row">
-      <span class="d-badge ${t.priority}">${prioIcon(t.priority,'dark')} ${pLabels[t.priority]}</span>
-      <span class="d-status">${statusLabel[t.status]||t.status}</span>
-    </div>
-    <div class="portal-detail-title">${t.title}</div>
-    ${t.date?`<div class="d-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${fmtFull(t.date)}</div>`:''}
-    ${t.link?`<div class="detail-link-box" style="margin-top:10px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ccc8f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <a href="${t.link}" target="_blank" rel="noopener" style="color:#ccc8f8;font-size:12px;font-weight:600;text-decoration:none;word-break:break-all">Ver entrega →</a></div>`:''}`;
-
-  document.getElementById('portal-detail-body').innerHTML=`
-    <div class="fg"><label>Observações</label><div class="detail-notes-box">${t.notes||'—'}</div></div>`;
-
-  const doneBtnEl=document.getElementById('portal-done-btn');
-  if(t.status==='done'){
-    doneBtnEl.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg> Marcar como pendente`;
-    doneBtnEl.style.background='var(--green)';
-  } else {
-    doneBtnEl.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg> Marcar como concluído`;
-    doneBtnEl.style.background='var(--grad)';
-  }
-
-  renderPortalComments(t);
-  document.getElementById('portal-detail-overlay').classList.add('open');
-};
-
-window.closePortalDetail=function(){
-  document.getElementById('portal-detail-overlay').classList.remove('open');
-  _portalDetailId=null;
-  document.getElementById('portal-comment-input').value='';
-};
-
-function renderPortalComments(t){
-  const comments=t.comments||[];
-  const list=document.getElementById('portal-comment-list');
-  if(!comments.length){
-    list.innerHTML=`<div style="font-size:12px;color:var(--gray);text-align:center;padding:6px 0">Nenhum comentário ainda.</div>`;
-    return;
-  }
-  list.innerHTML=comments.map(cm=>`
-    <div class="portal-comment-item">
-      ${cm.text}
-      <div class="portal-comment-meta">${cm.author} · ${cm.ts}</div>
-    </div>`).join('');
-}
-
-window.submitPortalComment=function(){
-  const input=document.getElementById('portal-comment-input');
-  const text=input.value.trim();
-  if(!text||_portalDetailId===null) return;
-  const t=S.tasks.find(t=>t.id===_portalDetailId);if(!t)return;
-  if(!t.comments)t.comments=[];
-  const c=S.clients.find(cl=>cl.id===t.clientId);
-  const now=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  t.comments.push({text,author:c?c.name:'Cliente',ts:now});
-  input.value='';
-  renderPortalComments(t);
-  saveTaskDBPortal(t);
-  // Atualiza portal renderizado em background
-  const cl=S.clients.find(cl=>cl.id===PORTAL.clientId);
-  if(cl) renderPortal(cl);
-};
-
-window.portalToggleDone=function(){
-  if(_portalDetailId===null)return;
-  const t=S.tasks.find(t=>t.id===_portalDetailId);if(!t)return;
-  t.status=t.status==='done'?'todo':'done';
-  saveTaskDBPortal(t);
-  openPortalDetail(_portalDetailId);
-  const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
-  if(c)renderPortal(c);
-};
-
-window.portalToggleDoneInline=function(id){
-  const t=S.tasks.find(t=>t.id===id);if(!t)return;
-  t.status=t.status==='done'?'todo':'done';
-  saveTaskDBPortal(t);
-  const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
-  if(c)renderPortal(c);
-};
-
-// Expor funções do portal
-window.togglePortalLinkDisplay=togglePortalLinkDisplay;
-window.copyPortalLink=copyPortalLink;
-window.selectOwnerTag=selectOwnerTag;
-window.setOwnerFilter=setOwnerFilter;
-window.applySearch=applySearch;
-window.clearSearch=clearSearch;
-
-// ── KANBAN DRAG & DROP ──────────────────────────────────────────────
-let _dragTaskId=null;
-
-window.kanbanDragStart=function(e, taskId){
-  _dragTaskId=taskId;
-  e.currentTarget.classList.add('dragging');
-  e.dataTransfer.effectAllowed='move';
-};
-window.kanbanDragEnd=function(e){
-  e.currentTarget.classList.remove('dragging');
-  document.querySelectorAll('.k-col').forEach(c=>c.classList.remove('drag-over'));
-};
-window.kanbanDrop=function(e, colId, colEl){
-  e.preventDefault();
-  colEl.classList.remove('drag-over');
-  if(_dragTaskId===null)return;
-  const t=S.tasks.find(t=>t.id===_dragTaskId);
-  if(!t)return;
-  const validCols=['todo','doing','waiting','done'];
-  if(!validCols.includes(colId)) return; // can't drop into overdue
-  const oldStatus=t.status;
-  t.status=colId;
-  _dragTaskId=null;
-  setSyncStatus('loading');
-  saveTaskDB(t);
-  const statusLabels={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando',done:'Concluído'};
-  addNotification('action',`Tarefa movida para "${statusLabels[colId]}"`,`"${t.title}" · antes: ${statusLabels[oldStatus]||oldStatus}`,'🔀');
-  showToast(`Movida para "${statusLabels[colId]}"`, 'info');
-};
-
-window.setPortalSearch=function(val, cid){
-  portalSearch=val.trim().toLowerCase();
-  const c=S.clients.find(cl=>cl.id===parseInt(cid)||cl.id===PORTAL.clientId);
-  if(c) renderPortal(c);
-};
-window.clearPortalSearch=function(cid){
-  portalSearch='';
-  const c=S.clients.find(cl=>cl.id===parseInt(cid)||cl.id===PORTAL.clientId);
-  if(c) renderPortal(c);
-};
-window.setPortalOwnerFilter=function(name, cid){
-  portalOwnerFilter=name;
-  const c=S.clients.find(cl=>cl.id===parseInt(cid)||cl.id===PORTAL.clientId);
-  if(c) renderPortal(c);
-};
-
-// ── DEPENDENCY HELPERS ────────────────────────────────────────────
-function checkDepsBlocked(task){
-  if(!task.dependsOn) return false;
-  const ids=task.dependsOn.replace(/#/g,'').split(/[,\s]+/).map(s=>parseInt(s.trim())).filter(Boolean);
-  return ids.some(id=>{
-    const dep=S.tasks.find(t=>t.id===id);
-    return dep && dep.status!=='done';
-  });
-}
-
-// ── NOTIFICATION SYSTEM ───────────────────────────────────────────
-// Stored in memory (could be persisted to localStorage)
-let notifications = JSON.parse(localStorage.getItem('cv_notifications')||'[]');
-
-function addNotification(type, title, sub, icon){
-  const n={id:Date.now(),type,title,sub,icon:icon||'🔔',ts:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})};
-  notifications.unshift(n);
-  if(notifications.length>100) notifications=notifications.slice(0,100);
-  localStorage.setItem('cv_notifications',JSON.stringify(notifications));
-  // Show badge
-  ['notif-badge','notif-badge-hdr'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display='block';
-  });
-  renderNotifications();
-}
-
-function renderNotifications(){
-  const el=document.getElementById('notif-list');
-  if(!el)return;
-  if(!notifications.length){
-    el.innerHTML=`<div class="empty-st"><div class="empty-icon">🔕</div>Nenhum aviso ainda.</div>`;
-    return;
-  }
-  el.innerHTML=notifications.map(n=>`
-    <div class="notif-card notif-${n.type}">
-      <div class="notif-card-icon">${n.icon}</div>
-      <div class="notif-card-body">
-        <div class="notif-card-title">${n.title}</div>
-        ${n.sub?`<div class="notif-card-sub">${n.sub}</div>`:''}
-      </div>
-      <div class="notif-card-time">${n.ts}</div>
-    </div>`).join('');
-  const sub=document.getElementById('notif-subtitle');
-  if(sub) sub.textContent=`${notifications.length} registro${notifications.length!==1?'s':''}`;
-}
-
-window.clearNotifications=function(){
-  notifications=[];
-  localStorage.removeItem('cv_notifications');
-  ['notif-badge','notif-badge-hdr'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display='none';
-  });
-  renderNotifications();
-};
-
-// Hide badge when viewing notifications tab
-const _origSetView=setView;
-// Patch setView to hide badge on notificacoes
-function setView(v){
-  _origSetView(v);
-  if(v==='notificacoes'){
-    ['notif-badge','notif-badge-hdr'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.style.display='none';
-    });
-    renderNotifications();
-    const waInput=document.getElementById('admin-wa-input');
-    if(waInput && adminWaNumber) waInput.value=adminWaNumber;
-  }
-}
-// Re-expose
-window.setView=setView;
-
-// ── TOAST NOTIFICATIONS ───────────────────────────────────────────
-let _toastTimer=null;
-function showToast(msg, type='info', duration=3000){
-  let toast=document.getElementById('notif-toast');
-  if(!toast){
-    toast=document.createElement('div');
-    toast.id='notif-toast';
-    toast.className='notif-toast';
-    document.body.appendChild(toast);
-  }
-  toast.textContent=msg;
-  toast.className=`notif-toast ${type}`;
-  clearTimeout(_toastTimer);
-  // Force reflow
-  toast.offsetHeight;
-  toast.classList.add('show');
-  _toastTimer=setTimeout(()=>toast.classList.remove('show'),duration);
-}
-window.showToast=showToast;
-
-// ── WHATSAPP INTEGRATION ──────────────────────────────────────────
-// Admin WhatsApp number (stored in localStorage for persistence)
-let adminWaNumber = localStorage.getItem('cv_admin_wa')||'';
-
-window.setAdminWaNumber=function(num){
-  adminWaNumber=num.replace(/\D/g,'');
-  localStorage.setItem('cv_admin_wa',adminWaNumber);
-  showToast('Número WhatsApp salvo!','success');
-};
-
-// Send WhatsApp to client (from admin, signals action on task)
-window.signalClientWa=function(taskId){
-  const t=S.tasks.find(t=>t.id===taskId);if(!t)return;
-  const c=S.clients.find(cl=>cl.id===t.clientId);
-  if(!c||!c.waNumber){
-    showToast('Adicione o WhatsApp do cliente nas configurações','warn');
-    return;
-  }
-  const statusPt={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando sua aprovação',done:'Concluída'};
-  const msg=encodeURIComponent(`Olá ${c.name}! 👋\n\nAtualizamos a tarefa *"${t.title}"*.\nStatus: ${statusPt[t.status]||t.status}\n\nAcesse o portal para mais detalhes.`);
-  window.open(`https://wa.me/${c.waNumber.replace(/\D/g,'')}?text=${msg}`,'_blank');
-  addNotification('action',`WhatsApp enviado para ${c.name}`,`Tarefa: "${t.title}"`,'📱');
-  showToast(`WhatsApp aberto para ${c.name}`,'success');
-};
-
-// Send WhatsApp to admin when client delivers something (portal side)
-window.notifyAdminDelivery=function(taskId){
-  const t=S.tasks.find(t=>t.id===taskId);if(!t)return;
-  const c=S.clients.find(cl=>cl.id===t.clientId||cl.id===PORTAL.clientId);
-  if(!adminWaNumber){
-    showToast('Entrega registrada! (Configure seu WhatsApp nas configs para notificações)','info');
-    return;
-  }
-  const msg=encodeURIComponent(`📦 *Entrega recebida!*\n\nCliente: ${c?c.name:'Cliente'}\nTarefa: "${t.title}"\n\n${t.link?`Link de entrega: ${t.link}`:'(sem link ainda)'}\n\nAcesse o painel para revisar.`);
-  window.open(`https://wa.me/${adminWaNumber}?text=${msg}`,'_blank');
-  showToast('Admin notificado via WhatsApp!','success');
-};
-
-// ── PORTAL: SIGNAL ACTION BUTTON + DELIVERY BUTTON ────────────────
-// Inject action signal button in portal detail modal
-const _origOpenPortalDetail=window.openPortalDetail;
-window.openPortalDetail=function(id){
-  _origOpenPortalDetail(id);
-  const t=S.tasks.find(t=>t.id===id);if(!t)return;
-  // Add signal/delivery section after comments
-  const body=document.getElementById('portal-detail-body');
-  if(body){
-    const c=S.clients.find(cl=>cl.id===t.clientId||cl.id===PORTAL.clientId);
-    const deliverSection=`<div class="portal-deliver-section">
-      ${t.status==='waiting'?`
-        <div style="font-size:12px;color:var(--gray);margin-bottom:8px">📦 Entregar para aprovação:</div>
-        <input type="url" id="portal-deliver-link" placeholder="Cole o link da entrega (Drive, Figma...)" style="width:100%;padding:10px 13px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:var(--lav-light);outline:none;margin-bottom:8px">
-        <button class="portal-signal-btn" onclick="submitPortalDelivery(${id})">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-          Entregar e notificar
-        </button>`:''}
-    </div>`;
-    body.insertAdjacentHTML('beforeend', deliverSection);
-  }
-};
-
-window.submitPortalDelivery=function(taskId){
-  const t=S.tasks.find(t=>t.id===taskId);if(!t)return;
-  const linkInput=document.getElementById('portal-deliver-link');
-  const link=linkInput?linkInput.value.trim():'';
-  if(link) t.link=link;
-  saveTaskDBPortal(t);
-  const c=S.clients.find(cl=>cl.id===t.clientId||cl.id===PORTAL.clientId);
-  showToast('Entrega registrada!','success');
-  notifyAdminDelivery(taskId);
-  closePortalDetail();
-  if(c) renderPortal(c);
-};
-
-// ── TASK SAVE PATCHES — include dependsOn field ────────────────────
-// Patch saveTask to save dependsOn
-const _origSaveTask=window.saveTask;
-if(typeof saveTask==='function'){
-  const _patchSaveTask=function(){
-    // dependsOn is set before calling original — we patch after the fact
-  };
-}
-
-// ── INITIAL NOTIFICATIONS RENDER ─────────────────────────────────
-if(notifications.length){
-  ['notif-badge','notif-badge-hdr'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display='block';
-  });
-}
-renderNotifications();
+function pickColor(el){document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');S.color=el.dataset.color}
 
 </script>
 </div><!-- /app-root -->
