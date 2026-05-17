@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Content-Type", "value": "text/html; charset=utf-8" }]
+    }
+  ],
   "rewrites": [
     { "source": "/api/whatsapp/notify", "destination": "/api/whatsapp/notify.js" },
     { "source": "/(.*)", "destination": "/public/index.html" }
