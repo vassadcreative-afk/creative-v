@@ -499,9 +499,6 @@ textarea{resize:vertical;min-height:72px}
   </defs>
 </svg>
 
-<!-- TELA DE LOGIN -->
-<div id="login-screen" style="display:flex;position:fixed;inset:0;z-index:9999;background:var(--grad-dark);align-items:center;justify-content:center;flex-direction:column;gap:24px">
-
 <!-- ===== PORTAL DO CLIENTE ===== -->
 <div id="client-portal">
   <!-- LOGIN DO PORTAL -->
@@ -539,6 +536,9 @@ textarea{resize:vertical;min-height:72px}
   </div>
 </div>
 <!-- /PORTAL DO CLIENTE -->
+
+<!-- TELA DE LOGIN -->
+<div id="login-screen" style="display:flex;position:fixed;inset:0;z-index:9999;background:var(--grad-dark);align-items:center;justify-content:center;flex-direction:column;gap:24px">
   <div style="text-align:center">
     <div style="display:flex;justify-content:center;margin-bottom:10px">
       <!-- Sparkle icon -->
@@ -716,13 +716,13 @@ textarea{resize:vertical;min-height:72px}
         </div>
         <div style="font-size:11px;color:var(--gray);margin-top:6px">Quando o cliente entrega algo pelo portal, você recebe mensagem no WhatsApp.</div>
 
-        <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(120,111,212,.1)">
-          <label style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Chave Z-API (WA_INTERNAL_KEY do Vercel)</label>
+        <div style="margin-top:12px">
+          <label style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">🔑 Chave de integração Z-API (WA_INTERNAL_KEY)</label>
           <div style="display:flex;gap:8px">
-            <input type="password" id="admin-wa-key-input" placeholder="Cole a chave aqui" style="flex:1;padding:10px 13px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--dark);background:var(--lav-light);outline:none">
+            <input type="password" id="admin-wa-key-input" placeholder="Cole a chave do Vercel aqui" style="flex:1;padding:10px 13px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--dark);background:var(--lav-light);outline:none">
             <button onclick="setWaInternalKey(document.getElementById('admin-wa-key-input').value)" class="btn btn-primary" style="flex:0 0 auto;padding:10px 16px">Salvar</button>
           </div>
-          <div style="font-size:11px;color:var(--gray);margin-top:5px">💡 Sem chave, o botão abre o WhatsApp Web como fallback.</div>
+          <div style="font-size:11px;color:var(--gray);margin-top:5px">Mesma chave da variável <strong>WA_INTERNAL_KEY</strong> no Vercel. Salva só neste navegador.</div>
         </div>
       </div>
     </div>
@@ -898,84 +898,77 @@ textarea{resize:vertical;min-height:72px}
 
 <!-- MODAL: BIO DO CLIENTE -->
 <div class="overlay" id="modal-clientbio">
-  <div class="modal" style="max-width:480px">
+  <div class="modal" style="max-width:480px;padding-bottom:40px">
     <span class="modal-handle"></span>
 
-    <!-- Header colorido com avatar -->
-    <div id="bio-header" style="border-radius:14px;padding:20px;margin-bottom:18px;position:relative">
+    <!-- Header colorido -->
+    <div id="bio-header" style="border-radius:14px;padding:20px;margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:14px">
-        <div id="bio-avatar" style="width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;background:rgba(255,255,255,.2)"></div>
+        <!-- Avatar com suporte a foto -->
+        <div style="position:relative;flex-shrink:0">
+          <div id="bio-avatar" style="width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);overflow:hidden;cursor:pointer" onclick="document.getElementById('bio-photo-input').click()" title="Clique para trocar a foto">
+            <span id="bio-avatar-ini"></span>
+            <img id="bio-avatar-img" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:14px" src="">
+          </div>
+          <div style="position:absolute;bottom:-4px;right:-4px;background:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)" onclick="document.getElementById('bio-photo-input').click()" title="Trocar foto">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <input type="file" id="bio-photo-input" accept="image/*" style="display:none" onchange="handleBioPhotoUpload(this)">
+        </div>
         <div style="flex:1;min-width:0">
           <div id="bio-name" style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px"></div>
           <div id="bio-task-count" style="font-size:12px;color:rgba(255,255,255,.6);margin-top:2px"></div>
         </div>
-        <button onclick="openEditClientFromBio()" style="background:rgba(255,255,255,.15);border:none;border-radius:10px;padding:8px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px">
+        <button onclick="openEditClientFromBio()" style="background:rgba(255,255,255,.15);border:none;border-radius:10px;padding:8px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Editar
         </button>
       </div>
-      <!-- Stats row -->
+      <!-- Stats -->
       <div style="display:flex;gap:8px;margin-top:14px">
-        <div id="bio-stat-doing" style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#fff" id="bio-n-doing">0</div>
+        <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;text-align:center">
+          <div id="bio-n-doing" style="font-size:18px;font-weight:700;color:#fff">0</div>
           <div style="font-size:10px;color:rgba(255,255,255,.55);margin-top:1px">Em andamento</div>
         </div>
         <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#fff" id="bio-n-waiting">0</div>
+          <div id="bio-n-waiting" style="font-size:18px;font-weight:700;color:#fff">0</div>
           <div style="font-size:10px;color:rgba(255,255,255,.55);margin-top:1px">Aguardando</div>
         </div>
         <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#fff" id="bio-n-done">0</div>
+          <div id="bio-n-done" style="font-size:18px;font-weight:700;color:#fff">0</div>
           <div style="font-size:10px;color:rgba(255,255,255,.55);margin-top:1px">Concluídas</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Foto do cliente -->
-    <div style="background:var(--lav-light);border-radius:12px;padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">🖼️ Foto do cliente</div>
-      <div style="display:flex;align-items:center;gap:14px">
-        <div id="bio-photo-preview" style="width:56px;height:56px;border-radius:14px;background:var(--lav-mid);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </div>
-        <div style="flex:1">
-          <input type="file" id="bio-photo-input" accept="image/*" style="display:none" onchange="handleBioPhotoUpload(this)">
-          <button onclick="document.getElementById('bio-photo-input').click()" style="background:var(--grad);border:none;border-radius:9px;padding:9px 16px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:block;margin-bottom:6px">
-            Escolher foto
-          </button>
-          <button id="bio-photo-remove" onclick="removeBioPhoto()" style="display:none;background:var(--red-bg);border:none;border-radius:9px;padding:6px 12px;color:var(--red-txt);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer">Remover foto</button>
         </div>
       </div>
     </div>
 
     <!-- WhatsApp -->
     <div style="background:var(--lav-light);border-radius:12px;padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">📱 WhatsApp</div>
+      <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">📱 WhatsApp do cliente</div>
       <div style="display:flex;gap:8px;align-items:center">
         <input type="tel" id="bio-wa-input" placeholder="Ex: 5541999990000 (com DDI)" style="flex:1;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--dark);background:#fff;outline:none">
         <button onclick="saveBioWa()" style="background:var(--grad);border:none;border-radius:9px;padding:9px 14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">Salvar</button>
       </div>
-      <div id="bio-wa-actions" style="display:none;gap:8px;margin-top:8px">
-        <button onclick="sendWaBio()" style="flex:1;background:#25D366;border:none;border-radius:9px;padding:9px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l.94-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
-          Enviar mensagem
+      <div id="bio-wa-actions" style="display:none;margin-top:8px;gap:8px">
+        <button onclick="sendWaBioMsg()" style="width:100%;background:#25D366;border:none;border-radius:9px;padding:9px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l.94-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
+          Abrir conversa no WhatsApp
         </button>
       </div>
     </div>
 
-    <!-- Notas / Bio -->
+    <!-- Notas -->
     <div style="background:var(--lav-light);border-radius:12px;padding:14px 16px;margin-bottom:10px">
       <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">📝 Notas do cliente</div>
-      <textarea id="bio-notes" placeholder="Preferências, briefing, contatos, observações..." style="width:100%;min-height:80px;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:#fff;outline:none;resize:vertical;line-height:1.6"></textarea>
+      <textarea id="bio-notes" placeholder="Briefing, preferências, contatos importantes..." style="width:100%;min-height:80px;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:#fff;outline:none;resize:vertical;line-height:1.6;box-sizing:border-box"></textarea>
       <button onclick="saveBioNotes()" style="margin-top:6px;background:var(--grad);border:none;border-radius:9px;padding:8px 16px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Salvar notas</button>
     </div>
 
-    <!-- Portal rápido -->
-    <div id="bio-portal-section" style="background:var(--lav-light);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:none">
-      <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">🔗 Portal do cliente</div>
+    <!-- Portal (só se ativo) -->
+    <div id="bio-portal-section" style="display:none;background:var(--lav-light);border-radius:12px;padding:14px 16px;margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">🔗 Link do portal</div>
       <div style="display:flex;gap:8px;align-items:center">
         <div id="bio-portal-link" style="flex:1;font-size:11px;color:var(--purple);background:#fff;border-radius:9px;padding:8px 12px;word-break:break-all;border:1.5px solid rgba(120,111,212,.18)"></div>
-        <button onclick="copyBioPortalLink()" style="background:var(--grad);border:none;border-radius:9px;padding:8px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Copiar</button>
+        <button onclick="copyBioPortalLink()" style="background:var(--grad);border:none;border-radius:9px;padding:8px 12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">Copiar</button>
       </div>
     </div>
 
@@ -988,8 +981,8 @@ textarea{resize:vertical;min-height:72px}
     <div class="modal-acts">
       <button class="btn btn-ghost" onclick="closeModal('clientbio')">Fechar</button>
       <button class="btn btn-primary" onclick="filterFromBio()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Ver tarefas
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/></svg>
+        Ver todas as tarefas
       </button>
     </div>
   </div>
@@ -1525,13 +1518,12 @@ function clientHTML(){
   return all+S.clients.map(c=>{
     const n=S.tasks.filter(t=>t.clientId===c.id).length;
     const ini=c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    const avContent = c.photoData
-      ? `<img src="${c.photoData}" style="width:100%;height:100%;object-fit:cover;border-radius:9px">`
-      : ini;
     return`<div class="c-item-wrap">
       <div class="c-item ${S.filter==c.id?'active':''}" style="flex:1" onclick="setFilter(${c.id})">
-        <div class="c-av" style="background:${c.color};padding:${c.photoData?'0':''}" onclick="event.stopPropagation();openClientBio(${c.id})" title="Ver perfil">${avContent}</div>
-        <div class="c-nm" onclick="event.stopPropagation();openClientBio(${c.id})">${c.name}</div><div class="c-cnt">${n}</div>
+        <div class="c-av" style="background:${c.color};cursor:pointer;overflow:hidden;position:relative" onclick="event.stopPropagation();openClientBio(${c.id})" title="Ver perfil">
+          ${c.photoURL ? `<img src="${c.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.style.display='none'">` : ini}
+        </div>
+        <div class="c-nm" onclick="event.stopPropagation();openClientBio(${c.id})" style="cursor:pointer">${c.name}</div><div class="c-cnt">${n}</div>
       </div>
       <button class="c-edit-btn" onclick="event.stopPropagation();openClientBio(${c.id})" title="Ver perfil do cliente">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -2698,34 +2690,29 @@ function showToast(msg, type='info', duration=3000){
 }
 window.showToast=showToast;
 
-// ── WHATSAPP INTEGRATION — Z-API via Vercel Function ─────────────────────────
+// ── WHATSAPP INTEGRATION — Z-API via Vercel Function ─────────────────────
 let adminWaNumber = localStorage.getItem('cv_admin_wa') || '';
 let waInternalKey = localStorage.getItem('cv_wa_key')   || '';
 
 window.setAdminWaNumber = function(num){
   adminWaNumber = num.replace(/\D/g,'');
   localStorage.setItem('cv_admin_wa', adminWaNumber);
-  showToast('Número salvo! 📱','success');
+  showToast('Número WhatsApp salvo! 📱','success');
 };
+
 window.setWaInternalKey = function(key){
   waInternalKey = key.trim();
   localStorage.setItem('cv_wa_key', waInternalKey);
-  showToast('Chave Z-API salva! 🔑','success');
+  showToast('Chave de integração salva! 🔑','success');
 };
 
-// Central de envio — chama /api/whatsapp/notify (Vercel Function → Z-API)
-async function sendWaNotification({ to, type, task, client, fallbackMsg }){
-  to = String(to).replace(/\D/g,'');
-  if(to.length <= 11) to = '55' + to;
-  if(!to){ showToast('Número de destino não encontrado','warn'); return false; }
-
-  // Se não tiver chave Z-API configurada, abre link wa.me como fallback
+// Função central — chama /api/whatsapp/notify (Vercel Function + Z-API)
+async function sendWaNotification({ to, type, task, client }){
   if(!waInternalKey){
-    const msg = fallbackMsg || `📨 *Creative V*\n\nOlá! Você tem uma atualização.`;
-    window.open(`https://wa.me/${to}?text=${encodeURIComponent(msg)}`,'_blank');
-    return true;
+    showToast('Configure a chave WA em Avisos → Configurações','warn');
+    return false;
   }
-
+  if(!to){ showToast('Número de destino não encontrado','warn'); return false; }
   try {
     const res = await fetch('/api/whatsapp/notify', {
       method: 'POST',
@@ -2736,36 +2723,35 @@ async function sendWaNotification({ to, type, task, client, fallbackMsg }){
     if(!res.ok) throw new Error(data.error || res.status);
     return true;
   } catch(err) {
-    console.error('[Z-API]', err);
-    showToast('Erro ao enviar via Z-API: ' + err.message, 'error');
+    console.error('[WA]', err);
+    showToast('Erro WA: ' + err.message, 'error');
     return false;
   }
 }
 
-// Admin notifica CLIENTE sobre tarefa
+// Admin notifica cliente sobre tarefa
 window.signalClientWa = async function(taskId){
   const t = S.tasks.find(t=>t.id===taskId); if(!t) return;
   const c = S.clients.find(cl=>cl.id===t.clientId);
-  if(!c || !c.waNumber){ showToast('Adicione o WhatsApp do cliente no perfil dele','warn'); return; }
+  if(!c || !c.waNumber){
+    showToast('Adicione o WhatsApp do cliente no perfil dele','warn');
+    return;
+  }
   const typeMap = { todo:'task_update', doing:'task_started', progress:'task_started', waiting:'task_review', review:'task_review', done:'task_done' };
-  const type = typeMap[t.status] || 'task_update';
-  const statusPt = { todo:'A fazer', doing:'Em andamento', waiting:'Aguardando aprovação', done:'Concluída' };
-  const fallback = `Olá ${c.name}! 👋\n\nAtualizamos a tarefa *"${t.title}"*.\nStatus: ${statusPt[t.status]||t.status}\n\nAcesse o portal para mais detalhes.`;
-  showToast(`Enviando WhatsApp para ${c.name}...`,'info');
-  const ok = await sendWaNotification({ to: c.waNumber, type, task: t, client: c, fallbackMsg: fallback });
+  showToast(`Enviando WA para ${c.name}...`,'info');
+  const ok = await sendWaNotification({ to: c.waNumber, type: typeMap[t.status]||'task_update', task: t, client: c });
   if(ok){
     addNotification('action',`WhatsApp enviado para ${c.name}`,`Tarefa: "${t.title}"`,'📱');
     showToast(`✅ WhatsApp enviado para ${c.name}!`,'success');
   }
 };
 
-// Portal: cliente entregou → notifica ADMIN
+// Portal notifica admin quando cliente entrega
 window.notifyAdminDelivery = async function(taskId){
   const t = S.tasks.find(t=>t.id===taskId); if(!t) return;
   const c = S.clients.find(cl=>cl.id===(t.clientId||PORTAL.clientId));
-  if(!adminWaNumber){ showToast('Entrega registrada!','success'); return; }
-  const fallback = `📦 *Entrega recebida!*\n\nCliente: ${c?c.name:'Cliente'}\nTarefa: "${t.title}"\n\n${t.link?`Link: ${t.link}`:''}\n\nAcesse o painel para revisar.`;
-  const ok = await sendWaNotification({ to: adminWaNumber, type:'client_delivery', task: t, client: c, fallbackMsg: fallback });
+  if(!adminWaNumber){ showToast('Entrega registrada!','info'); return; }
+  const ok = await sendWaNotification({ to: adminWaNumber, type:'client_delivery', task: t, client: c });
   if(ok) showToast('Admin notificado via WhatsApp! 📱','success');
 };
 
@@ -2818,70 +2804,63 @@ if(typeof saveTask==='function'){
 // ── CLIENT BIO ────────────────────────────────────────────────────────────
 let _bioClientId = null;
 
-window.openClientBio = function(id) {
-  const c = S.clients.find(cl => cl.id === id);
-  if (!c) return;
+window.openClientBio = function(id){
+  const c = S.clients.find(cl => cl.id === id); if(!c) return;
   _bioClientId = id;
-
-  const tasks = S.tasks.filter(t => t.clientId === id);
-  const doing  = tasks.filter(t => t.status === 'doing' || t.status === 'progress').length;
-  const waiting = tasks.filter(t => t.status === 'waiting' || t.status === 'review').length;
+  const tasks  = S.tasks.filter(t => t.clientId === id);
+  const doing  = tasks.filter(t => ['doing','progress'].includes(t.status)).length;
+  const waiting = tasks.filter(t => ['waiting','review'].includes(t.status)).length;
   const done   = tasks.filter(t => t.status === 'done').length;
-  const ini = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const ini    = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
   // Header
-  document.getElementById('bio-header').style.background = `linear-gradient(135deg, ${c.color}, ${c.color}99)`;
-  // Avatar: foto ou iniciais
-  const bioAv = document.getElementById('bio-avatar');
-  if(c.photoData){
-    bioAv.innerHTML = `<img src="${c.photoData}" style="width:100%;height:100%;object-fit:cover;border-radius:14px">`;
-  } else {
-    bioAv.textContent = ini;
-  }
+  document.getElementById('bio-header').style.background = `linear-gradient(135deg,${c.color},${c.color}bb)`;
   document.getElementById('bio-name').textContent = c.name;
-  document.getElementById('bio-task-count').textContent = `${tasks.length} tarefa${tasks.length !== 1 ? 's' : ''} no total`;
-  document.getElementById('bio-n-doing').textContent = doing;
+  document.getElementById('bio-task-count').textContent = `${tasks.length} tarefa${tasks.length!==1?'s':''} no total`;
+  document.getElementById('bio-n-doing').textContent   = doing;
   document.getElementById('bio-n-waiting').textContent = waiting;
-  document.getElementById('bio-n-done').textContent = done;
+  document.getElementById('bio-n-done').textContent    = done;
+
+  // Avatar / foto
+  const iniEl = document.getElementById('bio-avatar-ini');
+  const imgEl = document.getElementById('bio-avatar-img');
+  if(c.photoURL){
+    imgEl.src = c.photoURL;
+    imgEl.style.display = 'block';
+    iniEl.style.display = 'none';
+  } else {
+    imgEl.style.display = 'none';
+    iniEl.style.display = '';
+    iniEl.textContent = ini;
+  }
 
   // WhatsApp
-  const waInput = document.getElementById('bio-wa-input');
-  waInput.value = c.waNumber || '';
-  const waActions = document.getElementById('bio-wa-actions');
-  waActions.style.display = c.waNumber ? 'flex' : 'none';
-
-  // Foto preview
-  const preview = document.getElementById('bio-photo-preview');
-  const removeBtn = document.getElementById('bio-photo-remove');
-  if(c.photoData){
-    preview.innerHTML = `<img src="${c.photoData}" style="width:100%;height:100%;object-fit:cover">`;
-    if(removeBtn) removeBtn.style.display = 'block';
-  } else {
-    preview.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
-    if(removeBtn) removeBtn.style.display = 'none';
-  }
+  document.getElementById('bio-wa-input').value = c.waNumber || '';
+  document.getElementById('bio-wa-actions').style.display = c.waNumber ? 'block' : 'none';
 
   // Notas
   document.getElementById('bio-notes').value = c.bio || '';
 
   // Portal link
-  const portalSection = document.getElementById('bio-portal-section');
-  if (c.portalEnabled && c.portalPassword) {
-    portalSection.style.display = 'block';
-    const token = btoa('crv:' + (currentUser ? currentUser.uid : '') + ':' + id + ':portal');
-    const link = `${location.origin}${location.pathname}?portal=${token}`;
-    document.getElementById('bio-portal-link').textContent = link;
+  const portalSec = document.getElementById('bio-portal-section');
+  if(c.portalEnabled){
+    portalSec.style.display = 'block';
+    const uid   = currentUser ? currentUser.uid : '';
+    const token = btoa('crv:' + uid + ':' + id + ':portal');
+    document.getElementById('bio-portal-link').textContent = `${location.origin}${location.pathname}?portal=${token}`;
   } else {
-    portalSection.style.display = 'none';
+    portalSec.style.display = 'none';
   }
 
-  // Tarefas recentes (últimas 5)
-  const recent = [...tasks].sort((a,b) => (b.id||0)-(a.id||0)).slice(0, 5);
-  const statusColors = { todo:'var(--gray)', doing:'var(--purple)', progress:'var(--purple)', waiting:'var(--orange)', review:'var(--orange)', done:'var(--green)' };
-  const statusLabels = { todo:'A fazer', doing:'Em andamento', progress:'Em andamento', waiting:'Aguardando', review:'Em revisão', done:'Concluído ✓' };
+  // Tarefas recentes
+  const statusColors  = { todo:'var(--gray)', doing:'var(--purple)', progress:'var(--purple)', waiting:'var(--orange)', review:'var(--orange)', done:'var(--green)' };
+  const statusLabels  = { todo:'A fazer', doing:'Em andamento', progress:'Em andamento', waiting:'Aguardando', review:'Em revisão', done:'Concluído ✓' };
+  const recent = [...tasks].sort((a,b)=>(b.id||0)-(a.id||0)).slice(0,5);
   document.getElementById('bio-tasks-list').innerHTML = recent.length
     ? recent.map(t => `
-        <div onclick="closeModal('clientbio');openDetail(${t.id},null)" style="background:#fff;border-radius:8px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;border:1.5px solid transparent;transition:border-color .15s" onmouseover="this.style.borderColor='var(--lav-mid)'" onmouseout="this.style.borderColor='transparent'">
+        <div onclick="closeModal('clientbio');openDetail(${t.id},null)"
+          style="background:#fff;border-radius:8px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;border:1.5px solid transparent;transition:border-color .15s"
+          onmouseover="this.style.borderColor='var(--lav-mid)'" onmouseout="this.style.borderColor='transparent'">
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>
             <div style="font-size:11px;color:${statusColors[t.status]||'var(--gray)'};margin-top:2px;font-weight:600">${statusLabels[t.status]||t.status}${t.date?' · '+fmt(t.date):''}</div>
@@ -2893,72 +2872,59 @@ window.openClientBio = function(id) {
   openModal('clientbio');
 };
 
-window.saveBioWa = function() {
-  const c = S.clients.find(cl => cl.id === _bioClientId); if (!c) return;
-  const num = document.getElementById('bio-wa-input').value.trim();
-  c.waNumber = num.replace(/\D/g, '');
-  saveClientDB(c);
-  document.getElementById('bio-wa-actions').style.display = c.waNumber ? 'flex' : 'none';
-  showToast('WhatsApp salvo! 📱', 'success');
-};
-
-window.saveBioNotes = function() {
-  const c = S.clients.find(cl => cl.id === _bioClientId); if (!c) return;
-  c.bio = document.getElementById('bio-notes').value.trim();
-  saveClientDB(c);
-  showToast('Notas salvas!', 'success');
-};
-
-window.sendWaBio = function() {
-  const c = S.clients.find(cl => cl.id === _bioClientId); if (!c || !c.waNumber) return;
-  // Abre conversa direta (sem texto pré-definido)
-  window.open(`https://wa.me/${c.waNumber}`, '_blank');
-};
-
-window.copyBioPortalLink = function() {
-  const link = document.getElementById('bio-portal-link').textContent;
-  navigator.clipboard.writeText(link).then(() => showToast('Link copiado!', 'success'));
-};
-
-window.openEditClientFromBio = function() {
-  closeModal('clientbio');
-  setTimeout(() => openEditClient(_bioClientId), 180);
-};
-
 window.handleBioPhotoUpload = function(input){
   const file = input.files[0]; if(!file) return;
+  if(file.size > 3 * 1024 * 1024){ showToast('Foto muito grande. Máx 3MB.','warn'); return; }
   const reader = new FileReader();
   reader.onload = function(e){
-    const data = e.target.result;
-    const preview = document.getElementById('bio-photo-preview');
-    preview.innerHTML = `<img src="${data}" style="width:100%;height:100%;object-fit:cover">`;
-    document.getElementById('bio-photo-remove').style.display = 'block';
-    // Save to client
-    const c = S.clients.find(cl=>cl.id===_bioClientId); if(!c) return;
-    c.photoData = data;
+    const dataURL = e.target.result;
+    const c = S.clients.find(cl => cl.id === _bioClientId); if(!c) return;
+    c.photoURL = dataURL;
     saveClientDB(c);
-    // Update avatar in bio header too
-    const bioAv = document.getElementById('bio-avatar');
-    bioAv.innerHTML = `<img src="${data}" style="width:100%;height:100%;object-fit:cover;border-radius:14px">`;
+    // Atualiza avatar no modal
+    const imgEl = document.getElementById('bio-avatar-img');
+    const iniEl = document.getElementById('bio-avatar-ini');
+    imgEl.src = dataURL;
+    imgEl.style.display = 'block';
+    iniEl.style.display = 'none';
+    // Atualiza sidebar
+    renderLists();
     showToast('Foto salva! 📸','success');
   };
   reader.readAsDataURL(file);
 };
 
-window.removeBioPhoto = function(){
-  const c = S.clients.find(cl=>cl.id===_bioClientId); if(!c) return;
-  c.photoData = null;
+window.saveBioWa = function(){
+  const c = S.clients.find(cl => cl.id === _bioClientId); if(!c) return;
+  c.waNumber = document.getElementById('bio-wa-input').value.replace(/\D/g,'');
   saveClientDB(c);
-  const preview = document.getElementById('bio-photo-preview');
-  preview.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
-  document.getElementById('bio-photo-remove').style.display = 'none';
-  const bioAv = document.getElementById('bio-avatar');
-  const ini = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  bioAv.textContent = ini;
-  showToast('Foto removida','info');
+  document.getElementById('bio-wa-actions').style.display = c.waNumber ? 'block' : 'none';
+  showToast('WhatsApp salvo! 📱','success');
 };
 
-window.filterFromBio = function() {
+window.saveBioNotes = function(){
+  const c = S.clients.find(cl => cl.id === _bioClientId); if(!c) return;
+  c.bio = document.getElementById('bio-notes').value.trim();
+  saveClientDB(c);
+  showToast('Notas salvas! ✍️','success');
+};
+
+window.sendWaBioMsg = function(){
+  const c = S.clients.find(cl => cl.id === _bioClientId); if(!c || !c.waNumber) return;
+  window.open(`https://wa.me/${c.waNumber}`,'_blank');
+};
+
+window.copyBioPortalLink = function(){
+  const link = document.getElementById('bio-portal-link').textContent;
+  navigator.clipboard.writeText(link).then(() => showToast('Link copiado!','success'));
+};
+
+window.openEditClientFromBio = function(){
+  closeModal('clientbio');
+  setTimeout(() => openEditClient(_bioClientId), 180);
+};
+
+window.filterFromBio = function(){
   closeModal('clientbio');
   setFilter(_bioClientId);
 };
