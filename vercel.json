@@ -1,13 +1,19 @@
 {
   "version": 2,
-  "headers": [
+  "builds": [
     {
-      "source": "/",
-      "headers": [{ "key": "Content-Type", "value": "text/html; charset=utf-8" }]
+      "src": "api/whatsapp/notify.js",
+      "use": "@vercel/node"
     }
   ],
-  "rewrites": [
-    { "source": "/api/whatsapp/notify", "destination": "/api/whatsapp/notify.js" },
-    { "source": "/(.*)", "destination": "/public/index.html" }
+  "routes": [
+    {
+      "src": "/api/whatsapp/notify",
+      "dest": "/api/whatsapp/notify.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
   ]
 }
