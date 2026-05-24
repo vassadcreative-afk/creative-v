@@ -476,7 +476,36 @@ textarea{resize:vertical;min-height:72px}
 /* ── HIGHLIGHT busca ── */
 mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;padding:0 1px}
 
-/* ── KANBAN DRAG & DROP ── */
+/* ── TAREFAS BLOQUEADAS / DEPENDÊNCIAS ── */
+.k-col.blocked-col{background:#FFF5F0;border:1.5px solid rgba(232,93,93,.15)}
+.k-card.blocked-card{background:#FFF5F0;border-color:rgba(232,93,93,.25)}
+.blocked-badge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;background:rgba(232,93,93,.12);color:#B02020;display:inline-flex;align-items:center;gap:3px;letter-spacing:.3px}
+/* Seção de impedimento no modal */
+.block-box{background:rgba(232,93,93,.06);border:1.5px solid rgba(232,93,93,.2);border-radius:12px;padding:12px 14px;margin-top:2px}
+.block-box-title{font-size:11px;font-weight:700;color:#B02020;letter-spacing:.4px;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.block-reason-box{background:#fff;border-radius:8px;padding:10px 13px;font-size:13px;color:var(--dark);line-height:1.6;white-space:pre-wrap;border:1px solid rgba(232,93,93,.15)}
+.dep-list{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.dep-tag{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:9px;background:var(--lav-light);border:1.5px solid transparent;transition:all .14s;cursor:pointer}
+.dep-tag:hover{border-color:var(--lav-mid)}
+.dep-tag.blocking{background:rgba(232,93,93,.07);border-color:rgba(232,93,93,.2)}
+.dep-tag-code{font-size:10px;font-weight:800;color:var(--purple-dark);letter-spacing:.4px;flex-shrink:0}
+.dep-tag-title{font-size:12px;font-weight:600;color:var(--dark);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dep-tag-status{font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px}
+.dep-remove{background:none;border:none;cursor:pointer;color:var(--gray);padding:2px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;line-height:1}
+.dep-remove:hover{color:var(--red);background:rgba(232,93,93,.1)}
+/* Buscador de dependências */
+.dep-search-wrap{position:relative;margin-top:8px}
+.dep-search-input{width:100%;padding:9px 12px 9px 32px;border:1.5px solid rgba(120,111,212,.18);border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:var(--lav-light);outline:none;transition:border-color .15s}
+.dep-search-input:focus{border-color:var(--purple);background:#fff}
+.dep-search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--gray)}
+.dep-results{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1.5px solid var(--lav-mid);border-radius:10px;box-shadow:0 8px 24px rgba(120,111,212,.15);z-index:600;max-height:220px;overflow-y:auto;display:none}
+.dep-results.open{display:block}
+.dep-result-item{padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .12s;border-bottom:1px solid var(--lav-light)}
+.dep-result-item:last-child{border-bottom:none}
+.dep-result-item:hover{background:var(--lav-light)}
+.dep-result-item.disabled{opacity:.4;cursor:default;pointer-events:none}
+/* Auto-unlock banner */
+.auto-unlock-banner{background:rgba(112,196,168,.1);border:1.5px solid rgba(112,196,168,.3);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--green-txt);display:flex;align-items:center;gap:8px;margin-top:8px}
 .k-card{cursor:grab}
 .k-card:active{cursor:grabbing}
 .k-card.dragging{opacity:.35;transform:rotate(1.5deg);box-shadow:0 8px 24px rgba(120,111,212,.3)!important}
@@ -844,6 +873,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
           <option value="todo">A fazer</option>
           <option value="doing">Em andamento</option>
           <option value="waiting">Aguardando cliente</option>
+          <option value="blocked">Impedida</option>
           <option value="done">Concluído</option>
         </select>
       </div>
@@ -890,6 +920,8 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
       </div>
       <!-- CONVITE GOOGLE CALENDAR -->
       <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
+      <!-- DEPENDÊNCIAS / IMPEDIMENTO -->
+      <div id="dv-block-section" style="display:none;margin-top:2px"></div>
       <div class="modal-acts">
         <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
@@ -924,6 +956,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
             <option value="todo">A fazer</option>
             <option value="doing">Em andamento</option>
             <option value="waiting">Aguardando cliente</option>
+            <option value="blocked">Impedida</option>
             <option value="done">Concluído</option>
           </select>
         </div>
@@ -935,6 +968,22 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
       </div>
       </div>
       <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
+      <!-- SEÇÃO DE IMPEDIMENTO (aparece quando status=blocked) -->
+      <div id="e-block-section" style="display:none">
+        <div class="fg">
+          <label>Motivo do impedimento</label>
+          <textarea id="e-block-reason" placeholder="Descreva por que esta tarefa está impedida..." style="min-height:60px"></textarea>
+        </div>
+        <div class="fg">
+          <label>Bloqueada por (tarefas dependentes)</label>
+          <div class="dep-list" id="e-dep-list"></div>
+          <div class="dep-search-wrap">
+            <span class="dep-search-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+            <input class="dep-search-input" id="e-dep-search" type="text" placeholder="Buscar tarefa bloqueante..." oninput="searchBlockingTasks(this.value)" autocomplete="off">
+            <div class="dep-results" id="e-dep-results"></div>
+          </div>
+        </div>
+      </div>
       <div class="fg portal-visible-row" id="e-portal-row" style="display:none">
         <span class="portal-visible-lbl">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1796,7 +1845,196 @@ function isOverdue(t){
   return t.date < td();
 }
 
-const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando',done:'Concluído ✓'};
+const statusLabel={todo:'A fazer',doing:'Em andamento',waiting:'Aguardando',blocked:'Impedida 🚫',done:'Concluído ✓'};
+const statusColors={todo:'rgba(120,111,212,.15)',doing:'rgba(208,151,196,.2)',waiting:'rgba(232,168,112,.2)',blocked:'rgba(232,93,93,.15)',done:'rgba(112,196,168,.2)'};
+const statusTextColors={todo:'#5A52B0',doing:'#9B50A0',waiting:'#A05C20',blocked:'#B02020',done:'#1E8060'};
+
+// ── SISTEMA DE DEPENDÊNCIAS / TAREFAS IMPEDIDAS ───────────────────────
+
+// Estado temporário durante edição
+let _editBlockedBy=[]; // array de taskIds
+
+function renderBlockSection(t){
+  const sec=document.getElementById('dv-block-section');
+  if(!sec) return;
+
+  const blockedBy=(t.blockedBy||[]).filter(id=>S.tasks.find(x=>x.id===id));
+  const blockReason=t.blockReason||'';
+  const isBlocked=t.status==='blocked';
+  // Tarefas que ESTA tarefa bloqueia (referência inversa)
+  const blocks=S.tasks.filter(x=>x.id!==t.id&&(x.blockedBy||[]).includes(t.id));
+
+  if(!isBlocked && !blockedBy.length && !blocks.length){ sec.style.display='none'; return; }
+  sec.style.display='block';
+
+  let html='';
+
+  // Se está impedida → mostrar motivo
+  if(isBlocked){
+    html+=`<div class="block-box">
+      <div class="block-box-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Impedimento
+      </div>`;
+    if(blockReason){
+      html+=`<div class="block-reason-box">${escHtml(blockReason)}</div>`;
+    } else {
+      html+=`<div style="font-size:12px;color:var(--gray);font-style:italic">Nenhum motivo registrado.</div>`;
+    }
+    if(blockedBy.length){
+      html+=`<div style="font-size:11px;font-weight:700;color:#B02020;margin:10px 0 6px;letter-spacing:.3px">BLOQUEADA POR:</div>`;
+      html+=`<div class="dep-list">`;
+      blockedBy.forEach(bid=>{
+        const bt=S.tasks.find(x=>x.id===bid); if(!bt) return;
+        const isDone=bt.status==='done';
+        html+=`<div class="dep-tag blocking" onclick="closeModal('detail');setTimeout(()=>openDetail(${bt.id},null),80)">
+          <span class="dep-tag-code">${bt.code||'#'+bt.id}</span>
+          <span class="dep-tag-title">${escHtml(bt.title)}</span>
+          <span class="dep-tag-status" style="background:${isDone?'rgba(112,196,168,.2)':'rgba(232,93,93,.12)'};color:${isDone?'#1E8060':'#B02020'}">${statusLabel[bt.status]||bt.status}</span>
+        </div>`;
+      });
+      html+=`</div>`;
+      // Banner de auto-desbloqueio se todas as bloqueantes estão concluídas
+      const allDone=blockedBy.every(bid=>{ const bt=S.tasks.find(x=>x.id===bid); return bt&&bt.status==='done'; });
+      if(allDone){
+        html+=`<div class="auto-unlock-banner">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          Todas as dependências foram concluídas! Esta tarefa pode ser desbloqueada.
+        </div>`;
+      }
+    }
+    html+=`</div>`;
+  }
+
+  // Mostra quais tarefas ESTA bloqueia
+  if(blocks.length){
+    html+=`<div style="margin-top:10px">
+      <div style="font-size:10px;font-weight:700;color:var(--gray);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">Esta tarefa bloqueia:</div>
+      <div class="dep-list">`;
+    blocks.forEach(bt=>{
+      html+=`<div class="dep-tag" onclick="closeModal('detail');setTimeout(()=>openDetail(${bt.id},null),80)">
+        <span class="dep-tag-code">${bt.code||'#'+bt.id}</span>
+        <span class="dep-tag-title">${escHtml(bt.title)}</span>
+        <span class="dep-tag-status" style="background:${statusColors[bt.status]||''};color:${statusTextColors[bt.status]||'var(--gray)'}">${statusLabel[bt.status]||bt.status}</span>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  sec.innerHTML=html;
+}
+
+// Controla visibilidade da seção de bloqueio no modal de edição
+function updateEditBlockSection(){
+  const sel=document.getElementById('e-status');
+  const sec=document.getElementById('e-block-section');
+  if(!sel||!sec) return;
+  sec.style.display=sel.value==='blocked'?'block':'none';
+}
+
+// Renderiza a lista de bloqueantes no modal de edição
+function renderEditDepList(){
+  const list=document.getElementById('e-dep-list');
+  if(!list) return;
+  if(!_editBlockedBy.length){ list.innerHTML=''; return; }
+  list.innerHTML=_editBlockedBy.map(bid=>{
+    const bt=S.tasks.find(x=>x.id===bid);
+    if(!bt) return '';
+    return`<div class="dep-tag blocking" style="cursor:default">
+      <span class="dep-tag-code">${bt.code||'#'+bt.id}</span>
+      <span class="dep-tag-title">${escHtml(bt.title)}</span>
+      <span class="dep-tag-status" style="background:${statusColors[bt.status]||''};color:${statusTextColors[bt.status]||'var(--gray)'}">${statusLabel[bt.status]||bt.status}</span>
+      <button class="dep-remove" onclick="removeBlocker(${bid})" title="Remover dependência">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  }).join('');
+}
+
+window.removeBlocker=function(bid){
+  _editBlockedBy=_editBlockedBy.filter(x=>x!==bid);
+  renderEditDepList();
+};
+
+// Busca tarefas para adicionar como bloqueante
+window.searchBlockingTasks=function(q){
+  const res=document.getElementById('e-dep-results');
+  if(!res) return;
+  q=q.trim().toLowerCase();
+  if(!q){ res.classList.remove('open'); return; }
+
+  const editingId=S.editingId;
+  const candidates=S.tasks.filter(t=>{
+    if(t.id===editingId) return false; // não pode bloquear a si mesma
+    if(_editBlockedBy.includes(t.id)) return false; // já na lista
+    // Detectar ciclo: não adicionar tarefa que é bloqueada por esta
+    if(wouldCreateCycle(editingId, t.id)) return false;
+    return (t.title.toLowerCase().includes(q)||(t.code||'').toLowerCase().includes(q));
+  }).slice(0,8);
+
+  if(!candidates.length){ res.innerHTML=`<div class="dep-result-item disabled">Nenhuma tarefa encontrada</div>`; res.classList.add('open'); return; }
+
+  res.innerHTML=candidates.map(t=>{
+    const c=S.clients.find(cl=>cl.id===t.clientId);
+    return`<div class="dep-result-item" onclick="addBlocker(${t.id})">
+      <span style="font-size:10px;font-weight:800;color:var(--purple-dark);flex-shrink:0">${t.code||'#'+t.id}</span>
+      <span style="font-size:12px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(t.title)}</span>
+      ${c?`<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${c.color}22;color:${c.color}">${escHtml(c.name)}</span>`:''}
+      <span style="font-size:10px;color:var(--gray)">${statusLabel[t.status]||t.status}</span>
+    </div>`;
+  }).join('');
+  res.classList.add('open');
+};
+
+window.addBlocker=function(bid){
+  if(!_editBlockedBy.includes(bid)) _editBlockedBy.push(bid);
+  const inp=document.getElementById('e-dep-search');
+  if(inp) inp.value='';
+  document.getElementById('e-dep-results')?.classList.remove('open');
+  renderEditDepList();
+};
+
+// Fecha dropdown ao clicar fora
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#e-dep-search')&&!e.target.closest('#e-dep-results')){
+    document.getElementById('e-dep-results')?.classList.remove('open');
+  }
+});
+
+// Detecta ciclos: verifica se adicionar `newBlockerId` como bloqueante de `taskId`
+// criaria um ciclo (taskId já bloqueia newBlockerId direta ou indiretamente)
+function wouldCreateCycle(taskId, newBlockerId, visited=new Set()){
+  if(visited.has(taskId)) return false;
+  visited.add(taskId);
+  const t=S.tasks.find(x=>x.id===taskId);
+  const blockedBy=(t?.blockedBy||[]);
+  for(const bid of blockedBy){
+    if(bid===newBlockerId) return true;
+    if(wouldCreateCycle(bid, newBlockerId, visited)) return true;
+  }
+  return false;
+}
+
+// Auto-desbloqueio: quando uma tarefa é concluída, verifica se alguma tarefa
+// bloqueada por ela pode ser notificada
+function checkAutoUnlock(completedTaskId){
+  const unblockable=S.tasks.filter(t=>{
+    if(t.status!=='blocked') return false;
+    const blockedBy=(t.blockedBy||[]).filter(id=>S.tasks.find(x=>x.id===id));
+    if(!blockedBy.includes(completedTaskId)) return false;
+    // Verifica se TODAS as bloqueantes estão concluídas agora
+    return blockedBy.every(bid=>{ const bt=S.tasks.find(x=>x.id===bid); return bt&&bt.status==='done'; });
+  });
+  if(unblockable.length){
+    const names=unblockable.map(t=>t.code?`${t.code}`:`"${t.title}"`).join(', ');
+    // Atualiza a sync bar com notificação discreta
+    const lbl=document.getElementById('fb-lbl');
+    if(lbl){
+      lbl.innerHTML=`✅ Concluído! As tarefas <strong>${escHtml(names)}</strong> podem ser desbloqueadas.`;
+      setTimeout(()=>{ if(lbl) lbl.textContent='Dados salvos na nuvem ✓'; }, 5000);
+    }
+  }
+}
 
 // Priority icons (SVG, inline)
 function prioIcon(p, ctx='light'){
@@ -1964,6 +2202,7 @@ function renderKanban(){
     {id:'todo',label:'A fazer',color:'#786FD4'},
     {id:'doing',label:'Em andamento',color:'#D097C4'},
     {id:'waiting',label:'Aguardando',color:'#E8A870'},
+    {id:'blocked',label:'Impedidas',color:'#E85D5D',isBlocked:true},
     {id:'done',label:'Concluído',color:'#70C4A8'}
   ];
 
@@ -2007,10 +2246,18 @@ function renderKanban(){
       ct=ft.filter(t=>t.status===col.id && !isOverdue(t));
     }
     ct=sortByDate(ct);
-    // data-col identifica a coluna para o drop; overdue não aceita drops
-    return`<div class="k-col ${col.isOverdue?'overdue':''}" data-col="${col.id}" ${!col.isOverdue?'data-droptarget="true"':''}>
-      <div class="k-hdr"><div class="k-dot" style="background:${col.color}"></div><div class="k-name">${col.label}</div><div class="k-cnt ${col.isOverdue&&ct.length?'overdue-cnt':''}">${ct.length}</div></div>
-      ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="k-card ${col.isOverdue?'overdue-card':''}"
+    const colCls=[
+      'k-col',
+      col.isOverdue?'overdue':'',
+      col.isBlocked?'blocked-col':''
+    ].filter(Boolean).join(' ');
+    // Drop target: overdue e blocked não aceitam drops
+    const isDropTarget=!col.isOverdue&&!col.isBlocked;
+    return`<div class="${colCls}" data-col="${col.id}" ${isDropTarget?'data-droptarget="true"':''}>
+      <div class="k-hdr"><div class="k-dot" style="background:${col.color}"></div><div class="k-name">${col.label}</div><div class="k-cnt ${(col.isOverdue||col.isBlocked)&&ct.length?'overdue-cnt':''}">${ct.length}</div></div>
+      ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);
+        const isBlockedCard=t.status==='blocked';
+        return`<div class="k-card ${col.isOverdue?'overdue-card':''} ${isBlockedCard?'blocked-card':''}"
           draggable="true"
           data-taskid="${t.id}"
           onclick="openDetail(${t.id},event)">
@@ -2020,10 +2267,11 @@ function renderKanban(){
           ${c?`<span class="tag" style="background:${c.color};font-size:10px;padding:2px 7px">${c.name}</span>`:''}
           <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:${pB[t.priority]};color:${pC[t.priority]};display:inline-flex;align-items:center;gap:3px">${prioIcon(t.priority,'light')} ${pLabels[t.priority]}</span>
           ${t.date?`<span class="k-date ${col.isOverdue?'late':''}">${fmt(t.date)}</span>`:''}
+          ${isBlockedCard&&t.blockReason?`<span class="blocked-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Impedida</span>`:''}
           ${t.link?`<span style="font-size:11px;display:inline-flex"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>`:''}
           ${ownerTag(t.ownerName)}
         </div></div>`;}).join('')}
-      ${!col.isOverdue?`<button class="add-col" onclick="openNewTask()">+ adicionar</button>`:''}
+      ${isDropTarget?`<button class="add-col" onclick="openNewTask()">+ adicionar</button>`:''}
     </div>`;
   }).join('');
 
@@ -2152,7 +2400,15 @@ function updateStats(){
   document.getElementById('hero-date').textContent=localStr.charAt(0).toUpperCase()+localStr.slice(1);
 }
 
-function toggleDone(id){const t=S.tasks.find(t=>t.id===id);if(t){t.status=t.status==='done'?'todo':'done';setSyncStatus('loading');saveTaskDB(t);}}
+function toggleDone(id){
+  const t=S.tasks.find(t=>t.id===id);
+  if(t){
+    t.status=t.status==='done'?'todo':'done';
+    setSyncStatus('loading');
+    saveTaskDB(t);
+    if(t.status==='done') checkAutoUnlock(id);
+  }
+}
 function changeMonth(d){S.month=new Date(S.month.getFullYear(),S.month.getMonth()+d,1);renderCalendar()}
 
 // ── MODALS ─────────────────────────────────────────────────────────
@@ -2244,6 +2500,8 @@ function switchToView(){
   document.getElementById('dv-notes').textContent=t.notes||'—';
   // Box de convite Google Calendar
   renderInviteBox(t);
+  // Seção de dependências / impedimento
+  renderBlockSection(t);
 }
 
 function switchToEdit(){
@@ -2262,6 +2520,14 @@ function switchToEdit(){
   buildOwnerTags('e', t.ownerName||MY_NAME);
   const hasPortalClient=S.clients.some(c=>c.portalEnabled);
   document.getElementById('e-portal-row').style.display=hasPortalClient?'flex':'none';
+  // Bloqueio / dependências
+  _editBlockedBy=[...(t.blockedBy||[])];
+  document.getElementById('e-block-reason').value=t.blockReason||'';
+  renderEditDepList();
+  updateEditBlockSection();
+  // Listener no select de status para mostrar/esconder seção de bloqueio
+  const statusSel=document.getElementById('e-status');
+  statusSel.onchange=updateEditBlockSection;
 }
 
 function saveEdit(){
@@ -2277,6 +2543,16 @@ function saveEdit(){
   t.link=document.getElementById('e-link').value.trim();
   t.portalVisible=document.getElementById('e-portal-visible').checked;
   t.ownerName=getOwner('e');
+  // Bloqueio / dependências
+  if(t.status==='blocked'){
+    t.blockReason=document.getElementById('e-block-reason').value.trim();
+    t.blockedBy=[..._editBlockedBy];
+  } else {
+    // Se saiu do status blocked, limpa o motivo mas mantém as referências
+    // (outras tarefas podem ainda bloqueá-la)
+    t.blockedBy=[..._editBlockedBy];
+    t.blockReason=t.status==='blocked'?(t.blockReason||''):'';
+  }
   if(!t.comments)t.comments=[];
   setSyncStatus('loading');
   saveTaskDB(t);
@@ -2299,6 +2575,13 @@ function confirmDelete(mode){
     _deleteConfirming=false;
     const idToDelete=S.editingId;
     closeModal('detail');
+    // Limpa referências desta tarefa em outras tarefas que ela bloqueava
+    S.tasks.forEach(t=>{
+      if((t.blockedBy||[]).includes(idToDelete)){
+        t.blockedBy=t.blockedBy.filter(x=>x!==idToDelete);
+        saveTaskDB(t);
+      }
+    });
     setSyncStatus('loading');
     deleteTaskDB(idToDelete);
   }
