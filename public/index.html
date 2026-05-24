@@ -163,16 +163,17 @@ main{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:
 .cal-month{font-size:16px;font-weight:700}
 .cal-dn-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
 .cal-dn{text-align:center;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gray);padding:6px 0}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-cell{background:var(--white);border-radius:10px;padding:8px 6px;min-height:80px;cursor:pointer;transition:all .15s;border:1.5px solid transparent}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:110px;gap:4px}
+.cal-cell{background:var(--white);border-radius:10px;padding:8px 6px;height:110px;overflow:hidden;cursor:pointer;transition:all .15s;border:1.5px solid transparent;display:flex;flex-direction:column}
 .cal-cell:hover{border-color:var(--purple)}
 .cal-cell.today{border-color:var(--purple);background:rgba(120,111,212,.04)}
 .cal-cell.faded{opacity:.36}
-.cal-num{font-size:13px;font-weight:700;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:7px}
+.cal-num{font-size:13px;font-weight:700;width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:7px}
 .cal-cell.today .cal-num{background:var(--grad);color:#fff}
-.cal-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
-.cal-dot{width:6px;height:6px;border-radius:50%}
-.cal-mini{font-size:9px;font-weight:600;padding:2px 4px;border-radius:4px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cal-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px;flex-shrink:0}
+.cal-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cal-mini{font-size:9px;font-weight:600;padding:2px 5px;border-radius:4px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;display:block}
+.cal-mini+.cal-mini{margin-top:2px}
 
 /* ===== MODALS ===== */
 .overlay{position:fixed;inset:0;background:rgba(26,22,40,.62);backdrop-filter:blur(5px);z-index:500;display:none;align-items:flex-end;justify-content:center}
@@ -275,7 +276,8 @@ textarea{resize:vertical;min-height:72px}
   .hero-title{font-size:24px}
   .stat-num{font-size:24px}
   .kanban-board{grid-template-columns:repeat(5,minmax(240px,1fr));gap:16px}
-  .cal-cell{min-height:100px}
+  .cal-grid{grid-auto-rows:120px}
+  .cal-cell{height:120px}
 }
 @media(min-width:1024px) and (max-width:1399px){
   main{padding:24px 26px}
@@ -286,7 +288,8 @@ textarea{resize:vertical;min-height:72px}
   main{padding:18px}
   .hero-title{font-size:17px}
   .kanban-board{grid-template-columns:repeat(3,minmax(190px,1fr))}
-  .cal-cell{min-height:70px}
+  .cal-grid{grid-auto-rows:88px}
+  .cal-cell{height:88px}
 }
 @media(min-width:640px) and (max-width:767px){
   :root{--sidebar-w:180px}
@@ -297,7 +300,8 @@ textarea{resize:vertical;min-height:72px}
   .hero-stats{width:100%}
   .stat-pill{flex:1;padding:8px}
   .kanban-board{grid-template-columns:repeat(2,minmax(180px,1fr))}
-  .cal-cell{min-height:60px;padding:6px 4px}
+  .cal-grid{grid-auto-rows:76px}
+  .cal-cell{height:76px;padding:6px 4px}
   .cal-cell .cal-mini{display:none}
 }
 @media(max-width:639px){
@@ -313,8 +317,8 @@ textarea{resize:vertical;min-height:72px}
   .stat-num{font-size:18px}
   .kanban-scroll{margin:0 -14px;padding-left:14px;padding-right:14px}
   .kanban-board{grid-template-columns:repeat(5,minmax(190px,1fr))}
-  .cal-grid{gap:3px}
-  .cal-cell{padding:6px 4px;min-height:58px;border-radius:8px}
+  .cal-grid{gap:3px;grid-auto-rows:64px}
+  .cal-cell{height:64px;padding:6px 4px;border-radius:8px}
   .cal-cell .cal-mini{display:none}
   .cal-dn{font-size:9px;letter-spacing:.3px}
   .form-row{grid-template-columns:1fr}
@@ -329,7 +333,8 @@ textarea{resize:vertical;min-height:72px}
   .hero{padding:14px 16px}
   .hero-title{font-size:14px}
   .stat-num{font-size:16px}
-  .cal-cell{min-height:48px;padding:4px 3px;border-radius:6px}
+  .cal-grid{grid-auto-rows:54px}
+  .cal-cell{height:54px;padding:4px 3px;border-radius:6px}
   .cal-num{font-size:11px;width:20px;height:20px}
 }
 
@@ -672,6 +677,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
         <div class="sec-title" style="font-size:15px">Quadro de tarefas</div>
         <div class="filters" id="board-filters"></div>
       </div>
+      <div id="kanban-owner-filter"></div>
       <div class="kanban-scroll"><div class="kanban-board" id="kanban"></div></div>
     </div>
 
@@ -1558,27 +1564,24 @@ function renderKanban(){
   const pC={alta:'#B02020',normal:'#5A52B0',baixa:'#1E8060'};
   const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
-  // Filtro de responsável no kanban
-  const allOwners=[...new Set(ft.map(t=>t.ownerName||MY_NAME))];
-  const ownerBar=allOwners.length>1?`<div class="owner-filter-bar" style="margin-bottom:10px">
-    <span class="owner-filter-lbl">Responsável:</span>
-    <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
-    ${allOwners.map(n=>{
-      const isClient=S.clients.some(c=>c.name===n);
-      const active=ownerFilter===n;
-      return `<div class="owner-filter-chip ${active?(isClient?'active active-client':'active'):''}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
-    }).join('')}
-  </div>`:'';
+  // Filtro de responsável — calcula sobre TODAS as tarefas filtradas por cliente (não por owner)
+  // para que os chips apareçam mesmo quando um filtro está ativo
+  const allTasksForOwner=S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter);
+  const allOwners=[...new Set(allTasksForOwner.map(t=>t.ownerName||MY_NAME))];
 
-  // Insere barra de responsável acima do scroll
-  let ownerBarEl=document.getElementById('kanban-owner-filter');
-  if(!ownerBarEl){
-    ownerBarEl=document.createElement('div');
-    ownerBarEl.id='kanban-owner-filter';
-    const scroll=document.querySelector('.kanban-scroll');
-    if(scroll)scroll.parentNode.insertBefore(ownerBarEl,scroll);
+  // Filtro de responsável no kanban — usa container fixo no HTML
+  const ownerBarEl=document.getElementById('kanban-owner-filter');
+  if(ownerBarEl){
+    ownerBarEl.innerHTML=allOwners.length>1?`<div class="owner-filter-bar" style="margin-bottom:10px">
+      <span class="owner-filter-lbl">Responsável:</span>
+      <div class="owner-filter-chip ${!ownerFilter?'active':''}" onclick="setOwnerFilter(null)">Todos</div>
+      ${allOwners.map(n=>{
+        const isClient=S.clients.some(c=>c.name===n);
+        const active=ownerFilter===n;
+        return `<div class="owner-filter-chip ${active?(isClient?'active active-client':'active'):''}" onclick="setOwnerFilter('${n}')">${isClient?'🏢':'👤'} ${n}</div>`;
+      }).join('')}
+    </div>`:'';
   }
-  ownerBarEl.innerHTML=ownerBar;
 
   document.getElementById('kanban').innerHTML=cols.map(col=>{
     let ct;
@@ -1621,7 +1624,8 @@ function renderCalendar(){
         ${de.map(()=>`<div class="cal-dot" style="background:#D097C4"></div>`).join('')}
         ${dt.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="cal-dot" style="background:${c?c.color:'#786FD4'}"></div>`}).join('')}
       </div>
-      ${dt.slice(0,1).map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="cal-mini" style="background:${c?c.color+'22':'rgba(120,111,212,.12)'};color:${c?c.color:'#5A52B0'}">${t.title}</div>`}).join('')}
+      ${dt.slice(0,2).map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="cal-mini" style="background:${c?c.color+'22':'rgba(120,111,212,.12)'};color:${c?c.color:'#5A52B0'}">${t.title}</div>`}).join('')}
+      ${dt.length>2?`<div style="font-size:8px;color:var(--gray);margin-top:2px;font-weight:700">+${dt.length-2} mais</div>`:''}
     </div>`;
   }
   const rem=(fd+days)%7;for(let d=1;d<=(rem?7-rem:0);d++)html+=`<div class="cal-cell faded"><div class="cal-num">${d}</div></div>`;
@@ -1994,8 +1998,10 @@ function renderOwnerFilterBar(containerId){
 }
 
 function setOwnerFilter(name){
-  ownerFilter=name;
-  renderAll();
+  // Toggle: clicar no filtro já ativo remove o filtro
+  ownerFilter = (ownerFilter === name) ? null : name;
+  renderToday();
+  renderKanban();
 }
 
 // Filtrar tarefas pelo ownerFilter
