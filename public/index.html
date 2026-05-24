@@ -476,7 +476,21 @@ textarea{resize:vertical;min-height:72px}
 /* ── HIGHLIGHT busca ── */
 mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;padding:0 1px}
 
-/* ── PERFIL DO CLIENTE ── */
+/* ── GOOGLE CALENDAR INVITE ── */
+.gcal-invite-box{background:rgba(66,133,244,.06);border:1.5px solid rgba(66,133,244,.18);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.gcal-invite-box.sent{background:rgba(52,168,83,.06);border-color:rgba(52,168,83,.25)}
+.gcal-invite-box.sending{background:rgba(251,188,4,.06);border-color:rgba(251,188,4,.25);opacity:.8}
+.gcal-invite-info{flex:1;min-width:0}
+.gcal-invite-title{font-size:12px;font-weight:700;color:var(--dark)}
+.gcal-invite-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.gcal-invite-btn{padding:7px 14px;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .16s;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.gcal-invite-btn.send{background:rgba(66,133,244,.12);color:#1a73e8}
+.gcal-invite-btn.send:hover{background:rgba(66,133,244,.22)}
+.gcal-invite-btn.cancel{background:rgba(232,93,93,.1);color:var(--red)}
+.gcal-invite-btn.cancel:hover{background:rgba(232,93,93,.2)}
+.gcal-invite-btn.update{background:rgba(52,168,83,.1);color:#1e8e3e}
+.gcal-invite-btn.update:hover{background:rgba(52,168,83,.2)}
+.gcal-invite-spinner{width:12px;height:12px;border:2px solid rgba(66,133,244,.3);border-top-color:#1a73e8;border-radius:50%;animation:spin .7s linear infinite}
 .client-profile-overlay{position:fixed;inset:0;background:rgba(26,22,40,.62);backdrop-filter:blur(5px);z-index:500;display:none;align-items:flex-end;justify-content:center}
 .client-profile-overlay.open{display:flex}
 .client-profile-modal{background:var(--white);width:100%;max-width:520px;border-radius:24px 24px 0 0;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column}
@@ -868,6 +882,8 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
         <label>Observações</label>
         <div class="detail-notes-box" id="dv-notes"></div>
       </div>
+      <!-- CONVITE GOOGLE CALENDAR -->
+      <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
       <div class="modal-acts">
         <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
@@ -1072,6 +1088,10 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
             <input class="cp-edit-field" id="cp-wpp" type="tel" placeholder="(11) 99999-9999">
           </div>
           <div class="cp-field-group">
+            <span class="cp-field-label">E-mail (para convites do Calendar)</span>
+            <input class="cp-edit-field" id="cp-email" type="email" placeholder="cliente@email.com">
+          </div>
+          <div class="cp-field-group">
             <span class="cp-field-label">Responsável / Contato</span>
             <input class="cp-edit-field" id="cp-contact" type="text" placeholder="Nome do responsável">
           </div>
@@ -1188,8 +1208,8 @@ const firebaseConfig = {
 // Preencha com seu Client ID do Google Cloud Console
 // (o mesmo projeto que você usa para o Firebase / Google Sign-In)
 const GCAL_CLIENT_ID = '927106514031-s0v2g59vmso33gcjfa3an3tqeirsou5v.apps.googleusercontent.com';
-// Escopos necessários para leitura do calendário
-const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+// Escopos necessários: leitura + criação/edição de eventos (para invites)
+const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly';
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -1368,6 +1388,221 @@ async function fetchCalendarEvents(){
     renderAll();
     return true;
   }catch(e){ return false; }
+}
+
+// ── GOOGLE CALENDAR — INVITE DE TAREFAS ───────────────────────────────
+// Escopo necessário: calendar.events (criação/edição)
+// O escopo atual pode ser só .readonly → upgradamos silenciosamente via GSI
+
+const GCAL_WRITE_SCOPE='https://www.googleapis.com/auth/calendar.events';
+
+async function ensureWriteScope(){
+  // Verifica se o token atual já tem o escopo de escrita tentando uma chamada
+  // Se retornar 403, precisa de novo consentimento
+  if(!googleAccessToken) return false;
+  // Testa o escopo tentando listar com o token atual
+  const test = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary',{
+    headers:{ Authorization:`Bearer ${googleAccessToken}` }
+  });
+  if(test.ok) return true; // token válido
+  if(test.status===401){ googleAccessToken=null; localStorage.removeItem('gcal_token'); return false; }
+  return false;
+}
+
+async function requestWriteToken(){
+  return new Promise(async(resolve)=>{
+    try{
+      await loadGSIScript();
+      const client=google.accounts.oauth2.initTokenClient({
+        client_id:GCAL_CLIENT_ID,
+        scope:GCAL_SCOPE+' '+GCAL_WRITE_SCOPE,
+        prompt:'', // sem forçar consent se já foi dado
+        callback:r=>{
+          if(r&&r.access_token){
+            googleAccessToken=r.access_token;
+            localStorage.setItem('gcal_token',googleAccessToken);
+            resolve(true);
+          } else { resolve(false); }
+        }
+      });
+      client.requestAccessToken();
+    }catch(e){ resolve(false); }
+  });
+}
+
+// Renderiza o box de invite no modal de detalhe da tarefa
+function renderInviteBox(t){
+  const box=document.getElementById('dv-gcal-invite');
+  if(!box) return;
+
+  const c=S.clients.find(cl=>cl.id===t.clientId);
+  const clientEmail=c?.email;
+  const isClientTask = t.ownerName && t.ownerName!==MY_NAME && S.clients.some(cl=>cl.name===t.ownerName);
+
+  // Só mostra se: tem data + (é tarefa do cliente OU cliente tem email cadastrado)
+  if(!t.date || (!isClientTask && !clientEmail)){
+    box.style.display='none';
+    return;
+  }
+
+  box.style.display='block';
+  const hasEvent=!!t.gcalEventId;
+  const emailLabel=clientEmail?`→ ${clientEmail}`:'(sem e-mail cadastrado no perfil)';
+  const canSend=!!clientEmail;
+
+  if(hasEvent){
+    box.innerHTML=`<div class="gcal-invite-box sent">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,168,83,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1e8e3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+      </div>
+      <div class="gcal-invite-info">
+        <div class="gcal-invite-title">Invite enviado ✓</div>
+        <div class="gcal-invite-sub">${emailLabel}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <button class="gcal-invite-btn update" onclick="sendCalendarInvite(${t.id},true)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Atualizar
+        </button>
+        <button class="gcal-invite-btn cancel" onclick="cancelCalendarInvite(${t.id})">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Remover
+        </button>
+      </div>
+    </div>`;
+  } else {
+    box.innerHTML=`<div class="gcal-invite-box">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(66,133,244,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      </div>
+      <div class="gcal-invite-info">
+        <div class="gcal-invite-title">Enviar convite pelo Google Agenda</div>
+        <div class="gcal-invite-sub">${emailLabel}</div>
+      </div>
+      ${canSend
+        ?`<button class="gcal-invite-btn send" onclick="sendCalendarInvite(${t.id},false)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+            Enviar
+          </button>`
+        :`<button class="gcal-invite-btn send" onclick="openClientProfileForEmail(${t.clientId})" style="opacity:.7">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Adicionar e-mail
+          </button>`
+      }
+    </div>`;
+  }
+}
+
+window.openClientProfileForEmail=function(clientId){
+  closeModal('detail');
+  setTimeout(()=>openClientProfile(clientId),150);
+};
+
+window.sendCalendarInvite=async function(taskId, isUpdate=false){
+  const t=S.tasks.find(x=>x.id===taskId); if(!t) return;
+  const c=S.clients.find(cl=>cl.id===t.clientId); if(!c||!c.email) return;
+
+  // UI de loading
+  const box=document.getElementById('dv-gcal-invite');
+  if(box) box.innerHTML=`<div class="gcal-invite-box sending">
+    <div class="gcal-invite-spinner"></div>
+    <div class="gcal-invite-info"><div class="gcal-invite-title">${isUpdate?'Atualizando':'Enviando'} convite...</div><div class="gcal-invite-sub">${escHtml(c.email)}</div></div>
+  </div>`;
+
+  // Garante token com escopo de escrita
+  if(!googleAccessToken){ const ok=await requestWriteToken(); if(!ok){ showInviteError('Conecte o Google Calendar primeiro.'); return; } }
+
+  // Monta o evento: dia inteiro (all-day) no dia da tarefa
+  const [y,mo,d]=t.date.split('-');
+  const eventTitle=`ENTREGA: ${t.title}`;
+  const eventBody={
+    summary: eventTitle,
+    description: [
+      t.notes?`${t.notes}\n\n`:'',
+      `Código: ${t.code||''}`,
+      t.link?`\nLink de entrega: ${t.link}`:'',
+      `\n\nGerado pelo Creative V`
+    ].join('').trim(),
+    start:{ date: t.date },  // all-day
+    end:{ date: t.date },    // all-day (mesmo dia)
+    attendees:[{ email: c.email, displayName: c.name }],
+    guestsCanModify: false,
+    reminders:{ useDefault:false, overrides:[{method:'email',minutes:24*60},{method:'popup',minutes:60}] }
+  };
+
+  try{
+    let resp, data;
+    if(isUpdate && t.gcalEventId){
+      // PATCH para atualizar evento existente
+      resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${t.gcalEventId}`,{
+        method:'PATCH',
+        headers:{'Authorization':`Bearer ${googleAccessToken}`,'Content-Type':'application/json'},
+        body: JSON.stringify(eventBody)
+      });
+    } else {
+      // POST para criar novo evento
+      resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?sendUpdates=all`,{
+        method:'POST',
+        headers:{'Authorization':`Bearer ${googleAccessToken}`,'Content-Type':'application/json'},
+        body: JSON.stringify(eventBody)
+      });
+    }
+
+    if(resp.status===401){
+      googleAccessToken=null; localStorage.removeItem('gcal_token');
+      const ok=await requestWriteToken();
+      if(ok){ window.sendCalendarInvite(taskId, isUpdate); return; }
+      showInviteError('Token expirado. Reconecte o Google Calendar.'); return;
+    }
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      showInviteError(err?.error?.message||`Erro ${resp.status}`); return;
+    }
+
+    data=await resp.json();
+    // Salva o eventId na tarefa para poder atualizar/cancelar depois
+    t.gcalEventId=data.id;
+    t.gcalEventLink=data.htmlLink||'';
+    setSyncStatus('loading');
+    saveTaskDB(t);
+    renderInviteBox(t);
+
+  }catch(e){
+    showInviteError('Erro de rede. Tente novamente.');
+    console.error(e);
+  }
+};
+
+window.cancelCalendarInvite=async function(taskId){
+  const t=S.tasks.find(x=>x.id===taskId); if(!t||!t.gcalEventId) return;
+  if(!confirm('Remover o convite do Google Agenda?')) return;
+
+  if(!googleAccessToken){ const ok=await requestWriteToken(); if(!ok) return; }
+
+  try{
+    const resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${t.gcalEventId}?sendUpdates=all`,{
+      method:'DELETE',
+      headers:{'Authorization':`Bearer ${googleAccessToken}`}
+    });
+    // 204 = sucesso, 410 = já deletado — ambos ok
+    if(resp.status===204||resp.status===410||resp.ok){
+      t.gcalEventId=null; t.gcalEventLink=null;
+      setSyncStatus('loading');
+      saveTaskDB(t);
+      renderInviteBox(t);
+    } else {
+      alert(`Erro ao remover: ${resp.status}`);
+    }
+  }catch(e){ alert('Erro de rede.'); }
+};
+
+function showInviteError(msg){
+  const box=document.getElementById('dv-gcal-invite');
+  if(box) box.innerHTML=`<div class="gcal-invite-box" style="border-color:var(--red);background:var(--red-bg)">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div class="gcal-invite-info"><div class="gcal-invite-title" style="color:var(--red)">${escHtml(msg)}</div><div class="gcal-invite-sub">Tente novamente</div></div>
+    <button class="gcal-invite-btn send" onclick="renderInviteBox(S.tasks.find(x=>x.id===S.editingId))">Voltar</button>
+  </div>`;
 }
 
 function updateGCalBar(status){
@@ -1910,6 +2145,8 @@ function switchToView(){
     ?`<div class="detail-link-box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ccc8f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <a href="${t.link}" target="_blank" rel="noopener">${t.link}</a></div>`:'';
 
   document.getElementById('dv-notes').textContent=t.notes||'—';
+  // Box de convite Google Calendar
+  renderInviteBox(t);
 }
 
 function switchToEdit(){
@@ -2131,6 +2368,13 @@ function renderProfileInfoView(c){
   } else {
     html+=`<div class="cp-link-btn empty"><div class="cp-link-ico" style="background:rgba(37,211,102,.1)">${wppIco}</div><div class="cp-link-info"><div class="cp-link-name" style="color:var(--gray)">WhatsApp</div><div class="cp-link-url">Não configurado</div></div></div>`;
   }
+  if(c.email){
+    html+=`<a class="cp-link-btn" href="mailto:${escHtml(c.email)}">
+      <div class="cp-link-ico" style="background:rgba(66,133,244,.1)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div class="cp-link-info"><div class="cp-link-name">E-mail</div><div class="cp-link-url">${escHtml(c.email)}</div></div>
+      <div class="cp-link-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+    </a>`;
+  }
   if(c.contactName){
     html+=`<div class="cp-link-btn" style="cursor:default">
       <div class="cp-link-ico" style="background:rgba(120,111,212,.1)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -2230,6 +2474,7 @@ window.toggleProfileEdit=function(){
     editEl.style.display='block';
     // Preencher campos
     document.getElementById('cp-wpp').value=c.wpp||'';
+    document.getElementById('cp-email').value=c.email||'';
     document.getElementById('cp-contact').value=c.contactName||'';
     document.getElementById('cp-drive-info').value=c.driveInfo||'';
     document.getElementById('cp-drive-delivery').value=c.driveDelivery||'';
@@ -2256,6 +2501,7 @@ window.cancelProfileEdit=function(){
 window.saveProfileEdit=function(){
   const c=S.clients.find(cl=>cl.id===_profileClientId);if(!c)return;
   c.wpp=document.getElementById('cp-wpp').value.trim();
+  c.email=document.getElementById('cp-email').value.trim().toLowerCase();
   c.contactName=document.getElementById('cp-contact').value.trim();
   c.driveInfo=document.getElementById('cp-drive-info').value.trim();
   c.driveDelivery=document.getElementById('cp-drive-delivery').value.trim();
