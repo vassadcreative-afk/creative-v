@@ -476,7 +476,13 @@ textarea{resize:vertical;min-height:72px}
 /* ── HIGHLIGHT busca ── */
 mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;padding:0 1px}
 
-/* ── GOOGLE CALENDAR INVITE ── */
+/* ── KANBAN DRAG & DROP ── */
+.k-card{cursor:grab}
+.k-card:active{cursor:grabbing}
+.k-card.dragging{opacity:.35;transform:rotate(1.5deg);box-shadow:0 8px 24px rgba(120,111,212,.3)!important}
+.k-col.drag-over{background:rgba(120,111,212,.07);outline:2px dashed var(--purple);outline-offset:-3px}
+.k-col.drag-over.overdue{background:#FFF8F8;outline-color:var(--red)}
+.k-drop-ghost{height:52px;border-radius:10px;background:rgba(120,111,212,.08);border:2px dashed rgba(120,111,212,.3);margin-bottom:8px;pointer-events:none}
 .gcal-invite-box{background:rgba(66,133,244,.06);border:1.5px solid rgba(66,133,244,.18);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px}
 .gcal-invite-box.sent{background:rgba(52,168,83,.06);border-color:rgba(52,168,83,.25)}
 .gcal-invite-box.sending{background:rgba(251,188,4,.06);border-color:rgba(251,188,4,.25);opacity:.8}
@@ -1977,12 +1983,9 @@ function renderKanban(){
   const pC={alta:'#B02020',normal:'#5A52B0',baixa:'#1E8060'};
   const pLabels={alta:'Alta',normal:'Normal',baixa:'Baixa'};
 
-  // Filtro de responsável — calcula sobre TODAS as tarefas filtradas por cliente (não por owner)
-  // para que os chips apareçam mesmo quando um filtro está ativo
+  // Filtro de responsável
   const allTasksForOwner=S.filter==='all'?S.tasks:S.tasks.filter(t=>t.clientId==S.filter);
   const allOwners=[...new Set(allTasksForOwner.map(t=>t.ownerName||MY_NAME))];
-
-  // Filtro de responsável no kanban — usa container fixo no HTML
   const ownerBarEl=document.getElementById('kanban-owner-filter');
   if(ownerBarEl){
     ownerBarEl.innerHTML=allOwners.length>1?`<div class="owner-filter-bar" style="margin-bottom:10px">
@@ -2004,9 +2007,13 @@ function renderKanban(){
       ct=ft.filter(t=>t.status===col.id && !isOverdue(t));
     }
     ct=sortByDate(ct);
-    return`<div class="k-col ${col.isOverdue?'overdue':''}">
+    // data-col identifica a coluna para o drop; overdue não aceita drops
+    return`<div class="k-col ${col.isOverdue?'overdue':''}" data-col="${col.id}" ${!col.isOverdue?'data-droptarget="true"':''}>
       <div class="k-hdr"><div class="k-dot" style="background:${col.color}"></div><div class="k-name">${col.label}</div><div class="k-cnt ${col.isOverdue&&ct.length?'overdue-cnt':''}">${ct.length}</div></div>
-      ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="k-card ${col.isOverdue?'overdue-card':''}" onclick="openDetail(${t.id},event)">
+      ${ct.map(t=>{const c=S.clients.find(cl=>cl.id===t.clientId);return`<div class="k-card ${col.isOverdue?'overdue-card':''}"
+          draggable="true"
+          data-taskid="${t.id}"
+          onclick="openDetail(${t.id},event)">
         ${t.code?`<div class="k-card-code">${t.code}</div>`:''}
         <div class="k-card-ttl">${t.title}</div>
         <div class="k-card-foot">
@@ -2019,6 +2026,96 @@ function renderKanban(){
       ${!col.isOverdue?`<button class="add-col" onclick="openNewTask()">+ adicionar</button>`:''}
     </div>`;
   }).join('');
+
+  // Ativa os listeners de DnD após renderizar
+  initKanbanDnD();
+}
+
+// ── KANBAN DRAG & DROP ────────────────────────────────────────────────
+let _dragTaskId=null;
+let _dragSourceCol=null;
+
+function initKanbanDnD(){
+  const board=document.getElementById('kanban');
+  if(!board) return;
+
+  // ── DRAG START — no card
+  board.addEventListener('dragstart', e=>{
+    const card=e.target.closest('[data-taskid]');
+    if(!card) return;
+    _dragTaskId=parseInt(card.dataset.taskid);
+    _dragSourceCol=card.closest('[data-col]')?.dataset.col;
+
+    // Transferência de dados (fallback para browsers antigos)
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain', String(_dragTaskId));
+
+    // Adia a classe para o ghost do browser aparecer primeiro
+    requestAnimationFrame(()=>card.classList.add('dragging'));
+  }, true);
+
+  // ── DRAG END — limpa estado visual
+  board.addEventListener('dragend', e=>{
+    const card=e.target.closest('[data-taskid]');
+    if(card) card.classList.remove('dragging');
+    board.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over'));
+    board.querySelectorAll('.k-drop-ghost').forEach(g=>g.remove());
+    _dragTaskId=null;
+    _dragSourceCol=null;
+  }, true);
+
+  // ── DRAG OVER — highlight da coluna alvo
+  board.addEventListener('dragover', e=>{
+    const col=e.target.closest('[data-droptarget]');
+    if(!col||!_dragTaskId) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect='move';
+
+    // Highlight apenas a coluna atual (remove das outras)
+    board.querySelectorAll('.drag-over').forEach(c=>{ if(c!==col) c.classList.remove('drag-over'); });
+    col.classList.add('drag-over');
+
+    // Ghost de posição — mostra onde o card vai cair
+    const existingGhost=col.querySelector('.k-drop-ghost');
+    if(!existingGhost){
+      const ghost=document.createElement('div');
+      ghost.className='k-drop-ghost';
+      // Insere antes do botão "+ adicionar"
+      const addBtn=col.querySelector('.add-col');
+      addBtn ? col.insertBefore(ghost,addBtn) : col.appendChild(ghost);
+    }
+  });
+
+  // ── DRAG LEAVE — remove highlight quando sai da coluna
+  board.addEventListener('dragleave', e=>{
+    const col=e.target.closest('[data-droptarget]');
+    if(!col) return;
+    // Só remove se realmente saiu da coluna (não só de um filho)
+    if(!col.contains(e.relatedTarget)){
+      col.classList.remove('drag-over');
+      col.querySelectorAll('.k-drop-ghost').forEach(g=>g.remove());
+    }
+  });
+
+  // ── DROP — move a tarefa
+  board.addEventListener('drop', e=>{
+    e.preventDefault();
+    const col=e.target.closest('[data-droptarget]');
+    if(!col||!_dragTaskId) return;
+
+    const targetStatus=col.dataset.col;
+    if(targetStatus===_dragSourceCol) return; // mesma coluna, nada a fazer
+
+    const t=S.tasks.find(x=>x.id===_dragTaskId);
+    if(!t) return;
+
+    t.status=targetStatus;
+    setSyncStatus('loading');
+    saveTaskDB(t);
+
+    // Re-renderiza só o kanban (não o app todo — sem piscar)
+    renderKanban();
+  });
 }
 
 function renderCalendar(){
