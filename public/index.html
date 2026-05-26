@@ -665,6 +665,61 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
   .admin-search-wrap{max-width:160px}
   .admin-search-input{font-size:12px}
 }
+
+/* ── ABA NOVOS CLIENTES ── */
+.nc-empty{text-align:center;padding:48px 20px;color:var(--gray)}
+.nc-empty-icon{font-size:36px;margin-bottom:10px}
+.nc-empty-title{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.nc-empty-sub{font-size:13px;line-height:1.6}
+.nc-card{background:var(--white);border-radius:14px;border:1.5px solid rgba(120,111,212,.12);box-shadow:0 2px 12px rgba(120,111,212,.08);overflow:hidden;margin-bottom:12px;transition:box-shadow .18s}
+.nc-card:hover{box-shadow:0 4px 20px rgba(120,111,212,.15)}
+.nc-card-hdr{background:var(--grad-dark);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.nc-card-av{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.nc-card-info{flex:1;min-width:0}
+.nc-card-name{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.nc-card-meta{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;display:flex;align-items:center;gap:8px}
+.nc-card-ts{font-size:10px;color:rgba(255,255,255,.32);margin-top:1px}
+.nc-status-pill{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0}
+.nc-status-pill.aguardando{background:rgba(232,168,112,.2);color:#E8A870}
+.nc-status-pill.gerado{background:rgba(120,111,212,.25);color:#B8A8E8}
+.nc-status-pill.aprovado{background:rgba(112,196,168,.2);color:#70C4A8}
+.nc-status-pill.recusado{background:rgba(232,93,93,.2);color:var(--red)}
+.nc-card-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.nc-section-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.nc-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nc-field{background:var(--lav-light);border-radius:9px;padding:9px 11px}
+.nc-field-lbl{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gray);margin-bottom:3px}
+.nc-field-val{font-size:12px;font-weight:600;color:var(--dark);line-height:1.45}
+.nc-field-val.empty{color:var(--gray);font-style:italic;font-weight:400}
+.nc-ai-box{background:rgba(120,111,212,.05);border:1.5px solid rgba(120,111,212,.18);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--dark);line-height:1.7;white-space:pre-wrap;min-height:80px}
+.nc-ai-box.gerando{color:var(--gray);font-style:italic;display:flex;align-items:center;gap:8px}
+.nc-ai-spinner{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid rgba(120,111,212,.3);border-top-color:var(--purple);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nc-ai-actions{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.nc-ai-btn{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;border:1.5px solid;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.nc-ai-btn.regen{background:rgba(120,111,212,.08);border-color:rgba(120,111,212,.25);color:var(--purple)}
+.nc-ai-btn.regen:hover{background:rgba(120,111,212,.15)}
+.nc-ai-btn.edit{background:transparent;border-color:rgba(120,111,212,.2);color:var(--gray)}
+.nc-ai-btn.edit:hover{border-color:var(--purple);color:var(--purple)}
+.nc-ai-textarea{width:100%;min-height:120px;resize:vertical;padding:10px 12px;border:1.5px solid rgba(120,111,212,.25);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--dark);background:var(--lav-light);outline:none;transition:border-color .15s;line-height:1.7}
+.nc-ai-textarea:focus{border-color:var(--purple);background:#fff}
+.nc-tasks-preview{display:flex;flex-direction:column;gap:6px}
+.nc-task-row{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--lav-light);border-radius:9px}
+.nc-task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--lav-mid)}
+.nc-task-name{font-size:12px;font-weight:600;color:var(--dark);flex:1}
+.nc-task-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px}
+.nc-task-tag.auto{background:rgba(120,111,212,.12);color:#5A52B0}
+.nc-task-tag.manual{background:rgba(232,168,112,.15);color:#A05C20}
+.nc-card-footer{padding:12px 16px 14px;border-top:1px solid rgba(120,111,212,.08);display:flex;gap:8px;align-items:center}
+.nc-btn{flex:1;padding:10px 14px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.nc-btn.aprovar{background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;box-shadow:0 4px 12px rgba(120,111,212,.3)}
+.nc-btn.aprovar:hover{box-shadow:0 6px 16px rgba(120,111,212,.4);transform:translateY(-1px)}
+.nc-btn.aprovar:disabled{opacity:.5;cursor:default;transform:none}
+.nc-btn.recusar{background:none;border:1.5px solid rgba(232,93,93,.3);color:var(--red-txt);flex:0 0 auto;padding:10px 14px}
+.nc-btn.recusar:hover{background:var(--red-bg)}
+.nc-nav-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.nc-approved-banner{background:rgba(112,196,168,.1);border:1.5px solid rgba(112,196,168,.3);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--green-txt);font-weight:600}
+
 </style>
 </head>
 <body>
@@ -766,6 +821,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
     <button class="nav-btn active" data-view="hoje" onclick="setView('hoje',this)">Hoje</button>
     <button class="nav-btn" data-view="quadro" onclick="setView('quadro',this)">Quadro</button>
     <button class="nav-btn" data-view="calendario" onclick="setView('calendario',this)">Calendário</button>
+    <button class="nav-btn" data-view="novos" onclick="setView('novos',this)" style="position:relative">Novos<span class="nc-nav-badge" id="nc-nav-badge-desktop" style="display:none"></span></button>
   </nav>
   <!-- BUSCA ADMIN -->
   <div class="admin-search-wrap hdr-center">
@@ -890,6 +946,23 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 
     <!-- VIEW DE BUSCA (gerada dinamicamente) -->
     <div class="view" id="view-search"></div>
+
+    <div class="view" id="view-novos" style="gap:14px">
+      <div class="hero" style="padding:18px 22px">
+        <div>
+          <div class="hero-date" style="margin-bottom:2px">PIPELINE DE ENTRADA</div>
+          <div class="hero-title" style="font-size:18px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Novos clientes
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-pill"><div class="stat-num" id="nc-stat-total">0</div><div class="stat-lbl">PENDENTES</div></div>
+          <div class="stat-pill"><div class="stat-num" id="nc-stat-ai">0</div><div class="stat-lbl">COM IA</div></div>
+        </div>
+      </div>
+      <div id="nc-list"></div>
+    </div>
   </main>
 </div>
 
@@ -911,6 +984,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
       <span class="bn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg></span>
       <span class="bn-lbl">Clientes</span>
     </button>
+    <button class="bn-btn" data-view="novos" onclick="setView('novos',this)" style="position:relative"><span class="bn-icon" style="position:relative" id="nc-nav-wrap-mobile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span><span class="bn-lbl">Novos</span></button>
   </div>
 </nav>
 
@@ -1315,7 +1389,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 <script type="module">
 // ── FIREBASE ────────────────────────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, addDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -3649,6 +3723,389 @@ window.clearPortalSearch=function(){
   const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
   if(c) renderPortal(c);
 };
+
+
+// ================================================================
+//  CREATIVE V - MODULO: NOVOS CLIENTES v2
+//  - Leads salvos no Firebase (pending_clients)
+//  - ncAdicionarCliente protegida por autenticacao
+//  - Proxy Cloudflare no lugar da chave direta
+//  - System prompt profissional integrado
+// ================================================================
+
+const NC_WORKER_URL = 'https://old-darkness-641a.v-assad-creative.workers.dev/ai';
+
+const NC_TASKS_PADRAO = [
+  { title: 'Estrat\u00e9gia de marketing',  status: 'done',    priority: 'alta',   portalVisible: true,  tag: 'auto' },
+  { title: 'Branding / identidade',    status: 'todo',    priority: 'alta',   portalVisible: false, tag: 'manual', condicional: true },
+  { title: 'Copies e headlines',       status: 'todo',    priority: 'normal', portalVisible: false, tag: 'auto' },
+  { title: 'Gera\u00e7\u00e3o de criativos',     status: 'todo',    priority: 'normal', portalVisible: true,  tag: 'auto' },
+  { title: 'Aprova\u00e7\u00e3o dos criativos',  status: 'waiting', priority: 'alta',   portalVisible: true,  tag: 'auto' },
+  { title: 'Relat\u00f3rio de entrega',     status: 'todo',    priority: 'baixa',  portalVisible: true,  tag: 'auto' },
+];
+
+const NC_FRAMEWORK_MAP = {
+  'Social media':      'STP + Content Pillars + TOFU-MOFU-BOFU',
+  'Tr\u00e1fego pago':      'TOFU-MOFU-BOFU + Pirate Metrics (AARRR)',
+  'Identidade visual': 'Brand Positioning Canvas + Golden Circle',
+  'Landing page':      'StoryBrand + AIDA + Cialdini',
+  'Automa\u00e7\u00e3o':         'RACE Framework + OKR',
+  'Outro':             'RACE Framework',
+};
+
+// Estado
+let _ncUid = null;
+let _pending = [];
+let _ncUnsub = null;
+
+// Firebase
+function ncSaveToFirebase(item) {
+  if (!_ncUid || typeof setDoc === 'undefined') return Promise.resolve();
+  return setDoc(doc(db, 'users', _ncUid, 'pending_clients', item.id), item)
+    .catch(e => console.error('NC save:', e));
+}
+
+function ncStartListener() {
+  if (_ncUnsub) _ncUnsub();
+  if (!_ncUid || typeof onSnapshot === 'undefined') return;
+  const col = collection(db, 'users', _ncUid, 'pending_clients');
+  _ncUnsub = onSnapshot(col, snap => {
+    _pending = snap.docs.map(d => d.data());
+    _pending.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+    ncRender();
+    ncUpdateBadge();
+  });
+}
+
+function ncInit(uid) {
+  _ncUid = uid;
+  ncStartListener();
+}
+
+// Receber lead - protegido por autenticacao
+window.ncAdicionarCliente = function(payload) {
+  if (!_ncUid) { console.warn('NC: usuario nao autenticado'); return; }
+  const b = payload;
+  const item = {
+    id: String(Date.now()),
+    ts: new Date().toISOString(),
+    status: 'aguardando',
+    briefing: {
+      nome:               b.nome              || '',
+      empresa:            b.empresa           || '',
+      email:              b.email             || '',
+      whatsapp:           b.whatsapp          || '',
+      instagram:          b.instagram         || '',
+      site:               b.site              || '',
+      tipo_projeto:       b.tipo_projeto      || '',
+      plataformas:        b.plataformas       || '',
+      frequencia:         b.frequencia        || '',
+      objetivo:           b.objetivo          || '',
+      anuncios:           b.anuncios          || '',
+      budget:             b.budget            || '',
+      ferramentas_auto:   b.ferramentas_auto  || '',
+      o_que_automatizar:  b.o_que_automatizar || '',
+      processo_atual:     b.processo_atual    || '',
+      resultado_auto:     b.resultado_auto    || '',
+      negocio_frase:      b.negocio_frase     || '',
+      publico_alvo:       b.publico_alvo      || '',
+      palavras_marca:     b.palavras_marca    || '',
+      refs_branding:      b.refs_branding     || '',
+      descricao_geral:    b.descricao_geral   || '',
+      resultado_esperado: b.resultado_esperado|| '',
+      tom:                b.tom               || '',
+      urgencia:           b.urgencia          || '',
+      observacoes:        b.observacoes       || '',
+      tem_identidade:     !!(b.palavras_marca || b.refs_branding),
+    },
+    estrategia: null,
+    editando: false,
+    estrategiaEdit: '',
+  };
+  ncSaveToFirebase(item);
+  ncGerarEstrategia(item);
+};
+
+// Gerar estrategia com IA
+async function ncGerarEstrategia(item) {
+  item.status = 'gerado';
+  item.estrategia = null;
+  await ncSaveToFirebase(item);
+
+  const b = item.briefing;
+  const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
+
+  const prompt = `Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia. Age como CMO e entrega documentos prontos para apresentar a clientes.
+
+Framework selecionado: ${fw}
+Justifique em 1 linha por que este framework foi escolhido.
+
+BRIEFING:
+- Cliente: ${b.empresa || b.nome}
+- Tipo de projeto: ${b.tipo_projeto}
+- Plataformas: ${b.plataformas || 'nao especificado'}
+- Objetivo: ${b.objetivo || b.descricao_geral || 'nao especificado'}
+- Publico-alvo: ${b.publico_alvo || 'nao especificado'}
+- Negocio em uma frase: ${b.negocio_frase || 'nao especificado'}
+- Tom da marca: ${b.tom || 'nao especificado'}
+- Budget: ${b.budget || 'nao especificado'}
+- Urgencia: ${b.urgencia || 'nao especificado'}
+- Tem identidade visual: ${b.tem_identidade ? 'Sim' : 'Nao - incluir branding no escopo'}
+- Observacoes: ${b.observacoes || 'nenhuma'}
+
+Gere a estrategia completa com:
+1. Framework e justificativa (1 linha)
+2. Posicionamento & Diferencial
+3. Publico-alvo detalhado
+4. Canais e formatos recomendados
+5. Calendario 30 dias (bullet points semanais)
+6. Copies sugeridos (3 headlines + 2 CTAs)
+7. KPIs principais (tabela Markdown)
+8. Proximos passos (3 acoes com prazo)
+${!b.tem_identidade ? '9. Branding - entregaveis necessarios' : ''}
+
+Use bullet points e tabelas Markdown. Maximo 500 palavras. Seja direto e acionavel.`;
+
+  try {
+    const resp = await fetch(NC_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      item.estrategia = '[Erro: ' + (err?.error?.message || resp.status) + ' - clique em Regenerar]';
+    } else {
+      const data = await resp.json();
+      item.estrategia = data.content?.[0]?.text || '[Resposta vazia - clique em Regenerar]';
+    }
+  } catch(e) {
+    item.estrategia = '[Erro de rede: ' + e.message + ' - verifique a conexao e clique em Regenerar]';
+  }
+  await ncSaveToFirebase(item);
+}
+
+// Aprovar
+window.ncAprovar = async function(id) {
+  const item = _pending.find(p => p.id === id);
+  if (!item || !_ncUid) return;
+  const btn = document.getElementById('nc-btn-aprovar-' + id);
+  if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
+
+  const b = item.briefing;
+  const estrategiaFinal = item.editando ? item.estrategiaEdit : (item.estrategia || '');
+  const COLORS = ['#786FD4','#D097C4','#E85D8A','#5BA8E0','#70C4A8','#E8A870'];
+
+  const novoCliente = {
+    id: S.nextC++,
+    name: b.empresa || b.nome,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    portalEnabled: false,
+    portalPassword: '',
+    wpp: b.whatsapp || '',
+    email: b.email || '',
+    contact: b.nome || '',
+    scope: estrategiaFinal,
+    driveInfo: '',
+    driveDelivery: '',
+    figma: '',
+    photoURL: null,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (typeof saveClientDB === 'function') await saveClientDB(novoCliente);
+  if (Array.isArray(S.clients)) S.clients.push(novoCliente);
+
+  const tarefas = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
+  for (const tpl of tarefas) {
+    const nova = {
+      id: S.nextT++,
+      clientId: novoCliente.id,
+      title: tpl.title,
+      status: tpl.status,
+      priority: tpl.priority,
+      portalVisible: tpl.portalVisible,
+      date: '',
+      notes: '',
+      link: '',
+      ownerName: 'Vict\u00f3ria',
+      code: typeof generateTaskCode === 'function' ? generateTaskCode(novoCliente.id) : '',
+      createdAt: new Date().toISOString(),
+      comments: [],
+    };
+    if (typeof saveTaskDB === 'function') await saveTaskDB(nova);
+    if (Array.isArray(S.tasks)) S.tasks.push(nova);
+  }
+
+  item.status = 'aprovado';
+  await ncSaveToFirebase(item);
+  ncUpdateBadge();
+  if (typeof renderAll === 'function') renderAll();
+
+  const lbl = document.getElementById('fb-lbl');
+  if (lbl) {
+    lbl.innerHTML = '\u2705 <strong>' + ncEsc(novoCliente.name) + '</strong> adicionado! Tarefas criadas.';
+    setTimeout(() => { if(lbl) lbl.textContent = 'Dados salvos na nuvem \u2713'; }, 4000);
+  }
+};
+
+window.ncRecusar = async function(id) {
+  if (!confirm('Recusar e arquivar este lead?')) return;
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  item.status = 'recusado';
+  await ncSaveToFirebase(item);
+  ncUpdateBadge();
+};
+
+window.ncRegenerar = async function(id) {
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  item.estrategia = null;
+  item.editando = false;
+  await ncSaveToFirebase(item);
+  ncGerarEstrategia(item);
+};
+
+window.ncEditarEstrategia = function(id) {
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  item.editando = true;
+  item.estrategiaEdit = item.estrategia || '';
+  ncRenderCard(id);
+  const ta = document.getElementById('nc-ta-' + id);
+  if (ta) ta.focus();
+};
+
+window.ncSalvarEdicao = async function(id) {
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  const ta = document.getElementById('nc-ta-' + id);
+  if (ta) item.estrategiaEdit = ta.value;
+  item.estrategia = item.estrategiaEdit;
+  item.editando = false;
+  await ncSaveToFirebase(item);
+  ncRenderCard(id);
+};
+
+window.ncCancelarEdicao = function(id) {
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  item.editando = false;
+  ncRenderCard(id);
+};
+
+function ncRender() {
+  const list = document.getElementById('nc-list');
+  if (!list) return;
+  const pendentes = _pending.filter(p => p.status !== 'recusado' && p.status !== 'aprovado');
+  const comIA = _pending.filter(p => p.estrategia && p.status !== 'recusado');
+  const st = document.getElementById('nc-stat-total');
+  const sa = document.getElementById('nc-stat-ai');
+  if (st) st.textContent = pendentes.length;
+  if (sa) sa.textContent = comIA.length;
+  if (_pending.length === 0) {
+    list.innerHTML = '<div class="nc-empty"><div class="nc-empty-icon">\u2736</div><div class="nc-empty-title">Nenhum lead pendente</div><div class="nc-empty-sub">Quando um formul\u00e1rio for submetido, o novo cliente aparece aqui para voc\u00ea revisar.</div></div>';
+    return;
+  }
+  list.innerHTML = _pending.map(p => '<div id="nc-card-wrap-' + p.id + '"></div>').join('');
+  _pending.forEach(p => ncRenderCard(p.id));
+}
+
+function ncRenderCard(id) {
+  const wrap = document.getElementById('nc-card-wrap-' + id);
+  if (!wrap) return;
+  const item = _pending.find(p => p.id === id);
+  if (!item) return;
+  const b = item.briefing;
+  const ini = (b.empresa || b.nome || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  const tsF = new Date(item.ts).toLocaleDateString('pt-BR', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  const stLabel = {aguardando:'Aguardando IA', gerado:'Estrat\u00e9gia pronta', aprovado:'Aprovado \u2713', recusado:'Recusado'};
+  const aprovado = item.status === 'aprovado';
+  const arquivado = aprovado || item.status === 'recusado';
+  const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
+  const tarefasVisiveis = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
+
+  const btnSalvarStyle = 'background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;border-color:transparent;font-family:Space Grotesk,sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:5px';
+
+  const estrategiaHTML = item.editando
+    ? '<textarea class="nc-ai-textarea" id="nc-ta-' + id + '">' + ncEsc(item.estrategiaEdit) + '</textarea>'
+      + '<div class="nc-ai-actions">'
+      + '<button style="' + btnSalvarStyle + '" onclick="ncSalvarEdicao(\'' + id + '\')">\u2713 Salvar</button>'
+      + '<button class="nc-ai-btn edit" onclick="ncCancelarEdicao(\'' + id + '\')">Cancelar</button>'
+      + '</div>'
+    : item.estrategia === null
+      ? '<div class="nc-ai-box gerando"><div class="nc-ai-spinner"></div><span>Gerando estrat\u00e9gia com IA...</span></div>'
+      : '<div class="nc-ai-box">' + ncEsc(item.estrategia) + '</div>'
+        + (!arquivado ? '<div class="nc-ai-actions"><button class="nc-ai-btn regen" onclick="ncRegenerar(\'' + id + '\')">\u21bb Regenerar</button><button class="nc-ai-btn edit" onclick="ncEditarEstrategia(\'' + id + '\')">\u270e Editar</button></div>' : '');
+
+  wrap.innerHTML =
+    '<div class="nc-card" style="' + (arquivado ? 'opacity:.65' : '') + '">'
+    + '<div class="nc-card-hdr">'
+    + '<div class="nc-card-av">' + ncEsc(ini) + '</div>'
+    + '<div class="nc-card-info">'
+    + '<div class="nc-card-name">' + ncEsc(b.empresa || b.nome || 'Sem nome') + '</div>'
+    + '<div class="nc-card-meta">' + (b.tipo_projeto ? '<span>' + ncEsc(b.tipo_projeto) + '</span>' : '') + (b.whatsapp ? '<span>\u00b7 ' + ncEsc(b.whatsapp) + '</span>' : '') + '</div>'
+    + '<div class="nc-card-ts">' + tsF + ' \u00b7 ' + ncEsc(fw) + '</div>'
+    + '</div>'
+    + '<span class="nc-status-pill ' + item.status + '">' + (stLabel[item.status] || item.status) + '</span>'
+    + '</div>'
+    + '<div class="nc-card-body">'
+    + '<div><div class="nc-section-lbl">Briefing</div>'
+    + '<div class="nc-fields">'
+    + '<div class="nc-field"><div class="nc-field-lbl">Objetivo</div><div class="nc-field-val' + (!b.objetivo && !b.descricao_geral ? ' empty' : '') + '">' + ncEsc(b.objetivo || b.descricao_geral || 'N\u00e3o informado') + '</div></div>'
+    + '<div class="nc-field"><div class="nc-field-lbl">P\u00fablico</div><div class="nc-field-val' + (!b.publico_alvo ? ' empty' : '') + '">' + ncEsc(b.publico_alvo || 'N\u00e3o informado') + '</div></div>'
+    + '<div class="nc-field"><div class="nc-field-lbl">Budget</div><div class="nc-field-val' + (!b.budget ? ' empty' : '') + '">' + ncEsc(b.budget || 'N\u00e3o informado') + '</div></div>'
+    + '<div class="nc-field"><div class="nc-field-lbl">Identidade</div><div class="nc-field-val">' + (b.tem_identidade ? '\u2713 J\u00e1 tem' : '\u2717 Precisa de branding') + '</div></div>'
+    + '</div></div>'
+    + '<div><div class="nc-section-lbl">Estrat\u00e9gia gerada por IA</div>' + estrategiaHTML + '</div>'
+    + (!arquivado ? '<div><div class="nc-section-lbl">Tarefas que ser\u00e3o criadas</div><div class="nc-tasks-preview">' + tarefasVisiveis.map(t => '<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">' + ncEsc(t.title) + '</div><span class="nc-task-tag ' + t.tag + '">' + (t.tag === 'auto' ? 'autom\u00e1tico' : 'manual') + '</span></div>').join('') + '</div></div>' : '')
+    + (aprovado ? '<div class="nc-approved-banner">\u2705 Cliente e tarefas criados com sucesso!</div>' : '')
+    + '</div>'
+    + (!arquivado ? '<div class="nc-card-footer"><button class="nc-btn recusar" onclick="ncRecusar(\'' + id + '\')">\u2715 Recusar</button><button class="nc-btn aprovar" id="nc-btn-aprovar-' + id + '" onclick="ncAprovar(\'' + id + '\')"' + (item.estrategia === null ? ' disabled' : '') + '>\u2713 Aprovar e criar cliente</button></div>' : '')
+    + '</div>';
+}
+
+function ncUpdateBadge() {
+  const n = _pending.filter(p => p.status === 'aguardando' || p.status === 'gerado').length;
+  const bd = document.getElementById('nc-nav-badge-desktop');
+  if (bd) { bd.textContent = n > 9 ? '9+' : n; bd.style.display = n > 0 ? 'flex' : 'none'; }
+  const mw = document.getElementById('nc-nav-wrap-mobile');
+  if (mw) {
+    let badge = mw.querySelector('.nc-nav-badge');
+    if (!badge) { badge = document.createElement('span'); badge.className = 'nc-nav-badge'; mw.appendChild(badge); }
+    badge.textContent = n > 9 ? '9+' : n;
+    badge.style.display = n > 0 ? 'flex' : 'none';
+  }
+}
+
+function ncEsc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Hook no login
+(function() {
+  const obs = new MutationObserver(() => {
+    const appRoot = document.getElementById('app-root');
+    if (appRoot && appRoot.style.display !== 'none') {
+      setTimeout(() => {
+        if (typeof auth !== 'undefined' && auth.currentUser) {
+          ncInit(auth.currentUser.uid);
+          obs.disconnect();
+        }
+      }, 1000);
+    }
+  });
+  obs.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['style'] });
+})();
+
+// Patch setView
+const _ncOrigSetView = window.setView;
+window.setView = function(v, btn) {
+  if (typeof _ncOrigSetView === 'function') _ncOrigSetView(v, btn);
+  if (v === 'novos') { ncRender(); ncUpdateBadge(); }
+};
+
 </script>
 </div><!-- /app-root -->
 </body>
