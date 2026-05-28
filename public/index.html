@@ -73,7 +73,6 @@ aside{
 aside.collapsed{width:52px;min-width:52px;padding:18px 8px}
 aside.collapsed .aside-lbl,
 aside.collapsed .c-nm,
-aside.collapsed .c-cnt,
 aside.collapsed .add-c span,
 aside.collapsed .c-edit-btn{display:none}
 aside.collapsed .c-item{justify-content:center;padding:9px 6px}
@@ -96,9 +95,9 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 .c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent}
 .c-item:hover{background:var(--lav-light)}
 .c-item.active{background:var(--lav-light);border-color:var(--purple)}
-.c-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.c-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
 .c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);padding:2px 7px;border-radius:20px;flex-shrink:0;min-width:22px;text-align:center}
+.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);padding:2px 6px;border-radius:20px;flex-shrink:0;min-width:24px;text-align:center;line-height:1.6;display:inline-flex;align-items:center;justify-content:center}
 .add-c{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:var(--rsm);border:1.5px dashed rgba(120,111,212,.28);background:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--purple);transition:all .15s;width:100%}
 .add-c:hover{background:var(--lav-light);border-color:var(--purple)}
 
@@ -723,6 +722,11 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 .nc-btn.recusar:hover{background:var(--red-bg)}
 .nc-nav-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .nc-approved-banner{background:rgba(112,196,168,.1);border:1.5px solid rgba(112,196,168,.3);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--green-txt);font-weight:600}
+
+/* ── COMENTÁRIOS CHAT ── */
+#dv-comment-list::-webkit-scrollbar{width:3px}
+#dv-comment-list::-webkit-scrollbar-thumb{background:var(--lav-mid);border-radius:99px}
+#dv-comment-list{scroll-behavior:smooth}
 </style>
 </head>
 <body>
@@ -1063,17 +1067,30 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
         <label>Observações</label>
         <div class="detail-notes-box" id="dv-notes"></div>
       </div>
-      <!-- CONVITE GOOGLE CALENDAR -->
       <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
-      <!-- DEPENDÊNCIAS / IMPEDIMENTO -->
       <div id="dv-block-section" style="display:none;margin-top:2px"></div>
-      <div class="modal-acts">
-        <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
-          Excluir
+
+      <!-- COMENTÁRIOS COMO CHAT -->
+      <div id="dv-comments-section" style="margin-top:14px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);margin-bottom:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Comentários
+        </div>
+        <div id="dv-comment-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:160px;overflow-y:auto"></div>
+        <div style="display:flex;gap:6px">
+          <input id="dv-comment-input" type="text" placeholder="Adicionar comentário..." style="flex:1;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:var(--lav-light);outline:none;transition:border-color .15s" onkeydown="if(event.key==='Enter')addAdminComment()" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='rgba(120,111,212,.18)'">
+          <button onclick="addAdminComment()" style="background:var(--grad);border:none;border-radius:10px;padding:9px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-acts" style="margin-top:16px">
+        <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')" style="flex:0 0 auto;padding:11px 12px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
         </button>
-        <button class="btn btn-ghost" onclick="closeModal('detail')">Fechar</button>
-        <button class="btn btn-primary" onclick="switchToEdit()">
+        <button class="btn btn-ghost" onclick="closeModal('detail')" style="flex:1">Fechar</button>
+        <button class="btn btn-primary" onclick="switchToEdit()" style="flex:1">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Editar
         </button>
@@ -1106,13 +1123,12 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
           </select>
         </div>
       </div>
-      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://..."></div>
+      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://drive.google.com/..."></div>
       <div class="fg">
         <label>Responsável</label>
         <div class="owner-tags" id="e-owner-tags"></div>
       </div>
-      </div>
-      <!-- SEÇÃO DE IMPEDIMENTO (aparece quando status=blocked) -->
+      <div class="fg"><label>Observações</label><textarea id="e-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
       <div id="e-block-section" style="display:none">
         <div class="fg">
           <label>Motivo do impedimento</label>
@@ -1128,8 +1144,6 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
           </div>
         </div>
       </div>
-      <div class="fg"><label>Observações</label><textarea id="e-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
-      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link-2" placeholder="https://drive.google.com/..." style="display:none"></div>
       <div class="fg portal-visible-row" id="e-portal-row" style="display:none">
         <span class="portal-visible-lbl">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1137,24 +1151,34 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
         </span>
         <label class="portal-toggle"><input type="checkbox" id="e-portal-visible"><span class="portal-toggle-slider"></span></label>
       </div>
-      <!-- COMENTÁRIOS DO CLIENTE -->
-      <div class="fg" id="e-comments-section" style="display:none">
-        <label>Comentários do cliente</label>
-        <div id="e-comments-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;max-height:160px;overflow-y:auto"></div>
-      </div>
       <div class="modal-acts">
-        <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg>
-          Excluir
+        <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')" style="flex:0 0 auto;padding:11px 12px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
         </button>
-        <button class="btn btn-ghost" onclick="switchToView()">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveEdit()">Salvar</button>
+        <button class="btn btn-ghost" onclick="switchToView()" style="flex:1">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEdit()" style="flex:1">Salvar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL: NOVO CLIENTE -->
+<!-- MODAL: NOVO CLIENTE -->inecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Visível no portal do cliente
+        </span>
+        <label class="portal-toggle"><input type="checkbox" id="e-portal-visible"><span class="portal-toggle-slider"></span></label>
+      </div>
+      <div class="modal-acts">
+        <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')" style="flex:0 0 auto;padding:11px 12px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
+        </button>
+        <button class="btn btn-ghost" onclick="switchToView()" style="flex:1">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEdit()" style="flex:1">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="overlay" id="modal-client">
   <div class="modal">
     <span class="modal-handle"></span>
@@ -2669,6 +2693,8 @@ function switchToView(){
   renderInviteBox(t);
   // Seção de dependências / impedimento
   renderBlockSection(t);
+  // Comentários
+  renderDetailComments(t);
 }
 
 function switchToEdit(){
@@ -3998,6 +4024,43 @@ window.setView = function(v, btn) {
   if (typeof _ncOrigSetView === 'function') _ncOrigSetView(v, btn);
   if (v === 'novos') { ncRender(); ncUpdateBadge(); }
 };
+
+
+// Adicionar comentário como admin
+window.addAdminComment = function() {
+  const input = document.getElementById('dv-comment-input');
+  const text = (input && input.value.trim());
+  if (!text || S.editingId === null) return;
+  const t = S.tasks.find(t => t.id === S.editingId);
+  if (!t) return;
+  if (!t.comments) t.comments = [];
+  const now = new Date().toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  t.comments.push({ text, author: MY_NAME, ts: now });
+  if (input) input.value = '';
+  setSyncStatus('loading');
+  saveTaskDB(t);
+  renderDetailComments(t);
+};
+
+function renderDetailComments(t) {
+  const list = document.getElementById('dv-comment-list');
+  if (!list) return;
+  const comments = t.comments || [];
+  if (!comments.length) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--gray);text-align:center;padding:6px 0;font-style:italic">Nenhum comentário ainda.</div>';
+    return;
+  }
+  list.innerHTML = comments.map(cm => {
+    const isMe = cm.author === MY_NAME;
+    return '<div style="display:flex;flex-direction:column;align-items:' + (isMe ? 'flex-end' : 'flex-start') + ';gap:2px">'
+      + '<div style="max-width:85%;background:' + (isMe ? 'var(--grad)' : 'var(--lav-light)') + ';color:' + (isMe ? '#fff' : 'var(--dark)') + ';border-radius:' + (isMe ? '12px 12px 4px 12px' : '12px 12px 12px 4px') + ';padding:8px 12px;font-size:13px;line-height:1.5">'
+      + escHtml(cm.text)
+      + '</div>'
+      + '<div style="font-size:10px;color:var(--gray)">' + escHtml(cm.author) + ' · ' + escHtml(cm.ts) + '</div>'
+      + '</div>';
+  }).join('');
+  list.scrollTop = list.scrollHeight;
+}
 
 </script>
 </div><!-- /app-root -->
