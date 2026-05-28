@@ -80,24 +80,24 @@ aside.collapsed .c-item{justify-content:center;padding:9px 6px}
 aside.collapsed .add-c{padding:9px 6px;justify-content:center;gap:0}
 aside.collapsed .c-item-wrap .c-item{flex:unset}
 
-.aside-toggle-bottom{
-  margin-top:8px;width:100%;
-  background:none;border:1.5px solid rgba(120,111,212,.15);
-  border-radius:var(--rsm);padding:7px;
+.aside-toggle{
+  position:absolute;top:14px;right:-12px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--white);border:1.5px solid rgba(120,111,212,.18);
+  box-shadow:0 2px 8px rgba(120,111,212,.14);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:var(--gray);transition:all .15s;flex-shrink:0;
+  z-index:10;transition:all .15s;color:var(--gray);flex-shrink:0;
 }
-.aside-toggle-bottom:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
-.aside-toggle-bottom svg{transition:transform .22s}
-aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
-aside.collapsed .aside-toggle-bottom{padding:7px 6px}
+.aside-toggle:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
+.aside-toggle svg{transition:transform .22s}
+aside.collapsed .aside-toggle svg{transform:rotate(180deg)}
 
 .aside-lbl{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gray);padding:6px 8px 10px}
-.c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent;width:100%}
+.c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent}
 .c-item:hover{background:var(--lav-light)}
 .c-item.active{background:var(--lav-light);border-color:var(--purple)}
 .c-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
-.c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4}
+.c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);border-radius:20px;flex-shrink:0;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center;line-height:1}
 .add-c{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:var(--rsm);border:1.5px dashed rgba(120,111,212,.28);background:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--purple);transition:all .15s;width:100%}
 .add-c:hover{background:var(--lav-light);border-color:var(--purple)}
@@ -666,12 +666,12 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
   .admin-search-input{font-size:12px}
 }
 
-/* ── ABA NOVOS CLIENTES ── */
-.aside-toggle-bottom{margin-top:8px;width:100%;background:none;border:1.5px solid rgba(120,111,212,.15);border-radius:var(--rsm);padding:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all .15s;flex-shrink:0}
-.aside-toggle-bottom:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
+.aside-toggle-bottom{margin-top:auto;padding-top:12px;width:100%;background:none;border:none;border-top:1px solid rgba(120,111,212,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all .15s;flex-shrink:0;padding-bottom:4px}
+.aside-toggle-bottom:hover{color:var(--purple)}
 .aside-toggle-bottom svg{transition:transform .22s}
 aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
-aside.collapsed .aside-toggle-bottom{padding:7px 6px}
+
+
 .nc-empty{text-align:center;padding:48px 20px;color:var(--gray)}
 .nc-empty-icon{font-size:36px;margin-bottom:10px}
 .nc-empty-title{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px}
@@ -723,11 +723,11 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 .nc-btn.recusar:hover{background:var(--red-bg)}
 .nc-nav-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .nc-approved-banner{background:rgba(112,196,168,.1);border:1.5px solid rgba(112,196,168,.3);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--green-txt);font-weight:600}
+/* Comentários chat */
+.chat-bubble-me{max-width:85%;background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;border-radius:12px 12px 4px 12px;padding:8px 12px;font-size:13px;line-height:1.5;align-self:flex-end}
+.chat-bubble-client{max-width:85%;background:var(--lav-light);color:var(--dark);border-radius:12px 12px 12px 4px;padding:8px 12px;font-size:13px;line-height:1.5;align-self:flex-start}
+.chat-meta{font-size:10px;color:var(--gray)}
 
-/* ── COMENTÁRIOS CHAT ── */
-#dv-comment-list::-webkit-scrollbar{width:3px}
-#dv-comment-list::-webkit-scrollbar-thumb{background:var(--lav-mid);border-radius:99px}
-#dv-comment-list{scroll-behavior:smooth}
 </style>
 </head>
 <body>
@@ -1070,22 +1070,20 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
       </div>
       <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
       <div id="dv-block-section" style="display:none;margin-top:2px"></div>
-
-      <!-- COMENTÁRIOS COMO CHAT -->
-      <div id="dv-comments-section" style="margin-top:14px">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);margin-bottom:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px">
+      <!-- COMENTÁRIOS CHAT -->
+      <div style="margin-top:14px">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);margin-bottom:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Comentários
-        </div>
-        <div id="dv-comment-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:160px;overflow-y:auto"></div>
+        </label>
+        <div id="dv-comment-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:160px;overflow-y:auto"></div>
         <div style="display:flex;gap:6px">
-          <input id="dv-comment-input" type="text" placeholder="Adicionar comentário..." style="flex:1;padding:9px 12px;border:1.5px solid rgba(120,111,212,.18);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--dark);background:var(--lav-light);outline:none;transition:border-color .15s" onkeydown="if(event.key==='Enter')addAdminComment()" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='rgba(120,111,212,.18)'">
-          <button onclick="addAdminComment()" style="background:var(--grad);border:none;border-radius:10px;padding:9px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">
+          <input id="dv-comment-input" type="text" placeholder="Adicionar comentário..." onkeydown="if(event.key==='Enter')addAdminComment()">
+          <button onclick="addAdminComment()" style="background:var(--grad);border:none;border-radius:10px;padding:9px 14px;cursor:pointer;flex-shrink:0">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
           </button>
         </div>
       </div>
-
       <div class="modal-acts" style="margin-top:16px">
         <button class="btn btn-danger" id="del-btn-view" onclick="confirmDelete('view')" style="flex:0 0 auto;padding:11px 12px">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
@@ -1124,12 +1122,14 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
           </select>
         </div>
       </div>
-      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://drive.google.com/..."></div>
+      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link" placeholder="https://..."></div>
       <div class="fg">
         <label>Responsável</label>
         <div class="owner-tags" id="e-owner-tags"></div>
       </div>
-      <div class="fg"><label>Observações</label><textarea id="e-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
+      </div>
+      <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
+      <!-- SEÇÃO DE IMPEDIMENTO (aparece quando status=blocked) -->
       <div id="e-block-section" style="display:none">
         <div class="fg">
           <label>Motivo do impedimento</label>
@@ -1839,7 +1839,7 @@ function updateGCalBar(status){
     dot.className='sync-dot off';
     lbl.innerHTML='Google Calendar: <strong>desconectado</strong>';
     btn.style.display='flex';
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Conectar';
+    btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Conectar`;
     btn.onclick=manualConnectGoogle;
   }
 }
@@ -2674,11 +2674,8 @@ function switchToView(){
     ?`<div class="detail-link-box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ccc8f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <a href="${t.link}" target="_blank" rel="noopener">${t.link}</a></div>`:'';
 
   document.getElementById('dv-notes').textContent=t.notes||'—';
-  // Box de convite Google Calendar
   renderInviteBox(t);
-  // Seção de dependências / impedimento
   renderBlockSection(t);
-  // Comentários
   renderDetailComments(t);
 }
 
@@ -2706,19 +2703,6 @@ function switchToEdit(){
   // Listener no select de status para mostrar/esconder seção de bloqueio
   const statusSel=document.getElementById('e-status');
   statusSel.onchange=updateEditBlockSection;
-  // Preencher link (campo duplicado no edit)
-  const elink2=document.getElementById('e-link-2');
-  if(elink2){elink2.value=t.link||'';elink2.style.display='block';elink2.closest('.fg').querySelector('label').style.display='block';}
-  // Mostrar comentários do cliente
-  const comments=t.comments||[];
-  const csec=document.getElementById('e-comments-section');
-  const clist=document.getElementById('e-comments-list');
-  if(csec&&clist){
-    if(comments.length){
-      csec.style.display='block';
-      clist.innerHTML=comments.map(cm=>`<div style="background:var(--lav-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dark);line-height:1.5">${escHtml(cm.text)}<div style="font-size:10px;color:var(--gray);margin-top:3px">${escHtml(cm.author)} · ${escHtml(cm.ts)}</div></div>`).join('');
-    }else{csec.style.display='none';}
-  }
 }
 
 function saveEdit(){
@@ -2731,7 +2715,7 @@ function saveEdit(){
   t.status=document.getElementById('e-status').value;
   t.date=document.getElementById('e-date').value||td();
   t.notes=document.getElementById('e-notes').value;
-  t.link=(document.getElementById('e-link-2')||document.getElementById('e-link')).value.trim();
+  t.link=document.getElementById('e-link').value.trim();
   t.portalVisible=document.getElementById('e-portal-visible').checked;
   t.ownerName=getOwner('e');
   // Bloqueio / dependências
@@ -2757,7 +2741,7 @@ function confirmDelete(mode){
   if(!btn)return;
   if(!_deleteConfirming){
     _deleteConfirming=true;
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Confirmar';
+    btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Confirmar`;
     btn.classList.add('btn-danger-confirm');
     btn.classList.remove('btn-danger');
     _deleteTimer=setTimeout(()=>{resetDeleteBtn(btn)},3000);
@@ -2780,7 +2764,7 @@ function confirmDelete(mode){
 function resetDeleteBtn(btn){
   if(!btn)return;
   _deleteConfirming=false;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg> Excluir';
+  btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg> Excluir`;
   btn.classList.remove('btn-danger-confirm');
   btn.classList.add('btn-danger');
 }
@@ -2801,7 +2785,7 @@ function openEditClient(id){
   document.getElementById('ec-portal-password').value=c.portalPassword||'';
   togglePortalLinkDisplay(c);
   const btn=document.getElementById('del-client-btn');
-  if(btn){btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir';btn.className='btn btn-danger';}
+  if(btn){btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir`;btn.className='btn btn-danger';}
   _delClientConfirming=false;clearTimeout(_delClientTimer);
   openModal('editclient');
 }
@@ -2829,22 +2813,20 @@ function confirmDeleteClient(){
   const btn=document.getElementById('del-client-btn');
   if(!_delClientConfirming){
     _delClientConfirming=true;
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Confirmar exclusão';
+    btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Confirmar exclusão`;
     btn.className='btn btn-danger-confirm';
     _delClientTimer=setTimeout(()=>{
       _delClientConfirming=false;
-      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir';
+      btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Excluir`;
       btn.className='btn btn-danger';
     },3000);
   } else {
     clearTimeout(_delClientTimer);_delClientConfirming=false;
     const idToDel=_editingClientId;
-    // Apaga todas as tarefas do cliente + o próprio cliente
-    const tasksToDel=S.tasks.filter(t=>t.clientId===idToDel);
-    tasksToDel.forEach(t=>deleteTaskDB(t.id));
+    S.tasks.filter(t=>t.clientId===idToDel).forEach(t=>deleteTaskDB(t.id));
+    if(S.filter===idToDel)S.filter='all';
     setSyncStatus('loading');
     deleteClientDB(idToDel);
-    if(S.filter===idToDel) S.filter='all';
     closeModal('editclient');
   }
 }
@@ -3003,10 +2985,7 @@ function renderProfilePortalTab(c){
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       Editar cliente (cor, nome)
     </button>
-    <button class="btn btn-danger" id="cp-delete-client-btn" style="width:100%;justify-content:center;gap:8px;margin-top:6px" onclick="confirmDeleteClientFromProfile(${c.id})">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
-      Apagar cliente e tarefas
-    </button>\`;
+    <button class=\"btn btn-danger\" id=\"cp-delete-client-btn\" style=\"width:100%;justify-content:center;gap:8px;margin-top:6px\" onclick=\"confirmDeleteClientFromProfile(${c.id})\">Apagar cliente e tarefas</button>\`;
 
   // Toggle visibilidade da seção de senha
   document.getElementById('cp-portal-enabled').addEventListener('change', function(){
@@ -3056,7 +3035,7 @@ window.toggleProfileEdit=function(){
     document.getElementById('cp-drive-info').value=c.driveInfo||'';
     document.getElementById('cp-drive-delivery').value=c.driveDelivery||'';
     document.getElementById('cp-figma').value=c.figma||'';
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
     btn.title='Cancelar edição';
     // Vai para aba info
     switchProfileTab('info', document.querySelectorAll('.cp-tab')[0]);
@@ -3071,7 +3050,7 @@ window.cancelProfileEdit=function(){
   document.getElementById('cp-info-view').style.display='block';
   document.getElementById('cp-info-edit').style.display='none';
   const btn=document.getElementById('cp-edit-toggle');
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
   btn.title='Editar perfil';
 };
 
@@ -3723,7 +3702,7 @@ function renderSearchResults(){
     <div class="tasks-list" id="search-list">
       ${tasks.length
         ? tasks.map(t=>taskCardHTMLSearch(t,q)).join('')
-        : '<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>Nenhuma tarefa encontrada.</div>'
+        : `<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>Nenhuma tarefa encontrada.</div>`
       }
     </div>`;
 }
@@ -3763,7 +3742,6 @@ window.clearPortalSearch=function(){
   if(c) renderPortal(c);
 };
 
-
 // ================================================================
 //  CREATIVE V - MODULO: NOVOS CLIENTES v2
 // ================================================================
@@ -3777,304 +3755,213 @@ const NC_TASKS_PADRAO = [
   { title: 'Relat\u00f3rio de entrega',     status: 'todo',    priority: 'baixa',  portalVisible: true,  tag: 'auto' },
 ];
 const NC_FRAMEWORK_MAP = {
-  'Social media':      'STP + Content Pillars + TOFU-MOFU-BOFU',
-  'Tr\u00e1fego pago':      'TOFU-MOFU-BOFU + Pirate Metrics (AARRR)',
-  'Identidade visual': 'Brand Positioning Canvas + Golden Circle',
-  'Landing page':      'StoryBrand + AIDA + Cialdini',
-  'Automa\u00e7\u00e3o':         'RACE Framework + OKR',
-  'Outro':             'RACE Framework',
+  'Social media': 'STP + Content Pillars + TOFU-MOFU-BOFU',
+  'Tr\u00e1fego pago': 'TOFU-MOFU-BOFU + Pirate Metrics',
+  'Identidade visual': 'Brand Positioning Canvas',
+  'Landing page': 'StoryBrand + AIDA + Cialdini',
+  'Automa\u00e7\u00e3o': 'RACE Framework + OKR',
+  'Outro': 'RACE Framework',
 };
-let _ncUid = null;
-let _pending = [];
-let _ncUnsub = null;
+let _ncUid=null, _pending=[], _ncUnsub=null;
 
-function ncSaveToFirebase(item) {
-  if (!_ncUid) return Promise.resolve();
-  return setDoc(doc(db, 'users', _ncUid, 'pending_clients', item.id), item)
-    .catch(e => console.error('NC save:', e));
+function ncSaveToFirebase(item){
+  if(!_ncUid)return Promise.resolve();
+  return setDoc(doc(db,'users',_ncUid,'pending_clients',item.id),item).catch(e=>console.error('NC:',e));
 }
-function ncStartListener() {
-  if (_ncUnsub) _ncUnsub();
-  if (!_ncUid) return;
-  const col = collection(db, 'users', _ncUid, 'pending_clients');
-  _ncUnsub = onSnapshot(col, snap => {
-    _pending = snap.docs.map(d => d.data());
-    _pending.sort((a, b) => new Date(b.ts) - new Date(a.ts));
-    ncRender();
-    ncUpdateBadge();
+function ncStartListener(){
+  if(_ncUnsub)_ncUnsub();
+  if(!_ncUid)return;
+  _ncUnsub=onSnapshot(collection(db,'users',_ncUid,'pending_clients'),snap=>{
+    _pending=snap.docs.map(d=>d.data()).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+    ncRender(); ncUpdateBadge();
   });
 }
-function ncInit(uid) { _ncUid = uid; ncStartListener(); }
+function ncInit(uid){_ncUid=uid;ncStartListener();}
 
-window.ncAdicionarCliente = function(payload) {
-  if (!_ncUid) { console.warn('NC: nao autenticado'); return; }
-  const b = payload;
-  const item = {
-    id: String(Date.now()),
-    ts: new Date().toISOString(),
-    status: 'aguardando',
-    estrategia: null,
-    editando: false,
-    estrategiaEdit: '',
-    briefing: {
-      nome: b.nome||'', empresa: b.empresa||'', email: b.email||'',
-      whatsapp: b.whatsapp||'', instagram: b.instagram||'', site: b.site||'',
-      tipo_projeto: b.tipo_projeto||'', plataformas: b.plataformas||'',
-      frequencia: b.frequencia||'', objetivo: b.objetivo||'',
-      anuncios: b.anuncios||'', budget: b.budget||'',
-      ferramentas_auto: b.ferramentas_auto||'', o_que_automatizar: b.o_que_automatizar||'',
-      processo_atual: b.processo_atual||'', resultado_auto: b.resultado_auto||'',
-      negocio_frase: b.negocio_frase||'', publico_alvo: b.publico_alvo||'',
-      palavras_marca: b.palavras_marca||'', refs_branding: b.refs_branding||'',
-      descricao_geral: b.descricao_geral||'', resultado_esperado: b.resultado_esperado||'',
-      tom: b.tom||'', urgencia: b.urgencia||'', observacoes: b.observacoes||'',
-      tem_identidade: !!(b.palavras_marca || b.refs_branding),
-    },
+window.ncAdicionarCliente=function(p){
+  if(!_ncUid){console.warn('NC: nao autenticado');return;}
+  const item={
+    id:String(Date.now()),ts:new Date().toISOString(),
+    status:'aguardando',estrategia:null,editando:false,estrategiaEdit:'',
+    briefing:{
+      nome:p.nome||'',empresa:p.empresa||'',email:p.email||'',
+      whatsapp:p.whatsapp||'',instagram:p.instagram||'',site:p.site||'',
+      tipo_projeto:p.tipo_projeto||'',plataformas:p.plataformas||'',
+      frequencia:p.frequencia||'',objetivo:p.objetivo||'',
+      anuncios:p.anuncios||'',budget:p.budget||'',
+      ferramentas_auto:p.ferramentas_auto||'',o_que_automatizar:p.o_que_automatizar||'',
+      processo_atual:p.processo_atual||'',resultado_auto:p.resultado_auto||'',
+      negocio_frase:p.negocio_frase||'',publico_alvo:p.publico_alvo||'',
+      palavras_marca:p.palavras_marca||'',refs_branding:p.refs_branding||'',
+      descricao_geral:p.descricao_geral||'',resultado_esperado:p.resultado_esperado||'',
+      tom:p.tom||'',urgencia:p.urgencia||'',observacoes:p.observacoes||'',
+      tem_identidade:!!(p.palavras_marca||p.refs_branding),
+    }
   };
   ncSaveToFirebase(item);
   ncGerarEstrategia(item);
 };
 
-async function ncGerarEstrategia(item) {
-  item.status = 'gerado';
-  item.estrategia = null;
+async function ncGerarEstrategia(item){
+  item.status='gerado';item.estrategia=null;
   await ncSaveToFirebase(item);
-  const b = item.briefing;
-  const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
-  const prompt = `Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\nFramework: ${fw}\nBRIEFING:\n- Cliente: ${b.empresa||b.nome}\n- Tipo: ${b.tipo_projeto}\n- Objetivo: ${b.objetivo||b.descricao_geral||'nao especificado'}\n- Publico: ${b.publico_alvo||'nao especificado'}\n- Budget: ${b.budget||'nao especificado'}\n- Tom: ${b.tom||'nao especificado'}\n- Identidade visual: ${b.tem_identidade?'Sim':'Nao'}\n\nGere estrategia com: 1. Framework+justificativa 2. Posicionamento 3. Publico-alvo 4. Canais 5. Calendario 30 dias 6. Copies (3 headlines+2 CTAs) 7. KPIs (tabela) 8. Proximos passos${!b.tem_identidade?' 9. Branding necessario':''}\nMax 500 palavras. Use Markdown.`;
-  try {
-    const resp = await fetch(NC_WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
-    });
-    item.estrategia = resp.ok
-      ? ((await resp.json()).content?.[0]?.text || '[Vazio - regenerar]')
-      : '[Erro ' + resp.status + ' - clique Regenerar]';
-  } catch(e) { item.estrategia = '[Erro: ' + e.message + ']'; }
+  const b=item.briefing;
+  const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
+  const prompt='Voce e um Estrategista Senior de Marketing Digital.\nFramework: '+fw+'\nBRIEFING:\n- Cliente: '+(b.empresa||b.nome)+'\n- Tipo: '+b.tipo_projeto+'\n- Objetivo: '+(b.objetivo||b.descricao_geral||'nao especificado')+'\n- Publico: '+(b.publico_alvo||'nao especificado')+'\n- Budget: '+(b.budget||'nao especificado')+'\n- Tom: '+(b.tom||'nao especificado')+'\n- Identidade: '+(b.tem_identidade?'Sim':'Nao')+'\n\nGere estrategia: 1.Framework+justificativa 2.Posicionamento 3.Publico 4.Canais 5.Calendario 30 dias 6.Copies(3 headlines+2 CTAs) 7.KPIs 8.Proximos passos'+(b.tem_identidade?'':' 9.Branding necessario')+'\nMax 500 palavras. Use Markdown.';
+  try{
+    const resp=await fetch(NC_WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    item.estrategia=resp.ok?((await resp.json()).content?.[0]?.text||'[Vazio]'):'[Erro '+resp.status+']';
+  }catch(e){item.estrategia='[Erro: '+e.message+']';}
   await ncSaveToFirebase(item);
 }
 
-window.ncAprovar = async function(id) {
-  const item = _pending.find(p => p.id === id);
-  if (!item || !_ncUid) return;
-  const btn = document.getElementById('nc-btn-aprovar-' + id);
-  if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
-  const b = item.briefing;
-  const COLORS = ['#786FD4','#D097C4','#E85D8A','#5BA8E0','#70C4A8','#E8A870'];
-  const novoCliente = {
-    id: S.nextC++,
-    name: b.empresa || b.nome,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    portalEnabled: false, portalPassword: '',
-    wpp: b.whatsapp||'', email: b.email||'', contact: b.nome||'',
-    scope: item.editando ? item.estrategiaEdit : (item.estrategia||''),
-    driveInfo: '', driveDelivery: '', figma: '', photoURL: null,
-    createdAt: new Date().toISOString(),
-  };
-  await saveClientDB(novoCliente);
-  S.clients.push(novoCliente);
-  const tarefas = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
-  for (const tpl of tarefas) {
-    const nova = {
-      id: S.nextT++, clientId: novoCliente.id, title: tpl.title,
-      status: tpl.status, priority: tpl.priority, portalVisible: tpl.portalVisible,
-      date: '', notes: '', link: '', ownerName: MY_NAME,
-      code: generateTaskCode(novoCliente.id),
-      createdAt: new Date().toISOString(), comments: [],
-    };
-    await saveTaskDB(nova);
-    S.tasks.push(nova);
+window.ncAprovar=async function(id){
+  const item=_pending.find(p=>p.id===id);
+  if(!item||!_ncUid)return;
+  const btn=document.getElementById('nc-btn-aprovar-'+id);
+  if(btn){btn.disabled=true;btn.textContent='Criando...';}
+  const b=item.briefing;
+  const COLORS=['#786FD4','#D097C4','#E85D8A','#5BA8E0','#70C4A8','#E8A870'];
+  const c={id:S.nextC++,name:b.empresa||b.nome,color:COLORS[Math.floor(Math.random()*6)],
+    portalEnabled:false,portalPassword:'',wpp:b.whatsapp||'',email:b.email||'',
+    contact:b.nome||'',scope:item.editando?item.estrategiaEdit:(item.estrategia||''),
+    driveInfo:'',driveDelivery:'',figma:'',photoURL:null,createdAt:new Date().toISOString()};
+  await saveClientDB(c);S.clients.push(c);
+  for(const tpl of NC_TASKS_PADRAO.filter(t=>!(t.condicional&&b.tem_identidade))){
+    const t={id:S.nextT++,clientId:c.id,title:tpl.title,status:tpl.status,priority:tpl.priority,
+      portalVisible:tpl.portalVisible,date:'',notes:'',link:'',ownerName:MY_NAME,
+      code:generateTaskCode(c.id),createdAt:new Date().toISOString(),comments:[]};
+    await saveTaskDB(t);S.tasks.push(t);
   }
-  item.status = 'aprovado';
+  item.status='aprovado';
   await ncSaveToFirebase(item);
-  ncUpdateBadge();
-  renderAll();
-  const lbl = document.getElementById('fb-lbl');
-  if (lbl) { lbl.innerHTML = '\u2705 <strong>' + ncEsc(novoCliente.name) + '</strong> adicionado!'; setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos na nuvem \u2713';},4000); }
+  ncUpdateBadge();renderAll();
+  const lbl=document.getElementById('fb-lbl');
+  if(lbl){lbl.innerHTML='\u2705 <strong>'+ncEsc(c.name)+'</strong> adicionado!';setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos \u2713';},4000);}
 };
 
-window.ncRecusar = async function(id) {
-  if (!confirm('Recusar e arquivar este lead?')) return;
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  item.status = 'recusado';
-  await ncSaveToFirebase(item);
-  ncUpdateBadge();
+window.ncRecusar=async function(id){
+  if(!confirm('Recusar e arquivar este lead?'))return;
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  item.status='recusado';await ncSaveToFirebase(item);ncUpdateBadge();
+};
+window.ncRegenerar=async function(id){
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  item.estrategia=null;item.editando=false;
+  await ncSaveToFirebase(item);ncGerarEstrategia(item);
+};
+window.ncEditarEstrategia=function(id){
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  item.editando=true;item.estrategiaEdit=item.estrategia||'';
+  ncRenderCard(id);const ta=document.getElementById('nc-ta-'+id);if(ta)ta.focus();
+};
+window.ncSalvarEdicao=async function(id){
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  const ta=document.getElementById('nc-ta-'+id);if(ta)item.estrategiaEdit=ta.value;
+  item.estrategia=item.estrategiaEdit;item.editando=false;
+  await ncSaveToFirebase(item);ncRenderCard(id);
+};
+window.ncCancelarEdicao=function(id){
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  item.editando=false;ncRenderCard(id);
 };
 
-window.ncRegenerar = async function(id) {
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  item.estrategia = null; item.editando = false;
-  await ncSaveToFirebase(item);
-  ncGerarEstrategia(item);
-};
-window.ncEditarEstrategia = function(id) {
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  item.editando = true; item.estrategiaEdit = item.estrategia||'';
-  ncRenderCard(id);
-  const ta = document.getElementById('nc-ta-' + id);
-  if (ta) ta.focus();
-};
-window.ncSalvarEdicao = async function(id) {
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  const ta = document.getElementById('nc-ta-' + id);
-  if (ta) item.estrategiaEdit = ta.value;
-  item.estrategia = item.estrategiaEdit; item.editando = false;
-  await ncSaveToFirebase(item); ncRenderCard(id);
-};
-window.ncCancelarEdicao = function(id) {
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  item.editando = false; ncRenderCard(id);
-};
-
-function ncRender() {
-  const list = document.getElementById('nc-list');
-  if (!list) return;
-  const pendentes = _pending.filter(p => p.status !== 'recusado' && p.status !== 'aprovado');
-  const comIA = _pending.filter(p => p.estrategia && p.status !== 'recusado');
-  const st = document.getElementById('nc-stat-total');
-  const sa = document.getElementById('nc-stat-ai');
-  if (st) st.textContent = pendentes.length;
-  if (sa) sa.textContent = comIA.length;
-  if (_pending.length === 0) {
-    list.innerHTML = '<div class="nc-empty"><div class="nc-empty-icon">\u2736</div><div class="nc-empty-title">Nenhum lead pendente</div><div class="nc-empty-sub">Quando um formul\u00e1rio for submetido, o novo cliente aparece aqui.</div></div>';
+function ncRender(){
+  const list=document.getElementById('nc-list');if(!list)return;
+  const p=_pending.filter(x=>x.status!=='recusado'&&x.status!=='aprovado');
+  const st=document.getElementById('nc-stat-total');const sa=document.getElementById('nc-stat-ai');
+  if(st)st.textContent=p.length;
+  if(sa)sa.textContent=_pending.filter(x=>x.estrategia&&x.status!=='recusado').length;
+  if(!_pending.length){
+    list.innerHTML='<div class="nc-empty"><div class="nc-empty-icon">\u2736</div><div class="nc-empty-title">Nenhum lead pendente</div><div class="nc-empty-sub">Quando um formul\u00e1rio for submetido, o cliente aparece aqui.</div></div>';
     return;
   }
-  list.innerHTML = _pending.map(p => '<div id="nc-card-wrap-' + p.id + '"></div>').join('');
-  _pending.forEach(p => ncRenderCard(p.id));
+  list.innerHTML=_pending.map(x=>'<div id="nc-card-wrap-'+x.id+'"></div>').join('');
+  _pending.forEach(x=>ncRenderCard(x.id));
 }
 
-function ncRenderCard(id) {
-  const wrap = document.getElementById('nc-card-wrap-' + id);
-  if (!wrap) return;
-  const item = _pending.find(p => p.id === id);
-  if (!item) return;
-  const b = item.briefing;
-  const ini = (b.empresa||b.nome||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const tsF = new Date(item.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-  const stLabel = {aguardando:'Aguardando IA',gerado:'Estrat\u00e9gia pronta',aprovado:'Aprovado \u2713',recusado:'Recusado'};
-  const aprovado = item.status === 'aprovado';
-  const arquivado = aprovado || item.status === 'recusado';
-  const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
-  const tarefasVisiveis = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
-  const btnSalvarStyle = 'background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;border-color:transparent;font-family:Space Grotesk,sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:5px';
-  const estrategiaHTML = item.editando
-    ? '<textarea class="nc-ai-textarea" id="nc-ta-'+id+'">'+ncEsc(item.estrategiaEdit)+'</textarea><div class="nc-ai-actions"><button style="'+btnSalvarStyle+'" onclick="ncSalvarEdicao(\''+id+'\')">\u2713 Salvar</button><button class="nc-ai-btn edit" onclick="ncCancelarEdicao(\''+id+'\')">Cancelar</button></div>'
-    : item.estrategia === null
-      ? '<div class="nc-ai-box gerando"><div class="nc-ai-spinner"></div><span>Gerando estrat\u00e9gia com IA...</span></div>'
-      : '<div class="nc-ai-box">'+ncEsc(item.estrategia)+'</div>'+(!arquivado?'<div class="nc-ai-actions"><button class="nc-ai-btn regen" onclick="ncRegenerar(\''+id+'\')">\u21bb Regenerar</button><button class="nc-ai-btn edit" onclick="ncEditarEstrategia(\''+id+'\')">\u270e Editar</button></div>':'');
-  wrap.innerHTML =
-    '<div class="nc-card" style="'+(arquivado?'opacity:.65':'')+'"><div class="nc-card-hdr"><div class="nc-card-av">'+ncEsc(ini)+'</div><div class="nc-card-info"><div class="nc-card-name">'+ncEsc(b.empresa||b.nome||'Sem nome')+'</div><div class="nc-card-meta">'+(b.tipo_projeto?'<span>'+ncEsc(b.tipo_projeto)+'</span>':'')+(b.whatsapp?'<span>\u00b7 '+ncEsc(b.whatsapp)+'</span>':'')+'</div><div class="nc-card-ts">'+tsF+' \u00b7 '+ncEsc(fw)+'</div></div><span class="nc-status-pill '+item.status+'">'+(stLabel[item.status]||item.status)+'</span></div>'
-    +'<div class="nc-card-body"><div><div class="nc-section-lbl">Briefing</div><div class="nc-fields"><div class="nc-field"><div class="nc-field-lbl">Objetivo</div><div class="nc-field-val'+(!b.objetivo&&!b.descricao_geral?' empty':'')+'">'+(ncEsc(b.objetivo||b.descricao_geral)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">P\u00fablico</div><div class="nc-field-val'+(!b.publico_alvo?' empty':'')+'">'+(ncEsc(b.publico_alvo)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Budget</div><div class="nc-field-val'+(!b.budget?' empty':'')+'">'+(ncEsc(b.budget)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Identidade</div><div class="nc-field-val">'+(b.tem_identidade?'\u2713 J\u00e1 tem':'\u2717 Branding necess\u00e1rio')+'</div></div></div></div>'
-    +'<div><div class="nc-section-lbl">Estrat\u00e9gia gerada por IA</div>'+estrategiaHTML+'</div>'
-    +(!arquivado?'<div><div class="nc-section-lbl">Tarefas que ser\u00e3o criadas</div><div class="nc-tasks-preview">'+tarefasVisiveis.map(t=>'<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">'+ncEsc(t.title)+'</div><span class="nc-task-tag '+t.tag+'">'+(t.tag==='auto'?'autom\u00e1tico':'manual')+'</span></div>').join('')+'</div></div>':'')
-    +(aprovado?'<div class="nc-approved-banner">\u2705 Cliente e tarefas criados!</div>':'')
-    +'</div>'
-    +(!arquivado?'<div class="nc-card-footer"><button class="nc-btn recusar" onclick="ncRecusar(\''+id+'\')">\u2715 Recusar</button><button class="nc-btn aprovar" id="nc-btn-aprovar-'+id+'" onclick="ncAprovar(\''+id+'\')"'+(item.estrategia===null?' disabled':'')+'>\u2713 Aprovar e criar cliente</button></div>':'')
-    +'</div>';
+function ncRenderCard(id){
+  const wrap=document.getElementById('nc-card-wrap-'+id);if(!wrap)return;
+  const item=_pending.find(p=>p.id===id);if(!item)return;
+  const b=item.briefing;
+  const ini=(b.empresa||b.nome||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const tsF=new Date(item.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  const stL={aguardando:'Aguardando IA',gerado:'Estrat\u00e9gia pronta',aprovado:'Aprovado \u2713',recusado:'Recusado'};
+  const aprov=item.status==='aprovado';
+  const arq=aprov||item.status==='recusado';
+  const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
+  const tv=NC_TASKS_PADRAO.filter(t=>!(t.condicional&&b.tem_identidade));
+  const bs='background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;border:none;font-family:Space Grotesk,sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:5px';
+  const eHTML=item.editando
+    ?'<textarea class="nc-ai-textarea" id="nc-ta-'+id+'">'+ncEsc(item.estrategiaEdit)+'</textarea><div class="nc-ai-actions"><button style="'+bs+'" onclick="ncSalvarEdicao(\''+id+'\')">\u2713 Salvar</button><button class="nc-ai-btn edit" onclick="ncCancelarEdicao(\''+id+'\')">Cancelar</button></div>'
+    :item.estrategia===null
+      ?'<div class="nc-ai-box gerando"><div class="nc-ai-spinner"></div><span>Gerando estrat\u00e9gia...</span></div>'
+      :'<div class="nc-ai-box">'+ncEsc(item.estrategia)+'</div>'+(!arq?'<div class="nc-ai-actions"><button class="nc-ai-btn regen" onclick="ncRegenerar(\''+id+'\')">\u21bb Regenerar</button><button class="nc-ai-btn edit" onclick="ncEditarEstrategia(\''+id+'\')">\u270e Editar</button></div>':'');
+  wrap.innerHTML='<div class="nc-card" style="'+(arq?'opacity:.65':'')+'"><div class="nc-card-hdr"><div class="nc-card-av">'+ncEsc(ini)+'</div><div class="nc-card-info"><div class="nc-card-name">'+ncEsc(b.empresa||b.nome||'Sem nome')+'</div><div class="nc-card-meta">'+(b.tipo_projeto?'<span>'+ncEsc(b.tipo_projeto)+'</span>':'')+(b.whatsapp?'<span>\u00b7 '+ncEsc(b.whatsapp)+'</span>':'')+'</div><div class="nc-card-ts">'+tsF+' \u00b7 '+ncEsc(fw)+'</div></div><span class="nc-status-pill '+item.status+'">'+(stL[item.status]||item.status)+'</span></div><div class="nc-card-body"><div><div class="nc-section-lbl">Briefing</div><div class="nc-fields"><div class="nc-field"><div class="nc-field-lbl">Objetivo</div><div class="nc-field-val'+(!b.objetivo&&!b.descricao_geral?' empty':'')+'">'+ncEsc(b.objetivo||b.descricao_geral||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">P\u00fablico</div><div class="nc-field-val'+(!b.publico_alvo?' empty':'')+'">'+ncEsc(b.publico_alvo||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Budget</div><div class="nc-field-val'+(!b.budget?' empty':'')+'">'+ncEsc(b.budget||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Identidade</div><div class="nc-field-val">'+(b.tem_identidade?'\u2713 J\u00e1 tem':'\u2717 Precisa branding')+'</div></div></div></div><div><div class="nc-section-lbl">Estrat\u00e9gia IA</div>'+eHTML+'</div>'+(!arq?'<div><div class="nc-section-lbl">Tarefas criadas</div><div class="nc-tasks-preview">'+tv.map(t=>'<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">'+ncEsc(t.title)+'</div><span class="nc-task-tag '+t.tag+'">'+(t.tag==='auto'?'autom\u00e1tico':'manual')+'</span></div>').join('')+'</div></div>':'')+(aprov?'<div class="nc-approved-banner">\u2705 Cliente e tarefas criados!</div>':'')+'</div>'+(!arq?'<div class="nc-card-footer"><button class="nc-btn recusar" onclick="ncRecusar(\''+id+'\')">\u2715 Recusar</button><button class="nc-btn aprovar" id="nc-btn-aprovar-'+id+'" onclick="ncAprovar(\''+id+'\')"'+(item.estrategia===null?' disabled':'')+'>\u2713 Aprovar e criar cliente</button></div>':'')+'</div>';
 }
 
-function ncUpdateBadge() {
-  const n = _pending.filter(p => p.status==='aguardando'||p.status==='gerado').length;
-  const bd = document.getElementById('nc-nav-badge-desktop');
-  if (bd) { bd.textContent = n>9?'9+':n; bd.style.display = n>0?'flex':'none'; }
-  const mw = document.getElementById('nc-nav-wrap-mobile');
-  if (mw) {
-    let badge = mw.querySelector('.nc-nav-badge');
-    if (!badge) { badge = document.createElement('span'); badge.className='nc-nav-badge'; mw.appendChild(badge); }
-    badge.textContent = n>9?'9+':n; badge.style.display = n>0?'flex':'none';
-  }
+function ncUpdateBadge(){
+  const n=_pending.filter(p=>p.status==='aguardando'||p.status==='gerado').length;
+  const bd=document.getElementById('nc-nav-badge-desktop');
+  if(bd){bd.textContent=n>9?'9+':n;bd.style.display=n>0?'flex':'none';}
+  const mw=document.getElementById('nc-nav-wrap-mobile');
+  if(mw){let b=mw.querySelector('.nc-nav-badge');if(!b){b=document.createElement('span');b.className='nc-nav-badge';mw.appendChild(b);}b.textContent=n>9?'9+':n;b.style.display=n>0?'flex':'none';}
 }
-function ncEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ncEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// Hook login
-(function() {
-  const obs = new MutationObserver(() => {
-    const appRoot = document.getElementById('app-root');
-    if (appRoot && appRoot.style.display !== 'none') {
-      setTimeout(() => {
-        if (typeof auth !== 'undefined' && auth.currentUser) {
-          ncInit(auth.currentUser.uid);
-          obs.disconnect();
-        }
-      }, 1000);
-    }
-  });
-  obs.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['style'] });
-})();
-
-const _ncOrigSetView = window.setView;
-window.setView = function(v, btn) {
-  if (typeof _ncOrigSetView === 'function') _ncOrigSetView(v, btn);
-  if (v === 'novos') { ncRender(); ncUpdateBadge(); }
-};
-
-
-// Adicionar comentário como admin
-window.addAdminComment = function() {
-  const input = document.getElementById('dv-comment-input');
-  const text = (input && input.value.trim());
-  if (!text || S.editingId === null) return;
-  const t = S.tasks.find(t => t.id === S.editingId);
-  if (!t) return;
-  if (!t.comments) t.comments = [];
-  const now = new Date().toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  t.comments.push({ text, author: MY_NAME, ts: now });
-  if (input) input.value = '';
-  setSyncStatus('loading');
-  saveTaskDB(t);
+// Comentários admin (modal de detalhe)
+window.addAdminComment=function(){
+  const input=document.getElementById('dv-comment-input');
+  const text=input&&input.value.trim();
+  if(!text||S.editingId===null)return;
+  const t=S.tasks.find(t=>t.id===S.editingId);if(!t)return;
+  if(!t.comments)t.comments=[];
+  const now=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  t.comments.push({text,author:MY_NAME,ts:now});
+  input.value='';
+  setSyncStatus('loading');saveTaskDB(t);
   renderDetailComments(t);
 };
-
-function renderDetailComments(t) {
-  const list = document.getElementById('dv-comment-list');
-  if (!list) return;
-  const comments = t.comments || [];
-  if (!comments.length) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--gray);text-align:center;padding:6px 0;font-style:italic">Nenhum comentário ainda.</div>';
-    return;
-  }
-  list.innerHTML = comments.map(cm => {
-    const isMe = cm.author === MY_NAME;
-    return '<div style="display:flex;flex-direction:column;align-items:' + (isMe ? 'flex-end' : 'flex-start') + ';gap:2px">'
-      + '<div style="max-width:85%;background:' + (isMe ? 'var(--grad)' : 'var(--lav-light)') + ';color:' + (isMe ? '#fff' : 'var(--dark)') + ';border-radius:' + (isMe ? '12px 12px 4px 12px' : '12px 12px 12px 4px') + ';padding:8px 12px;font-size:13px;line-height:1.5">'
-      + escHtml(cm.text)
-      + '</div>'
-      + '<div style="font-size:10px;color:var(--gray)">' + escHtml(cm.author) + ' · ' + escHtml(cm.ts) + '</div>'
-      + '</div>';
+function renderDetailComments(t){
+  const list=document.getElementById('dv-comment-list');if(!list)return;
+  const comments=t.comments||[];
+  if(!comments.length){list.innerHTML='<div style="font-size:12px;color:var(--gray);text-align:center;font-style:italic">Nenhum comentário ainda.</div>';return;}
+  list.innerHTML=comments.map(cm=>{
+    const isMe=cm.author===MY_NAME;
+    return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';gap:2px"><div class="'+(isMe?'chat-bubble-me':'chat-bubble-client')+'">'+ncEsc(cm.text)+'</div><div class="chat-meta">'+ncEsc(cm.author)+' \u00b7 '+ncEsc(cm.ts)+'</div></div>';
   }).join('');
-  list.scrollTop = list.scrollHeight;
+  list.scrollTop=list.scrollHeight;
 }
 
-
-window.confirmDeleteClientFromProfile = function(id) {
-  const c = S.clients.find(cl => cl.id === id);
-  if (!c) return;
-  const btn = document.getElementById('cp-delete-client-btn');
-  if (!btn) return;
-  if (btn.dataset.confirming !== '1') {
-    btn.dataset.confirming = '1';
-    btn.textContent = 'Confirmar exclusão';
+// Apagar cliente do perfil
+window.confirmDeleteClientFromProfile=function(id){
+  const btn=document.getElementById('cp-delete-client-btn');if(!btn)return;
+  if(btn.dataset.confirming!=='1'){
+    btn.dataset.confirming='1';
+    btn.textContent='Confirmar exclusão';
     btn.classList.add('btn-danger-confirm');
-    setTimeout(() => { 
-      btn.dataset.confirming = '0'; 
-      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Apagar cliente e tarefas';
-      btn.classList.remove('btn-danger-confirm');
-    }, 3000);
-  } else {
+    setTimeout(()=>{btn.dataset.confirming='0';btn.textContent='Apagar cliente e tarefas';btn.classList.remove('btn-danger-confirm');},3000);
+  }else{
     closeClientProfile();
-    const tasksToDel = S.tasks.filter(t => t.clientId === id);
-    tasksToDel.forEach(t => deleteTaskDB(t.id));
-    if (S.filter === id) S.filter = 'all';
-    setSyncStatus('loading');
-    deleteClientDB(id);
+    S.tasks.filter(t=>t.clientId===id).forEach(t=>deleteTaskDB(t.id));
+    if(S.filter===id)S.filter='all';
+    setSyncStatus('loading');deleteClientDB(id);
   }
 };
+
+// Hook login
+(function(){
+  const obs=new MutationObserver(()=>{
+    const r=document.getElementById('app-root');
+    if(r&&r.style.display!=='none'){
+      setTimeout(()=>{if(typeof auth!=='undefined'&&auth.currentUser){ncInit(auth.currentUser.uid);obs.disconnect();}},1000);
+    }
+  });
+  obs.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
+})();
+
+const _ncOSV=window.setView;
+window.setView=function(v,btn){if(typeof _ncOSV==='function')_ncOSV(v,btn);if(v==='novos'){ncRender();ncUpdateBadge();}};
 
 </script>
 </div><!-- /app-root -->
