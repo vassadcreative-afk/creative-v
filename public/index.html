@@ -73,6 +73,7 @@ aside{
 aside.collapsed{width:52px;min-width:52px;padding:18px 8px}
 aside.collapsed .aside-lbl,
 aside.collapsed .c-nm,
+aside.collapsed .c-cnt,
 aside.collapsed .add-c span,
 aside.collapsed .c-edit-btn{display:none}
 aside.collapsed .c-item{justify-content:center;padding:9px 6px}
@@ -92,12 +93,12 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
 aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 
 .aside-lbl{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gray);padding:6px 8px 10px}
-.c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent}
+.c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent;width:100%}
 .c-item:hover{background:var(--lav-light)}
 .c-item.active{background:var(--lav-light);border-color:var(--purple)}
 .c-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
-.c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);padding:2px 6px;border-radius:20px;flex-shrink:0;min-width:24px;text-align:center;line-height:1.6;display:inline-flex;align-items:center;justify-content:center}
+.c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4}
+.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);border-radius:20px;flex-shrink:0;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center;line-height:1}
 .add-c{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:var(--rsm);border:1.5px dashed rgba(120,111,212,.28);background:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--purple);transition:all .15s;width:100%}
 .add-c:hover{background:var(--lav-light);border-color:var(--purple)}
 
@@ -1162,23 +1163,7 @@ aside.collapsed .aside-toggle-bottom{padding:7px 6px}
   </div>
 </div>
 
-<!-- MODAL: NOVO CLIENTE -->inecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Visível no portal do cliente
-        </span>
-        <label class="portal-toggle"><input type="checkbox" id="e-portal-visible"><span class="portal-toggle-slider"></span></label>
-      </div>
-      <div class="modal-acts">
-        <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')" style="flex:0 0 auto;padding:11px 12px">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
-        </button>
-        <button class="btn btn-ghost" onclick="switchToView()" style="flex:1">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveEdit()" style="flex:1">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+<!-- MODAL: NOVO CLIENTE -->
 <div class="overlay" id="modal-client">
   <div class="modal">
     <span class="modal-handle"></span>
@@ -3017,7 +3002,11 @@ function renderProfilePortalTab(c){
     <button class="btn btn-ghost" style="width:100%;justify-content:center;gap:8px" onclick="closeClientProfile();openEditClient(${c.id})">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       Editar cliente (cor, nome)
-    </button>`;
+    </button>
+    <button class="btn btn-danger" id="cp-delete-client-btn" style="width:100%;justify-content:center;gap:8px;margin-top:6px" onclick="confirmDeleteClientFromProfile(${c.id})">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>
+      Apagar cliente e tarefas
+    </button>\`;
 
   // Toggle visibilidade da seção de senha
   document.getElementById('cp-portal-enabled').addEventListener('change', function(){
@@ -4061,6 +4050,31 @@ function renderDetailComments(t) {
   }).join('');
   list.scrollTop = list.scrollHeight;
 }
+
+
+window.confirmDeleteClientFromProfile = function(id) {
+  const c = S.clients.find(cl => cl.id === id);
+  if (!c) return;
+  const btn = document.getElementById('cp-delete-client-btn');
+  if (!btn) return;
+  if (btn.dataset.confirming !== '1') {
+    btn.dataset.confirming = '1';
+    btn.textContent = 'Confirmar exclusão';
+    btn.classList.add('btn-danger-confirm');
+    setTimeout(() => { 
+      btn.dataset.confirming = '0'; 
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg> Apagar cliente e tarefas';
+      btn.classList.remove('btn-danger-confirm');
+    }, 3000);
+  } else {
+    closeClientProfile();
+    const tasksToDel = S.tasks.filter(t => t.clientId === id);
+    tasksToDel.forEach(t => deleteTaskDB(t.id));
+    if (S.filter === id) S.filter = 'all';
+    setSyncStatus('loading');
+    deleteClientDB(id);
+  }
+};
 
 </script>
 </div><!-- /app-root -->
