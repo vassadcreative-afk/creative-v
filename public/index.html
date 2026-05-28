@@ -3723,7 +3723,7 @@ function renderSearchResults(){
     <div class="tasks-list" id="search-list">
       ${tasks.length
         ? tasks.map(t=>taskCardHTMLSearch(t,q)).join('')
-        : `<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>Nenhuma tarefa encontrada.</div>`
+        : '<div class="empty-st"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--lav-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>Nenhuma tarefa encontrada.</div>'
       }
     </div>`;
 }
