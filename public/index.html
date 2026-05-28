@@ -80,17 +80,17 @@ aside.collapsed .c-item{justify-content:center;padding:9px 6px}
 aside.collapsed .add-c{padding:9px 6px;justify-content:center;gap:0}
 aside.collapsed .c-item-wrap .c-item{flex:unset}
 
-.aside-toggle{
-  position:absolute;top:14px;right:-12px;
-  width:22px;height:22px;border-radius:50%;
-  background:var(--white);border:1.5px solid rgba(120,111,212,.18);
-  box-shadow:0 2px 8px rgba(120,111,212,.14);
+.aside-toggle-bottom{
+  margin-top:8px;width:100%;
+  background:none;border:1.5px solid rgba(120,111,212,.15);
+  border-radius:var(--rsm);padding:7px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  z-index:10;transition:all .15s;color:var(--gray);flex-shrink:0;
+  color:var(--gray);transition:all .15s;flex-shrink:0;
 }
-.aside-toggle:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
-.aside-toggle svg{transition:transform .22s}
-aside.collapsed .aside-toggle svg{transform:rotate(180deg)}
+.aside-toggle-bottom:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
+.aside-toggle-bottom svg{transition:transform .22s}
+aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
+aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 
 .aside-lbl{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gray);padding:6px 8px 10px}
 .c-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;border:1.5px solid transparent}
@@ -98,7 +98,7 @@ aside.collapsed .aside-toggle svg{transform:rotate(180deg)}
 .c-item.active{background:var(--lav-light);border-color:var(--purple)}
 .c-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
 .c-nm{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);padding:2px 7px;border-radius:20px;flex-shrink:0}
+.c-cnt{font-size:11px;font-weight:700;background:var(--lav-mid);color:var(--purple-dark);padding:2px 7px;border-radius:20px;flex-shrink:0;min-width:22px;text-align:center}
 .add-c{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:var(--rsm);border:1.5px dashed rgba(120,111,212,.28);background:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--purple);transition:all .15s;width:100%}
 .add-c:hover{background:var(--lav-light);border-color:var(--purple)}
 
@@ -667,6 +667,11 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 }
 
 /* ── ABA NOVOS CLIENTES ── */
+.aside-toggle-bottom{margin-top:8px;width:100%;background:none;border:1.5px solid rgba(120,111,212,.15);border-radius:var(--rsm);padding:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all .15s;flex-shrink:0}
+.aside-toggle-bottom:hover{background:var(--lav-light);color:var(--purple);border-color:var(--purple)}
+.aside-toggle-bottom svg{transition:transform .22s}
+aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
+aside.collapsed .aside-toggle-bottom{padding:7px 6px}
 .nc-empty{text-align:center;padding:48px 20px;color:var(--gray)}
 .nc-empty-icon{font-size:36px;margin-bottom:10px}
 .nc-empty-title{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px}
@@ -694,7 +699,6 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 .nc-ai-box{background:rgba(120,111,212,.05);border:1.5px solid rgba(120,111,212,.18);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--dark);line-height:1.7;white-space:pre-wrap;min-height:80px}
 .nc-ai-box.gerando{color:var(--gray);font-style:italic;display:flex;align-items:center;gap:8px}
 .nc-ai-spinner{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid rgba(120,111,212,.3);border-top-color:var(--purple);animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 .nc-ai-actions{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
 .nc-ai-btn{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;border:1.5px solid;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
 .nc-ai-btn.regen{background:rgba(120,111,212,.08);border-color:rgba(120,111,212,.25);color:var(--purple)}
@@ -719,7 +723,6 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 .nc-btn.recusar:hover{background:var(--red-bg)}
 .nc-nav-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .nc-approved-banner{background:rgba(112,196,168,.1);border:1.5px solid rgba(112,196,168,.3);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--green-txt);font-weight:600}
-
 </style>
 </head>
 <body>
@@ -860,14 +863,14 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 
 <div class="app-body">
   <aside id="main-aside">
-    <button class="aside-toggle" onclick="toggleSidebar()" id="aside-toggle-btn" title="Recolher menu">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-    </button>
     <div class="aside-lbl">Clientes</div>
     <div id="sidebar-list"></div>
     <button class="add-c" onclick="openModal('client')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span>Adicionar cliente</span>
+    </button>
+    <button class="aside-toggle-bottom" onclick="toggleSidebar()" id="aside-toggle-btn" title="Recolher menu">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
     </button>
   </aside>
 
@@ -1109,7 +1112,6 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
         <div class="owner-tags" id="e-owner-tags"></div>
       </div>
       </div>
-      <div class="fg"><label>Observações</label><textarea id="e-notes"></textarea></div>
       <!-- SEÇÃO DE IMPEDIMENTO (aparece quando status=blocked) -->
       <div id="e-block-section" style="display:none">
         <div class="fg">
@@ -1126,12 +1128,19 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
           </div>
         </div>
       </div>
+      <div class="fg"><label>Observações</label><textarea id="e-notes" placeholder="Detalhes, instruções, notas..."></textarea></div>
+      <div class="fg"><label>Link de entrega</label><input type="url" id="e-link-2" placeholder="https://drive.google.com/..." style="display:none"></div>
       <div class="fg portal-visible-row" id="e-portal-row" style="display:none">
         <span class="portal-visible-lbl">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           Visível no portal do cliente
         </span>
         <label class="portal-toggle"><input type="checkbox" id="e-portal-visible"><span class="portal-toggle-slider"></span></label>
+      </div>
+      <!-- COMENTÁRIOS DO CLIENTE -->
+      <div class="fg" id="e-comments-section" style="display:none">
+        <label>Comentários do cliente</label>
+        <div id="e-comments-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;max-height:160px;overflow-y:auto"></div>
       </div>
       <div class="modal-acts">
         <button class="btn btn-danger" id="del-btn-edit" onclick="confirmDelete('edit')">
@@ -1389,7 +1398,7 @@ mark.search-hl{background:rgba(120,111,212,.25);color:inherit;border-radius:2px;
 <script type="module">
 // ── FIREBASE ────────────────────────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, addDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -2686,6 +2695,19 @@ function switchToEdit(){
   // Listener no select de status para mostrar/esconder seção de bloqueio
   const statusSel=document.getElementById('e-status');
   statusSel.onchange=updateEditBlockSection;
+  // Preencher link (campo duplicado no edit)
+  const elink2=document.getElementById('e-link-2');
+  if(elink2){elink2.value=t.link||'';elink2.style.display='block';elink2.closest('.fg').querySelector('label').style.display='block';}
+  // Mostrar comentários do cliente
+  const comments=t.comments||[];
+  const csec=document.getElementById('e-comments-section');
+  const clist=document.getElementById('e-comments-list');
+  if(csec&&clist){
+    if(comments.length){
+      csec.style.display='block';
+      clist.innerHTML=comments.map(cm=>`<div style="background:var(--lav-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--dark);line-height:1.5">${escHtml(cm.text)}<div style="font-size:10px;color:var(--gray);margin-top:3px">${escHtml(cm.author)} · ${escHtml(cm.ts)}</div></div>`).join('');
+    }else{csec.style.display='none';}
+  }
 }
 
 function saveEdit(){
@@ -2698,7 +2720,7 @@ function saveEdit(){
   t.status=document.getElementById('e-status').value;
   t.date=document.getElementById('e-date').value||td();
   t.notes=document.getElementById('e-notes').value;
-  t.link=document.getElementById('e-link').value.trim();
+  t.link=(document.getElementById('e-link-2')||document.getElementById('e-link')).value.trim();
   t.portalVisible=document.getElementById('e-portal-visible').checked;
   t.ownerName=getOwner('e');
   // Bloqueio / dependências
@@ -2806,10 +2828,12 @@ function confirmDeleteClient(){
   } else {
     clearTimeout(_delClientTimer);_delClientConfirming=false;
     const idToDel=_editingClientId;
-    const tasksToUpdate=S.tasks.filter(t=>t.clientId===idToDel);
-    tasksToUpdate.forEach(t=>{t.clientId=null;saveTaskDB(t);});
+    // Apaga todas as tarefas do cliente + o próprio cliente
+    const tasksToDel=S.tasks.filter(t=>t.clientId===idToDel);
+    tasksToDel.forEach(t=>deleteTaskDB(t.id));
     setSyncStatus('loading');
     deleteClientDB(idToDel);
+    if(S.filter===idToDel) S.filter='all';
     closeModal('editclient');
   }
 }
@@ -3727,14 +3751,8 @@ window.clearPortalSearch=function(){
 
 // ================================================================
 //  CREATIVE V - MODULO: NOVOS CLIENTES v2
-//  - Leads salvos no Firebase (pending_clients)
-//  - ncAdicionarCliente protegida por autenticacao
-//  - Proxy Cloudflare no lugar da chave direta
-//  - System prompt profissional integrado
 // ================================================================
-
 const NC_WORKER_URL = 'https://old-darkness-641a.v-assad-creative.workers.dev/ai';
-
 const NC_TASKS_PADRAO = [
   { title: 'Estrat\u00e9gia de marketing',  status: 'done',    priority: 'alta',   portalVisible: true,  tag: 'auto' },
   { title: 'Branding / identidade',    status: 'todo',    priority: 'alta',   portalVisible: false, tag: 'manual', condicional: true },
@@ -3743,7 +3761,6 @@ const NC_TASKS_PADRAO = [
   { title: 'Aprova\u00e7\u00e3o dos criativos',  status: 'waiting', priority: 'alta',   portalVisible: true,  tag: 'auto' },
   { title: 'Relat\u00f3rio de entrega',     status: 'todo',    priority: 'baixa',  portalVisible: true,  tag: 'auto' },
 ];
-
 const NC_FRAMEWORK_MAP = {
   'Social media':      'STP + Content Pillars + TOFU-MOFU-BOFU',
   'Tr\u00e1fego pago':      'TOFU-MOFU-BOFU + Pirate Metrics (AARRR)',
@@ -3752,22 +3769,18 @@ const NC_FRAMEWORK_MAP = {
   'Automa\u00e7\u00e3o':         'RACE Framework + OKR',
   'Outro':             'RACE Framework',
 };
-
-// Estado
 let _ncUid = null;
 let _pending = [];
 let _ncUnsub = null;
 
-// Firebase
 function ncSaveToFirebase(item) {
-  if (!_ncUid || typeof setDoc === 'undefined') return Promise.resolve();
+  if (!_ncUid) return Promise.resolve();
   return setDoc(doc(db, 'users', _ncUid, 'pending_clients', item.id), item)
     .catch(e => console.error('NC save:', e));
 }
-
 function ncStartListener() {
   if (_ncUnsub) _ncUnsub();
-  if (!_ncUid || typeof onSnapshot === 'undefined') return;
+  if (!_ncUid) return;
   const col = collection(db, 'users', _ncUid, 'pending_clients');
   _ncUnsub = onSnapshot(col, snap => {
     _pending = snap.docs.map(d => d.data());
@@ -3776,177 +3789,94 @@ function ncStartListener() {
     ncUpdateBadge();
   });
 }
+function ncInit(uid) { _ncUid = uid; ncStartListener(); }
 
-function ncInit(uid) {
-  _ncUid = uid;
-  ncStartListener();
-}
-
-// Receber lead - protegido por autenticacao
 window.ncAdicionarCliente = function(payload) {
-  if (!_ncUid) { console.warn('NC: usuario nao autenticado'); return; }
+  if (!_ncUid) { console.warn('NC: nao autenticado'); return; }
   const b = payload;
   const item = {
     id: String(Date.now()),
     ts: new Date().toISOString(),
     status: 'aguardando',
-    briefing: {
-      nome:               b.nome              || '',
-      empresa:            b.empresa           || '',
-      email:              b.email             || '',
-      whatsapp:           b.whatsapp          || '',
-      instagram:          b.instagram         || '',
-      site:               b.site              || '',
-      tipo_projeto:       b.tipo_projeto      || '',
-      plataformas:        b.plataformas       || '',
-      frequencia:         b.frequencia        || '',
-      objetivo:           b.objetivo          || '',
-      anuncios:           b.anuncios          || '',
-      budget:             b.budget            || '',
-      ferramentas_auto:   b.ferramentas_auto  || '',
-      o_que_automatizar:  b.o_que_automatizar || '',
-      processo_atual:     b.processo_atual    || '',
-      resultado_auto:     b.resultado_auto    || '',
-      negocio_frase:      b.negocio_frase     || '',
-      publico_alvo:       b.publico_alvo      || '',
-      palavras_marca:     b.palavras_marca    || '',
-      refs_branding:      b.refs_branding     || '',
-      descricao_geral:    b.descricao_geral   || '',
-      resultado_esperado: b.resultado_esperado|| '',
-      tom:                b.tom               || '',
-      urgencia:           b.urgencia          || '',
-      observacoes:        b.observacoes       || '',
-      tem_identidade:     !!(b.palavras_marca || b.refs_branding),
-    },
     estrategia: null,
     editando: false,
     estrategiaEdit: '',
+    briefing: {
+      nome: b.nome||'', empresa: b.empresa||'', email: b.email||'',
+      whatsapp: b.whatsapp||'', instagram: b.instagram||'', site: b.site||'',
+      tipo_projeto: b.tipo_projeto||'', plataformas: b.plataformas||'',
+      frequencia: b.frequencia||'', objetivo: b.objetivo||'',
+      anuncios: b.anuncios||'', budget: b.budget||'',
+      ferramentas_auto: b.ferramentas_auto||'', o_que_automatizar: b.o_que_automatizar||'',
+      processo_atual: b.processo_atual||'', resultado_auto: b.resultado_auto||'',
+      negocio_frase: b.negocio_frase||'', publico_alvo: b.publico_alvo||'',
+      palavras_marca: b.palavras_marca||'', refs_branding: b.refs_branding||'',
+      descricao_geral: b.descricao_geral||'', resultado_esperado: b.resultado_esperado||'',
+      tom: b.tom||'', urgencia: b.urgencia||'', observacoes: b.observacoes||'',
+      tem_identidade: !!(b.palavras_marca || b.refs_branding),
+    },
   };
   ncSaveToFirebase(item);
   ncGerarEstrategia(item);
 };
 
-// Gerar estrategia com IA
 async function ncGerarEstrategia(item) {
   item.status = 'gerado';
   item.estrategia = null;
   await ncSaveToFirebase(item);
-
   const b = item.briefing;
   const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
-
-  const prompt = `Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia. Age como CMO e entrega documentos prontos para apresentar a clientes.
-
-Framework selecionado: ${fw}
-Justifique em 1 linha por que este framework foi escolhido.
-
-BRIEFING:
-- Cliente: ${b.empresa || b.nome}
-- Tipo de projeto: ${b.tipo_projeto}
-- Plataformas: ${b.plataformas || 'nao especificado'}
-- Objetivo: ${b.objetivo || b.descricao_geral || 'nao especificado'}
-- Publico-alvo: ${b.publico_alvo || 'nao especificado'}
-- Negocio em uma frase: ${b.negocio_frase || 'nao especificado'}
-- Tom da marca: ${b.tom || 'nao especificado'}
-- Budget: ${b.budget || 'nao especificado'}
-- Urgencia: ${b.urgencia || 'nao especificado'}
-- Tem identidade visual: ${b.tem_identidade ? 'Sim' : 'Nao - incluir branding no escopo'}
-- Observacoes: ${b.observacoes || 'nenhuma'}
-
-Gere a estrategia completa com:
-1. Framework e justificativa (1 linha)
-2. Posicionamento & Diferencial
-3. Publico-alvo detalhado
-4. Canais e formatos recomendados
-5. Calendario 30 dias (bullet points semanais)
-6. Copies sugeridos (3 headlines + 2 CTAs)
-7. KPIs principais (tabela Markdown)
-8. Proximos passos (3 acoes com prazo)
-${!b.tem_identidade ? '9. Branding - entregaveis necessarios' : ''}
-
-Use bullet points e tabelas Markdown. Maximo 500 palavras. Seja direto e acionavel.`;
-
+  const prompt = `Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\nFramework: ${fw}\nBRIEFING:\n- Cliente: ${b.empresa||b.nome}\n- Tipo: ${b.tipo_projeto}\n- Objetivo: ${b.objetivo||b.descricao_geral||'nao especificado'}\n- Publico: ${b.publico_alvo||'nao especificado'}\n- Budget: ${b.budget||'nao especificado'}\n- Tom: ${b.tom||'nao especificado'}\n- Identidade visual: ${b.tem_identidade?'Sim':'Nao'}\n\nGere estrategia com: 1. Framework+justificativa 2. Posicionamento 3. Publico-alvo 4. Canais 5. Calendario 30 dias 6. Copies (3 headlines+2 CTAs) 7. KPIs (tabela) 8. Proximos passos${!b.tem_identidade?' 9. Branding necessario':''}\nMax 500 palavras. Use Markdown.`;
   try {
     const resp = await fetch(NC_WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
     });
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      item.estrategia = '[Erro: ' + (err?.error?.message || resp.status) + ' - clique em Regenerar]';
-    } else {
-      const data = await resp.json();
-      item.estrategia = data.content?.[0]?.text || '[Resposta vazia - clique em Regenerar]';
-    }
-  } catch(e) {
-    item.estrategia = '[Erro de rede: ' + e.message + ' - verifique a conexao e clique em Regenerar]';
-  }
+    item.estrategia = resp.ok
+      ? ((await resp.json()).content?.[0]?.text || '[Vazio - regenerar]')
+      : '[Erro ' + resp.status + ' - clique Regenerar]';
+  } catch(e) { item.estrategia = '[Erro: ' + e.message + ']'; }
   await ncSaveToFirebase(item);
 }
 
-// Aprovar
 window.ncAprovar = async function(id) {
   const item = _pending.find(p => p.id === id);
   if (!item || !_ncUid) return;
   const btn = document.getElementById('nc-btn-aprovar-' + id);
   if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
-
   const b = item.briefing;
-  const estrategiaFinal = item.editando ? item.estrategiaEdit : (item.estrategia || '');
   const COLORS = ['#786FD4','#D097C4','#E85D8A','#5BA8E0','#70C4A8','#E8A870'];
-
   const novoCliente = {
     id: S.nextC++,
     name: b.empresa || b.nome,
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    portalEnabled: false,
-    portalPassword: '',
-    wpp: b.whatsapp || '',
-    email: b.email || '',
-    contact: b.nome || '',
-    scope: estrategiaFinal,
-    driveInfo: '',
-    driveDelivery: '',
-    figma: '',
-    photoURL: null,
+    portalEnabled: false, portalPassword: '',
+    wpp: b.whatsapp||'', email: b.email||'', contact: b.nome||'',
+    scope: item.editando ? item.estrategiaEdit : (item.estrategia||''),
+    driveInfo: '', driveDelivery: '', figma: '', photoURL: null,
     createdAt: new Date().toISOString(),
   };
-
-  if (typeof saveClientDB === 'function') await saveClientDB(novoCliente);
-  if (Array.isArray(S.clients)) S.clients.push(novoCliente);
-
+  await saveClientDB(novoCliente);
+  S.clients.push(novoCliente);
   const tarefas = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
   for (const tpl of tarefas) {
     const nova = {
-      id: S.nextT++,
-      clientId: novoCliente.id,
-      title: tpl.title,
-      status: tpl.status,
-      priority: tpl.priority,
-      portalVisible: tpl.portalVisible,
-      date: '',
-      notes: '',
-      link: '',
-      ownerName: 'Vict\u00f3ria',
-      code: typeof generateTaskCode === 'function' ? generateTaskCode(novoCliente.id) : '',
-      createdAt: new Date().toISOString(),
-      comments: [],
+      id: S.nextT++, clientId: novoCliente.id, title: tpl.title,
+      status: tpl.status, priority: tpl.priority, portalVisible: tpl.portalVisible,
+      date: '', notes: '', link: '', ownerName: MY_NAME,
+      code: generateTaskCode(novoCliente.id),
+      createdAt: new Date().toISOString(), comments: [],
     };
-    if (typeof saveTaskDB === 'function') await saveTaskDB(nova);
-    if (Array.isArray(S.tasks)) S.tasks.push(nova);
+    await saveTaskDB(nova);
+    S.tasks.push(nova);
   }
-
   item.status = 'aprovado';
   await ncSaveToFirebase(item);
   ncUpdateBadge();
-  if (typeof renderAll === 'function') renderAll();
-
+  renderAll();
   const lbl = document.getElementById('fb-lbl');
-  if (lbl) {
-    lbl.innerHTML = '\u2705 <strong>' + ncEsc(novoCliente.name) + '</strong> adicionado! Tarefas criadas.';
-    setTimeout(() => { if(lbl) lbl.textContent = 'Dados salvos na nuvem \u2713'; }, 4000);
-  }
+  if (lbl) { lbl.innerHTML = '\u2705 <strong>' + ncEsc(novoCliente.name) + '</strong> adicionado!'; setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos na nuvem \u2713';},4000); }
 };
 
 window.ncRecusar = async function(id) {
@@ -3961,38 +3891,30 @@ window.ncRecusar = async function(id) {
 window.ncRegenerar = async function(id) {
   const item = _pending.find(p => p.id === id);
   if (!item) return;
-  item.estrategia = null;
-  item.editando = false;
+  item.estrategia = null; item.editando = false;
   await ncSaveToFirebase(item);
   ncGerarEstrategia(item);
 };
-
 window.ncEditarEstrategia = function(id) {
   const item = _pending.find(p => p.id === id);
   if (!item) return;
-  item.editando = true;
-  item.estrategiaEdit = item.estrategia || '';
+  item.editando = true; item.estrategiaEdit = item.estrategia||'';
   ncRenderCard(id);
   const ta = document.getElementById('nc-ta-' + id);
   if (ta) ta.focus();
 };
-
 window.ncSalvarEdicao = async function(id) {
   const item = _pending.find(p => p.id === id);
   if (!item) return;
   const ta = document.getElementById('nc-ta-' + id);
   if (ta) item.estrategiaEdit = ta.value;
-  item.estrategia = item.estrategiaEdit;
-  item.editando = false;
-  await ncSaveToFirebase(item);
-  ncRenderCard(id);
+  item.estrategia = item.estrategiaEdit; item.editando = false;
+  await ncSaveToFirebase(item); ncRenderCard(id);
 };
-
 window.ncCancelarEdicao = function(id) {
   const item = _pending.find(p => p.id === id);
   if (!item) return;
-  item.editando = false;
-  ncRenderCard(id);
+  item.editando = false; ncRenderCard(id);
 };
 
 function ncRender() {
@@ -4005,7 +3927,7 @@ function ncRender() {
   if (st) st.textContent = pendentes.length;
   if (sa) sa.textContent = comIA.length;
   if (_pending.length === 0) {
-    list.innerHTML = '<div class="nc-empty"><div class="nc-empty-icon">\u2736</div><div class="nc-empty-title">Nenhum lead pendente</div><div class="nc-empty-sub">Quando um formul\u00e1rio for submetido, o novo cliente aparece aqui para voc\u00ea revisar.</div></div>';
+    list.innerHTML = '<div class="nc-empty"><div class="nc-empty-icon">\u2736</div><div class="nc-empty-title">Nenhum lead pendente</div><div class="nc-empty-sub">Quando um formul\u00e1rio for submetido, o novo cliente aparece aqui.</div></div>';
     return;
   }
   list.innerHTML = _pending.map(p => '<div id="nc-card-wrap-' + p.id + '"></div>').join('');
@@ -4018,72 +3940,44 @@ function ncRenderCard(id) {
   const item = _pending.find(p => p.id === id);
   if (!item) return;
   const b = item.briefing;
-  const ini = (b.empresa || b.nome || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-  const tsF = new Date(item.ts).toLocaleDateString('pt-BR', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-  const stLabel = {aguardando:'Aguardando IA', gerado:'Estrat\u00e9gia pronta', aprovado:'Aprovado \u2713', recusado:'Recusado'};
+  const ini = (b.empresa||b.nome||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const tsF = new Date(item.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  const stLabel = {aguardando:'Aguardando IA',gerado:'Estrat\u00e9gia pronta',aprovado:'Aprovado \u2713',recusado:'Recusado'};
   const aprovado = item.status === 'aprovado';
   const arquivado = aprovado || item.status === 'recusado';
   const fw = NC_FRAMEWORK_MAP[b.tipo_projeto] || NC_FRAMEWORK_MAP['Outro'];
   const tarefasVisiveis = NC_TASKS_PADRAO.filter(t => !(t.condicional && b.tem_identidade));
-
   const btnSalvarStyle = 'background:linear-gradient(135deg,#786FD4,#D097C4);color:#fff;border-color:transparent;font-family:Space Grotesk,sans-serif;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:5px';
-
   const estrategiaHTML = item.editando
-    ? '<textarea class="nc-ai-textarea" id="nc-ta-' + id + '">' + ncEsc(item.estrategiaEdit) + '</textarea>'
-      + '<div class="nc-ai-actions">'
-      + '<button style="' + btnSalvarStyle + '" onclick="ncSalvarEdicao(\'' + id + '\')">\u2713 Salvar</button>'
-      + '<button class="nc-ai-btn edit" onclick="ncCancelarEdicao(\'' + id + '\')">Cancelar</button>'
-      + '</div>'
+    ? '<textarea class="nc-ai-textarea" id="nc-ta-'+id+'">'+ncEsc(item.estrategiaEdit)+'</textarea><div class="nc-ai-actions"><button style="'+btnSalvarStyle+'" onclick="ncSalvarEdicao(\''+id+'\')">\u2713 Salvar</button><button class="nc-ai-btn edit" onclick="ncCancelarEdicao(\''+id+'\')">Cancelar</button></div>'
     : item.estrategia === null
       ? '<div class="nc-ai-box gerando"><div class="nc-ai-spinner"></div><span>Gerando estrat\u00e9gia com IA...</span></div>'
-      : '<div class="nc-ai-box">' + ncEsc(item.estrategia) + '</div>'
-        + (!arquivado ? '<div class="nc-ai-actions"><button class="nc-ai-btn regen" onclick="ncRegenerar(\'' + id + '\')">\u21bb Regenerar</button><button class="nc-ai-btn edit" onclick="ncEditarEstrategia(\'' + id + '\')">\u270e Editar</button></div>' : '');
-
+      : '<div class="nc-ai-box">'+ncEsc(item.estrategia)+'</div>'+(!arquivado?'<div class="nc-ai-actions"><button class="nc-ai-btn regen" onclick="ncRegenerar(\''+id+'\')">\u21bb Regenerar</button><button class="nc-ai-btn edit" onclick="ncEditarEstrategia(\''+id+'\')">\u270e Editar</button></div>':'');
   wrap.innerHTML =
-    '<div class="nc-card" style="' + (arquivado ? 'opacity:.65' : '') + '">'
-    + '<div class="nc-card-hdr">'
-    + '<div class="nc-card-av">' + ncEsc(ini) + '</div>'
-    + '<div class="nc-card-info">'
-    + '<div class="nc-card-name">' + ncEsc(b.empresa || b.nome || 'Sem nome') + '</div>'
-    + '<div class="nc-card-meta">' + (b.tipo_projeto ? '<span>' + ncEsc(b.tipo_projeto) + '</span>' : '') + (b.whatsapp ? '<span>\u00b7 ' + ncEsc(b.whatsapp) + '</span>' : '') + '</div>'
-    + '<div class="nc-card-ts">' + tsF + ' \u00b7 ' + ncEsc(fw) + '</div>'
-    + '</div>'
-    + '<span class="nc-status-pill ' + item.status + '">' + (stLabel[item.status] || item.status) + '</span>'
-    + '</div>'
-    + '<div class="nc-card-body">'
-    + '<div><div class="nc-section-lbl">Briefing</div>'
-    + '<div class="nc-fields">'
-    + '<div class="nc-field"><div class="nc-field-lbl">Objetivo</div><div class="nc-field-val' + (!b.objetivo && !b.descricao_geral ? ' empty' : '') + '">' + ncEsc(b.objetivo || b.descricao_geral || 'N\u00e3o informado') + '</div></div>'
-    + '<div class="nc-field"><div class="nc-field-lbl">P\u00fablico</div><div class="nc-field-val' + (!b.publico_alvo ? ' empty' : '') + '">' + ncEsc(b.publico_alvo || 'N\u00e3o informado') + '</div></div>'
-    + '<div class="nc-field"><div class="nc-field-lbl">Budget</div><div class="nc-field-val' + (!b.budget ? ' empty' : '') + '">' + ncEsc(b.budget || 'N\u00e3o informado') + '</div></div>'
-    + '<div class="nc-field"><div class="nc-field-lbl">Identidade</div><div class="nc-field-val">' + (b.tem_identidade ? '\u2713 J\u00e1 tem' : '\u2717 Precisa de branding') + '</div></div>'
-    + '</div></div>'
-    + '<div><div class="nc-section-lbl">Estrat\u00e9gia gerada por IA</div>' + estrategiaHTML + '</div>'
-    + (!arquivado ? '<div><div class="nc-section-lbl">Tarefas que ser\u00e3o criadas</div><div class="nc-tasks-preview">' + tarefasVisiveis.map(t => '<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">' + ncEsc(t.title) + '</div><span class="nc-task-tag ' + t.tag + '">' + (t.tag === 'auto' ? 'autom\u00e1tico' : 'manual') + '</span></div>').join('') + '</div></div>' : '')
-    + (aprovado ? '<div class="nc-approved-banner">\u2705 Cliente e tarefas criados com sucesso!</div>' : '')
-    + '</div>'
-    + (!arquivado ? '<div class="nc-card-footer"><button class="nc-btn recusar" onclick="ncRecusar(\'' + id + '\')">\u2715 Recusar</button><button class="nc-btn aprovar" id="nc-btn-aprovar-' + id + '" onclick="ncAprovar(\'' + id + '\')"' + (item.estrategia === null ? ' disabled' : '') + '>\u2713 Aprovar e criar cliente</button></div>' : '')
-    + '</div>';
+    '<div class="nc-card" style="'+(arquivado?'opacity:.65':'')+'"><div class="nc-card-hdr"><div class="nc-card-av">'+ncEsc(ini)+'</div><div class="nc-card-info"><div class="nc-card-name">'+ncEsc(b.empresa||b.nome||'Sem nome')+'</div><div class="nc-card-meta">'+(b.tipo_projeto?'<span>'+ncEsc(b.tipo_projeto)+'</span>':'')+(b.whatsapp?'<span>\u00b7 '+ncEsc(b.whatsapp)+'</span>':'')+'</div><div class="nc-card-ts">'+tsF+' \u00b7 '+ncEsc(fw)+'</div></div><span class="nc-status-pill '+item.status+'">'+(stLabel[item.status]||item.status)+'</span></div>'
+    +'<div class="nc-card-body"><div><div class="nc-section-lbl">Briefing</div><div class="nc-fields"><div class="nc-field"><div class="nc-field-lbl">Objetivo</div><div class="nc-field-val'+(!b.objetivo&&!b.descricao_geral?' empty':'')+'">'+(ncEsc(b.objetivo||b.descricao_geral)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">P\u00fablico</div><div class="nc-field-val'+(!b.publico_alvo?' empty':'')+'">'+(ncEsc(b.publico_alvo)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Budget</div><div class="nc-field-val'+(!b.budget?' empty':'')+'">'+(ncEsc(b.budget)||'N\u00e3o informado')+'</div></div><div class="nc-field"><div class="nc-field-lbl">Identidade</div><div class="nc-field-val">'+(b.tem_identidade?'\u2713 J\u00e1 tem':'\u2717 Branding necess\u00e1rio')+'</div></div></div></div>'
+    +'<div><div class="nc-section-lbl">Estrat\u00e9gia gerada por IA</div>'+estrategiaHTML+'</div>'
+    +(!arquivado?'<div><div class="nc-section-lbl">Tarefas que ser\u00e3o criadas</div><div class="nc-tasks-preview">'+tarefasVisiveis.map(t=>'<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">'+ncEsc(t.title)+'</div><span class="nc-task-tag '+t.tag+'">'+(t.tag==='auto'?'autom\u00e1tico':'manual')+'</span></div>').join('')+'</div></div>':'')
+    +(aprovado?'<div class="nc-approved-banner">\u2705 Cliente e tarefas criados!</div>':'')
+    +'</div>'
+    +(!arquivado?'<div class="nc-card-footer"><button class="nc-btn recusar" onclick="ncRecusar(\''+id+'\')">\u2715 Recusar</button><button class="nc-btn aprovar" id="nc-btn-aprovar-'+id+'" onclick="ncAprovar(\''+id+'\')"'+(item.estrategia===null?' disabled':'')+'>\u2713 Aprovar e criar cliente</button></div>':'')
+    +'</div>';
 }
 
 function ncUpdateBadge() {
-  const n = _pending.filter(p => p.status === 'aguardando' || p.status === 'gerado').length;
+  const n = _pending.filter(p => p.status==='aguardando'||p.status==='gerado').length;
   const bd = document.getElementById('nc-nav-badge-desktop');
-  if (bd) { bd.textContent = n > 9 ? '9+' : n; bd.style.display = n > 0 ? 'flex' : 'none'; }
+  if (bd) { bd.textContent = n>9?'9+':n; bd.style.display = n>0?'flex':'none'; }
   const mw = document.getElementById('nc-nav-wrap-mobile');
   if (mw) {
     let badge = mw.querySelector('.nc-nav-badge');
-    if (!badge) { badge = document.createElement('span'); badge.className = 'nc-nav-badge'; mw.appendChild(badge); }
-    badge.textContent = n > 9 ? '9+' : n;
-    badge.style.display = n > 0 ? 'flex' : 'none';
+    if (!badge) { badge = document.createElement('span'); badge.className='nc-nav-badge'; mw.appendChild(badge); }
+    badge.textContent = n>9?'9+':n; badge.style.display = n>0?'flex':'none';
   }
 }
+function ncEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function ncEsc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Hook no login
+// Hook login
 (function() {
   const obs = new MutationObserver(() => {
     const appRoot = document.getElementById('app-root');
@@ -4099,7 +3993,6 @@ function ncEsc(s) {
   obs.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['style'] });
 })();
 
-// Patch setView
 const _ncOrigSetView = window.setView;
 window.setView = function(v, btn) {
   if (typeof _ncOrigSetView === 'function') _ncOrigSetView(v, btn);
