@@ -1070,6 +1070,7 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
       </div>
       <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
       <div id="dv-block-section" style="display:none;margin-top:2px"></div>
+      <div id="dv-criativos" style="display:none;margin-top:2px"></div>
       <!-- COMENTÁRIOS CHAT -->
       <div style="margin-top:14px">
         <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);margin-bottom:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px">
@@ -2676,6 +2677,7 @@ function switchToView(){
   document.getElementById('dv-notes').textContent=t.notes||'—';
   renderInviteBox(t);
   renderBlockSection(t);
+  renderCriativosSection(t);
   renderDetailComments(t);
 }
 
@@ -3769,6 +3771,135 @@ function ncSaveToFirebase(item){
   if(!_ncUid)return Promise.resolve();
   return setDoc(doc(db,'users',_ncUid,'pending_clients',item.id),item).catch(e=>console.error('NC:',e));
 }
+// ── CRIATIVOS — SEÇÃO NO DETALHE DA TASK ────────────────────────────
+const CRIATIVO_FORMATOS_VALIDOS=[
+  'Google Display_template01_300x250px',
+  'Google Display_template01_728x90px',
+  'Google Display_template01_160x600px',
+  'Google Display_template01_970x250px',
+  'Meta ads_template01_1080x1080px',
+  'Meta ads_template01_1080x1920px',
+  'Meta ads_template01_1200x628px',
+  'Insta_template01_1080x1080px',
+  'Insta_template01_1080x1350px',
+  'Insta_template01_1080x1920px',
+];
+
+function isCriativosTask(t){
+  const title=(t.title||'').toLowerCase();
+  return title.includes('criativo')||title.includes('creative');
+}
+
+function renderCriativosSection(t){
+  const sec=document.getElementById('dv-criativos');
+  if(!sec)return;
+  if(!isCriativosTask(t)){sec.style.display='none';return;}
+  sec.style.display='block';
+
+  const criativos=t.criativos||[];
+  const temCriativos=criativos.length>0;
+
+  const statusLabel={pendente:'Pendente',gerado:'✓ Gerado'};
+  const statusColor={pendente:'var(--orange)',gerado:'var(--green)'};
+
+  const listHTML=temCriativos
+    ?criativos.map((c,i)=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--lav-light);border-radius:8px;margin-bottom:6px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(c.campanha||'Campanha '+(i+1))}</div>
+          <div style="font-size:10px;color:var(--gray);margin-top:2px">${escHtml(c.formato||'')}</div>
+          <div style="font-size:10px;color:var(--dark);margin-top:3px;font-style:italic">"${escHtml(c.headline||'')}"</div>
+        </div>
+        <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:${statusColor[c.status]||'var(--gray)'}22;color:${statusColor[c.status]||'var(--gray)'};flex-shrink:0">${statusLabel[c.status]||c.status||'pendente'}</span>
+      </div>`).join('')
+    :`<div style="font-size:12px;color:var(--gray);font-style:italic;padding:10px 0">Nenhum criativo gerado ainda.</div>`;
+
+  sec.innerHTML=`
+    <div style="margin-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);text-transform:uppercase;display:flex;align-items:center;gap:5px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Criativos (${criativos.length})
+        </label>
+        <button id="btn-regen-criativos" onclick="regenerarCriativos(${t.id})"
+          style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;border:1.5px solid var(--purple);background:transparent;color:var(--purple);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:Space Grotesk,sans-serif">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          ${temCriativos?'Regenerar':'Gerar criativos'}
+        </button>
+      </div>
+      <div id="dv-criativos-list">${listHTML}</div>
+    </div>`;
+}
+
+window.regenerarCriativos=async function(taskId){
+  const t=S.tasks.find(x=>x.id===taskId);if(!t)return;
+  const c=S.clients.find(cl=>cl.id===t.clientId);
+  const btn=document.getElementById('btn-regen-criativos');
+  if(btn){btn.disabled=true;btn.textContent='Gerando...';}
+
+  // Monta prompt focado apenas nos criativos
+  const clientName=c?c.name:'Cliente';
+  const scope=c?c.scope:'';
+  const prompt=
+    'Voce e um Estrategista Senior de Marketing Digital.\n'+
+    'Gere criativos para o cliente abaixo.\n\n'+
+    'Cliente: '+clientName+'\n'+
+    'Escopo/Estrategia: '+(scope||t.notes||'nao informado')+'\n\n'+
+    'REGRA CRITICA: responda APENAS com um array JSON valido, sem texto antes ou depois.\n'+
+    'Os formatos disponiveis sao EXCLUSIVAMENTE:\n'+
+    CRIATIVO_FORMATOS_VALIDOS.map(f=>'  "'+f+'"').join(',\n')+'\n\n'+
+    'Gere entre 4 e 6 criativos cobrindo formatos variados (feed, stories, display).\n'+
+    'Para cada criativo use EXATAMENTE esta estrutura:\n'+
+    '{\n'+
+    '  "campanha": "Nome da campanha",\n'+
+    '  "variacao": "V1",\n'+
+    '  "formato": "<um dos formatos acima — copia exato>",\n'+
+    '  "headline": "Texto principal (max 8 palavras)",\n'+
+    '  "subheadline": "Texto de apoio (max 12 palavras)",\n'+
+    '  "cta_label": "Texto do botao (max 4 palavras)",\n'+
+    '  "bg_color": "<hex cor de fundo>",\n'+
+    '  "cta_color": "<hex cor do botao>",\n'+
+    '  "product_image": "",\n'+
+    '  "badge_texto": "",\n'+
+    '  "status": "pendente"\n'+
+    '}\n'+
+    'Adapte headline ao tamanho: pequenos (728x90, 300x250) = muito curto; quadrados = medio; verticais = elaborado.\n'+
+    'Responda SOMENTE com o array JSON, sem markdown, sem explicacao.';
+
+  try{
+    const resp=await fetch(NC_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:prompt}]})
+    });
+    if(!resp.ok)throw new Error('Worker '+resp.status);
+    const data=await resp.json();
+    const fullText=(data._full_text||data.content?.filter(b=>b.type==='text').map(b=>b.text).join('\n')||'').trim();
+
+    // Parse do JSON — aceita com ou sem markdown
+    const clean=fullText.replace(/```json|```/g,'').trim();
+    const m=clean.match(/\[[\s\S]*\]/);
+    if(!m)throw new Error('JSON nao encontrado na resposta');
+    const criativos=JSON.parse(m[0]);
+    if(!Array.isArray(criativos)||!criativos.length)throw new Error('Array vazio');
+
+    // Valida formatos — descarta inválidos silenciosamente
+    const valid=criativos.filter(cr=>CRIATIVO_FORMATOS_VALIDOS.includes(cr.formato));
+    if(!valid.length)throw new Error('Nenhum formato valido retornado');
+
+    t.criativos=valid;
+    setSyncStatus('loading');
+    await saveTaskDB(t);
+    renderCriativosSection(t);
+    const lbl=document.getElementById('fb-lbl');
+    if(lbl){lbl.innerHTML='✅ <strong>'+valid.length+' criativos</strong> gerados!';setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos na nuvem ✓';},4000);}
+  }catch(e){
+    console.error('regenerarCriativos erro:',e.message);
+    alert('Erro ao gerar criativos: '+e.message);
+    if(btn){btn.disabled=false;btn.textContent='Tentar novamente';}
+  }
+};
+
 function ncStartListener(){
   if(_ncUnsub)_ncUnsub();
   if(!_ncUid)return;
