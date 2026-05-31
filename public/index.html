@@ -3860,11 +3860,45 @@ async function ncGerarEstrategia(item){
     '    "status": "todo",\n'+
     '    "priority": "alta",\n'+
     '    "portalVisible": true,\n'+
-    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies — tudo que o executor precisa"\n'+
+    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies — tudo que o executor precisa",\n'+
+    '    "criativos": []\n'+
     '  }\n'+
     ']\n\n'+
-    'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.'+
-    (b.tem_identidade?'':'\nIncluir task de criacao de identidade visual.');
+    'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.\n'+
+    (b.tem_identidade?'':'\nIncluir task de criacao de identidade visual.\n')+
+    '\nREGRA CRITICA PARA O CAMPO "criativos":\n'+
+    '- APENAS a task cujo title contenha "Geracao de criativos" ou "Criacao de criativos" deve ter o array "criativos" preenchido.\n'+
+    '- Todas as outras tasks devem ter "criativos": [].\n'+
+    '- Os formatos disponiveis sao EXCLUSIVAMENTE os listados abaixo — NUNCA invente outro nome:\n'+
+    '  "Google Display_template01_300x250px"\n'+
+    '  "Google Display_template01_728x90px"\n'+
+    '  "Google Display_template01_160x600px"\n'+
+    '  "Google Display_template01_970x250px"\n'+
+    '  "Meta ads_template01_1080x1080px"\n'+
+    '  "Meta ads_template01_1080x1920px"\n'+
+    '  "Meta ads_template01_1200x628px"\n'+
+    '  "Insta_template01_1080x1080px"\n'+
+    '  "Insta_template01_1080x1350px"\n'+
+    '  "Insta_template01_1080x1920px"\n'+
+    '\nPara cada criativo, use EXATAMENTE esta estrutura JSON:\n'+
+    '{\n'+
+    '  "campanha": "Nome da campanha (ex: Clareamento Dental - Novembro)",\n'+
+    '  "variacao": "V1",\n'+
+    '  "formato": "<um dos formatos acima — copia exato>",\n'+
+    '  "headline": "Texto principal impactante (max 8 palavras)",\n'+
+    '  "subheadline": "Texto de apoio (max 12 palavras)",\n'+
+    '  "cta_label": "Texto do botao (max 4 palavras)",\n'+
+    '  "bg_color": "<hex da cor de fundo da marca>",\n'+
+    '  "cta_color": "<hex da cor do botao>",\n'+
+    '  "product_image": "",\n'+
+    '  "badge_texto": "",\n'+
+    '  "status": "pendente"\n'+
+    '}\n'+
+    '\nGere entre 3 e 6 criativos cobrindo formatos variados (feed, stories, display).\n'+
+    'Adapte headline/subheadline ao tamanho do formato:\n'+
+    '- Pequenos (728x90, 300x250): textos muito curtos\n'+
+    '- Quadrados (1080x1080): textos medios\n'+
+    '- Verticais (1080x1920, 1080x1350): textos mais elaborados';
 
   try{
     const resp=await fetch(NC_WORKER_URL,{
@@ -3906,6 +3940,8 @@ async function ncGerarEstrategia(item){
         const m=tasksRaw.match(/\[[\s\S]*\]/);
         if(m){
           item.tasks_ia=JSON.parse(m[0]);
+          // Garante que todas as tasks tenham o campo criativos
+          item.tasks_ia=item.tasks_ia.map(t=>({...t,criativos:t.criativos||[]}));
           console.log('Tasks parseadas:',item.tasks_ia.length);
         }
       }catch(e){console.warn('Tasks parse erro:',e.message);}
@@ -3917,7 +3953,7 @@ async function ncGerarEstrategia(item){
         if(m){
           const parsed=JSON.parse(m[0]);
           if(Array.isArray(parsed)&&parsed[0]&&parsed[0].title){
-            item.tasks_ia=parsed;
+            item.tasks_ia=parsed.map(t=>({...t,criativos:t.criativos||[]}));
             // Remove o JSON da estratégia para não poluir
             item.estrategia=fullText.substring(0,fullText.lastIndexOf(m[0])).trim();
             console.log('Tasks extraídas do final:',item.tasks_ia.length);
@@ -3969,7 +4005,8 @@ window.ncAprovar=async function(id){
       ownerName:MY_NAME,
       code:generateTaskCode(c.id),
       createdAt:new Date().toISOString(),
-      comments:[]
+      comments:[],
+      criativos:tpl.criativos||[]
     };
     await saveTaskDB(t);S.tasks.push(t);
   }
