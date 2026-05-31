@@ -3875,11 +3875,27 @@ async function ncGerarEstrategia(item){
 
     if(!resp.ok){
       item.estrategia='[Erro '+resp.status+' - clique Regenerar]';
+      item.status='aguardando';
       await ncSaveToFirebase(item);return;
     }
 
     const data=await resp.json();
-    const fullText=data._full_text||(data.content&&data.content[0]&&data.content[0].text)||'[Resposta vazia]';
+
+    // Extrai texto de todos os blocos (web search retorna múltiplos blocos)
+    let fullText='';
+    if(data._full_text){
+      fullText=data._full_text;
+    }else if(data.content&&Array.isArray(data.content)){
+      fullText=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+    }
+
+    if(!fullText||fullText.trim()===''){
+      item.estrategia='[Resposta vazia - clique Regenerar]';
+      item.status='aguardando';
+      await ncSaveToFirebase(item);return;
+    }
+
+    // Tenta separar estratégia das tasks pelo marcador
     const marker='---TASKS---';
     const mi=fullText.indexOf(marker);
 
@@ -3888,14 +3904,39 @@ async function ncGerarEstrategia(item){
       const tasksRaw=fullText.substring(mi+marker.length).trim();
       try{
         const m=tasksRaw.match(/\[[\s\S]*\]/);
-        if(m)item.tasks_ia=JSON.parse(m[0]);
-      }catch(e){console.warn('Tasks parse:',e.message);}
+        if(m){
+          item.tasks_ia=JSON.parse(m[0]);
+          console.log('Tasks parseadas:',item.tasks_ia.length);
+        }
+      }catch(e){console.warn('Tasks parse erro:',e.message);}
     }else{
+      // Marcador não encontrado — tenta extrair JSON do final do texto
       item.estrategia=fullText;
+      try{
+        const m=fullText.match(/\[[\s\S]*\](?=[^\[\]]*$)/);
+        if(m){
+          const parsed=JSON.parse(m[0]);
+          if(Array.isArray(parsed)&&parsed[0]&&parsed[0].title){
+            item.tasks_ia=parsed;
+            // Remove o JSON da estratégia para não poluir
+            item.estrategia=fullText.substring(0,fullText.lastIndexOf(m[0])).trim();
+            console.log('Tasks extraídas do final:',item.tasks_ia.length);
+          }
+        }
+      }catch(e){console.warn('Tasks fallback parse:',e.message);}
     }
 
-  }catch(e){item.estrategia='[Erro: '+e.message+']';}
+    item.status='gerado';
+
+  }catch(e){
+    console.error('ncGerarEstrategia erro:',e.message);
+    item.estrategia='[Erro: '+e.message+' - clique Regenerar]';
+    item.status='aguardando';
+  }
+
+  // Sempre salva — garante que a estratégia apareça no card
   await ncSaveToFirebase(item);
+  ncRenderCard(item.id);
 }
 
 window.ncAprovar=async function(id){
