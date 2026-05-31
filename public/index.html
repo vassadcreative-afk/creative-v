@@ -3819,29 +3819,39 @@ async function ncGerarEstrategia(item){
   const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
 
   const prompt=
-    'Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\n\n'+
-    'PASSO 1 - DIAGNOSTICO DIGITAL:\n'+
-    'Pesquise agora no Google e Instagram:\n'+
-    '- Site: '+(b.site||('site de '+nome))+'\n'+
-    '- Instagram: '+(ig?('@'+ig):('Instagram de '+nome+' Brasil'))+'\n'+
-    '- Google: "'+nome+'" presenca, avaliacoes, concorrentes\n\n'+
-    'Gere RELATORIO DE DIAGNOSTICO com:\n'+
-    '- Presenca digital atual (nota 1-10 por canal)\n'+
-    '- Pontos fortes encontrados online\n'+
-    '- Pontos fracos / oportunidades\n'+
-    '- O que concorrentes fazem melhor\n'+
+    'Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\n'+
+    'Crie um diagnostico e estrategia BASEADOS EXCLUSIVAMENTE nas informacoes do briefing abaixo.\n'+
+    'NAO invente dados, NAO suponha segmento sem base no briefing.\n\n'+
+    '=== BRIEFING DO CLIENTE ===\n'+
+    'Nome/Empresa: '+nome+'\n'+
+    'Instagram: '+(ig?('@'+ig):'nao informado')+'\n'+
+    'Site: '+(b.site||'nao informado')+'\n'+
+    'Tipo de projeto: '+b.tipo_projeto+'\n'+
+    'Plataformas: '+(b.plataformas||'nao informado')+'\n'+
+    'Objetivo: '+(b.objetivo||b.descricao_geral||'nao informado')+'\n'+
+    'Publico-alvo: '+(b.publico_alvo||'nao informado')+'\n'+
+    'Budget mensal: '+(b.budget||'nao informado')+'\n'+
+    'Anuncios atuais: '+(b.anuncios||'nao informado')+'\n'+
+    'Frequencia desejada: '+(b.frequencia||'nao informado')+'\n'+
+    'Tom de comunicacao: '+(b.tom||'nao informado')+'\n'+
+    'Negocio em uma frase: '+(b.negocio_frase||'nao informado')+'\n'+
+    'Palavras da marca: '+(b.palavras_marca||'nao informado')+'\n'+
+    'Urgencia: '+(b.urgencia||'nao informado')+'\n'+
+    'Observacoes: '+(b.observacoes||'nenhuma')+'\n'+
+    'Identidade visual: '+(b.tem_identidade?'Ja tem':'Ainda nao tem')+'\n'+
+    '===========================\n\n'+
+    'PASSO 1 - DIAGNOSTICO:\n'+
+    'Com base APENAS no briefing acima, gere diagnostico com:\n'+
+    '- Situacao atual estimada por canal (Instagram, Google, Site) — nota 1-10 baseada no que foi informado\n'+
+    '- Pontos fortes do negocio (baseado no briefing)\n'+
+    '- Pontos fracos e oportunidades\n'+
     '- Posicionamento atual vs ideal\n\n'+
     'PASSO 2 - ESTRATEGIA:\n'+
     'Framework: '+fw+'\n'+
-    'Tipo: '+b.tipo_projeto+'\n'+
-    'Objetivo: '+(b.objetivo||b.descricao_geral||'nao especificado')+'\n'+
-    'Publico: '+(b.publico_alvo||'nao especificado')+'\n'+
-    'Budget: '+(b.budget||'nao especificado')+'\n'+
-    'Tom: '+(b.tom||'nao especificado')+'\n'+
-    'Identidade: '+(b.tem_identidade?'Sim':'Nao - incluir branding')+'\n\n'+
-    'Gere estrategia: posicionamento, canais, calendario 30 dias, copies (3 headlines + 2 CTAs), KPIs.\n\n'+
-    'PASSO 3 - TASKS DO PROJETO:\n'+
-    'Gere tasks especificas para este cliente com descricao DETALHADA.\n'+
+    'Gere estrategia completa: posicionamento, mix de canais, calendario 30 dias semana a semana, '+
+    'copies (3 headlines + 2 CTAs especificos para o negocio), KPIs, orcamento sugerido.\n\n'+
+    'PASSO 3 - TASKS:\n'+
+    'Gere tasks especificas e acionaveis para este cliente.\n'+
     'Ao final da resposta, adicione exatamente:\n\n'+
     '---TASKS---\n'+
     '[\n'+
@@ -3850,11 +3860,11 @@ async function ncGerarEstrategia(item){
     '    "status": "todo",\n'+
     '    "priority": "alta",\n'+
     '    "portalVisible": true,\n'+
-    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies, referencias - tudo que o executor precisa saber"\n'+
+    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies — tudo que o executor precisa"\n'+
     '  }\n'+
     ']\n\n'+
     'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.'+
-    (b.tem_identidade?'':'\nIncluir task de branding/identidade visual.');
+    (b.tem_identidade?'':'\nIncluir task de criacao de identidade visual.');
 
   try{
     const resp=await fetch(NC_WORKER_URL,{
