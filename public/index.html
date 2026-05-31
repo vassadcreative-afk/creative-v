@@ -3773,8 +3773,15 @@ function ncStartListener(){
   if(_ncUnsub)_ncUnsub();
   if(!_ncUid)return;
   _ncUnsub=onSnapshot(collection(db,'users',_ncUid,'pending_clients'),snap=>{
+    const antes=_pending.map(x=>x.id);
     _pending=snap.docs.map(d=>d.data()).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
     ncRender(); ncUpdateBadge();
+    // Dispara geração automaticamente para leads novos aguardando IA
+    _pending.forEach(item=>{
+      if(item.status==='aguardando'&&!item.estrategia&&!antes.includes(item.id)){
+        ncGerarEstrategia(item);
+      }
+    });
   });
 }
 function ncInit(uid){_ncUid=uid;ncStartListener();}
@@ -3804,14 +3811,79 @@ window.ncAdicionarCliente=function(p){
 };
 
 async function ncGerarEstrategia(item){
-  item.status='gerado';item.estrategia=null;
+  item.status='gerado';item.estrategia=null;item.tasks_ia=null;
   await ncSaveToFirebase(item);
   const b=item.briefing;
+  const nome=b.empresa||b.nome;
+  const ig=b.instagram?b.instagram.replace('@',''):'';
   const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
-  const prompt='Voce e um Estrategista Senior de Marketing Digital.\nFramework: '+fw+'\nBRIEFING:\n- Cliente: '+(b.empresa||b.nome)+'\n- Tipo: '+b.tipo_projeto+'\n- Objetivo: '+(b.objetivo||b.descricao_geral||'nao especificado')+'\n- Publico: '+(b.publico_alvo||'nao especificado')+'\n- Budget: '+(b.budget||'nao especificado')+'\n- Tom: '+(b.tom||'nao especificado')+'\n- Identidade: '+(b.tem_identidade?'Sim':'Nao')+'\n\nGere estrategia: 1.Framework+justificativa 2.Posicionamento 3.Publico 4.Canais 5.Calendario 30 dias 6.Copies(3 headlines+2 CTAs) 7.KPIs 8.Proximos passos'+(b.tem_identidade?'':' 9.Branding necessario')+'\nMax 500 palavras. Use Markdown.';
+
+  const prompt=
+    'Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\n\n'+
+    'PASSO 1 - DIAGNOSTICO DIGITAL:\n'+
+    'Pesquise agora no Google e Instagram:\n'+
+    '- Site: '+(b.site||('site de '+nome))+'\n'+
+    '- Instagram: '+(ig?('@'+ig):('Instagram de '+nome+' Brasil'))+'\n'+
+    '- Google: "'+nome+'" presenca, avaliacoes, concorrentes\n\n'+
+    'Gere RELATORIO DE DIAGNOSTICO com:\n'+
+    '- Presenca digital atual (nota 1-10 por canal)\n'+
+    '- Pontos fortes encontrados online\n'+
+    '- Pontos fracos / oportunidades\n'+
+    '- O que concorrentes fazem melhor\n'+
+    '- Posicionamento atual vs ideal\n\n'+
+    'PASSO 2 - ESTRATEGIA:\n'+
+    'Framework: '+fw+'\n'+
+    'Tipo: '+b.tipo_projeto+'\n'+
+    'Objetivo: '+(b.objetivo||b.descricao_geral||'nao especificado')+'\n'+
+    'Publico: '+(b.publico_alvo||'nao especificado')+'\n'+
+    'Budget: '+(b.budget||'nao especificado')+'\n'+
+    'Tom: '+(b.tom||'nao especificado')+'\n'+
+    'Identidade: '+(b.tem_identidade?'Sim':'Nao - incluir branding')+'\n\n'+
+    'Gere estrategia: posicionamento, canais, calendario 30 dias, copies (3 headlines + 2 CTAs), KPIs.\n\n'+
+    'PASSO 3 - TASKS DO PROJETO:\n'+
+    'Gere tasks especificas para este cliente com descricao DETALHADA.\n'+
+    'Ao final da resposta, adicione exatamente:\n\n'+
+    '---TASKS---\n'+
+    '[\n'+
+    '  {\n'+
+    '    "title": "Nome da task",\n'+
+    '    "status": "todo",\n'+
+    '    "priority": "alta",\n'+
+    '    "portalVisible": true,\n'+
+    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies, referencias - tudo que o executor precisa saber"\n'+
+    '  }\n'+
+    ']\n\n'+
+    'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.'+
+    (b.tem_identidade?'':'\nIncluir task de branding/identidade visual.');
+
   try{
-    const resp=await fetch(NC_WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
-    item.estrategia=resp.ok?((await resp.json()).content?.[0]?.text||'[Vazio]'):'[Erro '+resp.status+']';
+    const resp=await fetch(NC_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({web_search:true,messages:[{role:'user',content:prompt}]})
+    });
+
+    if(!resp.ok){
+      item.estrategia='[Erro '+resp.status+' - clique Regenerar]';
+      await ncSaveToFirebase(item);return;
+    }
+
+    const data=await resp.json();
+    const fullText=data._full_text||(data.content&&data.content[0]&&data.content[0].text)||'[Resposta vazia]';
+    const marker='---TASKS---';
+    const mi=fullText.indexOf(marker);
+
+    if(mi>=0){
+      item.estrategia=fullText.substring(0,mi).trim();
+      const tasksRaw=fullText.substring(mi+marker.length).trim();
+      try{
+        const m=tasksRaw.match(/\[[\s\S]*\]/);
+        if(m)item.tasks_ia=JSON.parse(m[0]);
+      }catch(e){console.warn('Tasks parse:',e.message);}
+    }else{
+      item.estrategia=fullText;
+    }
+
   }catch(e){item.estrategia='[Erro: '+e.message+']';}
   await ncSaveToFirebase(item);
 }
@@ -3828,10 +3900,26 @@ window.ncAprovar=async function(id){
     contact:b.nome||'',scope:item.editando?item.estrategiaEdit:(item.estrategia||''),
     driveInfo:'',driveDelivery:'',figma:'',photoURL:null,createdAt:new Date().toISOString()};
   await saveClientDB(c);S.clients.push(c);
-  for(const tpl of NC_TASKS_PADRAO.filter(t=>!(t.condicional&&b.tem_identidade))){
-    const t={id:S.nextT++,clientId:c.id,title:tpl.title,status:tpl.status,priority:tpl.priority,
-      portalVisible:tpl.portalVisible,date:'',notes:'',link:'',ownerName:MY_NAME,
-      code:generateTaskCode(c.id),createdAt:new Date().toISOString(),comments:[]};
+  // Usar tasks da IA se disponíveis, senão usar padrão
+  const tasksToCreate=item.tasks_ia&&item.tasks_ia.length>0
+    ?item.tasks_ia
+    :NC_TASKS_PADRAO.filter(t=>!(t.condicional&&b.tem_identidade));
+
+  for(const tpl of tasksToCreate){
+    const t={
+      id:S.nextT++,clientId:c.id,
+      title:tpl.title||'Task',
+      status:tpl.status||'todo',
+      priority:tpl.priority||'normal',
+      portalVisible:tpl.portalVisible!==false,
+      date:'',
+      notes:tpl.notes||tpl.description||'',
+      link:'',
+      ownerName:MY_NAME,
+      code:generateTaskCode(c.id),
+      createdAt:new Date().toISOString(),
+      comments:[]
+    };
     await saveTaskDB(t);S.tasks.push(t);
   }
   item.status='aprovado';
