@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1A1628">
+<title>Briefing Completo · Victória Assad</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS (mesmos do Creative V) ── */
+:root {
+  --purple:#786FD4; --purple-light:#9B94E0; --purple-dark:#5A52B0;
+  --pink:#D097C4;   --lav-mid:#B8A8E8;      --lav-light:#F0EEF7;
+  --dark:#1A1628;   --dark2:#2D2545;        --gray:#6B6585;
+  --white:#FFFFFF;  --border:#E2DDF0;
+  --grad:linear-gradient(135deg,#786FD4,#D097C4);
+  --grad-dark:linear-gradient(135deg,#1A1628,#2D2545);
+  --r:16px; --rsm:10px;
+  --sh:0 4px 24px rgba(120,111,212,.13);
+  --sh2:0 8px 32px rgba(120,111,212,.25);
+  --font:'Space Grotesk',sans-serif;
+  --red:#E85D5D; --red-bg:#FFE8E8;
+  --green:#70C4A8; --green-bg:#E8F7F2; --green-txt:#1E8060;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);background:var(--lav-light);
+  color:var(--dark);font-size:15px;line-height:1.6;
+  min-height:100vh;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--lav-mid);border-radius:99px}
+
+/* ── HEADER (idêntico ao Creative V) ── */
+header{
+  height:60px;background:var(--grad-dark);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;position:sticky;top:0;z-index:200;
+}
+.logo{
+  font-size:17px;font-weight:700;letter-spacing:-.4px;
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.header-badge{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);padding:4px 14px;border-radius:20px;
+}
+
+/* ── LAYOUT ── */
+.page{max-width:720px;margin:0 auto;padding:40px 24px 80px}
+@media(max-width:600px){.page{padding:24px 16px 64px}}
+
+/* ── HERO ── */
+.hero{margin-bottom:36px}
+.eyebrow{
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+  background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;
+}
+.hero h1{
+  font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.08;
+  letter-spacing:-.03em;margin-bottom:12px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#B8A8E8,#E8A8D6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{color:var(--gray);font-size:15px;max-width:520px;line-height:1.75}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:32px}
+.pips{display:flex;gap:6px;margin-bottom:8px}
+.pip{height:3px;flex:1;background:var(--border);border-radius:99px;transition:background .4s}
+.pip.done{background:var(--dark)}
+.pip.active{background:var(--grad)}
+.prog-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--gray)}
+.prog-pct{font-weight:600;color:var(--purple)}
+
+/* ── CARD ── */
+.card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  box-shadow:var(--sh);
+}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:40px 48px;animation:fadeIn .3s ease}
+.sec.active{display:block}
+@media(max-width:600px){.sec{padding:28px 22px}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-header{margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.sec-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:8px;background:var(--grad);
+  color:#fff;font-size:12px;font-weight:700;margin-bottom:12px;
+}
+.sec-title{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+.sec-desc{color:var(--gray);font-size:14px;line-height:1.6}
+
+/* ── HINT BOX ── */
+.hint{
+  background:rgba(120,111,212,.07);border:1px solid rgba(120,111,212,.15);
+  border-radius:12px;padding:12px 16px;font-size:13px;color:var(--purple-dark);
+  margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;line-height:1.55;
+}
+.hint-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+
+/* ── FORM ELEMENTS ── */
+.fg{margin-bottom:22px}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:22px}
+
+label.fl{
+  display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gray);margin-bottom:7px;font-weight:600;
+}
+label.fl .req{color:var(--pink)}
+.field-hint{font-size:12px;color:var(--gray);margin-top:5px;line-height:1.5}
+
+input[type=text],input[type=email],input[type=tel],input[type=url],
+input[type=number],select,textarea{
+  width:100%;background:var(--lav-light);border:1.5px solid var(--border);
+  border-radius:10px;padding:12px 16px;font-family:var(--font);
+  font-size:14px;color:var(--dark);outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(120,111,212,.12);
+}
+textarea{resize:vertical;min-height:100px}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6585' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+
+/* ── OPTION GRID (tipo card) ── */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:22px}
+.opt-grid.wide{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.opt-item{position:relative}
+.opt-item input{position:absolute;opacity:0;width:0;height:0}
+.opt-lbl{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:18px 12px;background:var(--lav-light);border:1.5px solid var(--border);
+  border-radius:12px;cursor:pointer;font-size:12px;font-weight:500;
+  color:var(--gray);min-height:84px;transition:all .2s;text-align:center;line-height:1.35;
+}
+.opt-ico{font-size:24px;line-height:1}
+.opt-item input:checked + .opt-lbl{
+  border-color:var(--purple);background:rgba(120,111,212,.09);color:var(--dark);
+}
+.opt-lbl:hover{border-color:var(--lav-mid);color:var(--dark)}
+
+/* ── CHECKBOX LIST ── */
+.check-group{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.check-item{
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  font-size:14px;color:var(--dark);padding:10px 14px;
+  background:var(--lav-light);border:1.5px solid var(--border);
+  border-radius:10px;transition:all .2s;
+}
+.check-item:hover{border-color:var(--lav-mid)}
+.check-item input[type=checkbox]{
+  width:18px;height:18px;min-width:18px;border:1.5px solid var(--border);
+  border-radius:5px;background:var(--white);cursor:pointer;
+  -webkit-appearance:none;appearance:none;position:relative;transition:all .2s;padding:0;
+}
+.check-item input[type=checkbox]:checked{background:var(--purple);border-color:var(--purple)}
+.check-item input[type=checkbox]:checked::after{
+  content:'';position:absolute;left:4px;top:1px;
+  width:6px;height:9px;border:2px solid white;
+  border-top:none;border-left:none;transform:rotate(45deg);
+}
+.check-item.checked{border-color:var(--purple);background:rgba(120,111,212,.07)}
+.check-label{flex:1;line-height:1.4}
+.check-sublabel{display:block;font-size:11px;color:var(--gray);margin-top:1px}
+
+/* ── SLIDER ── */
+input[type=range]{
+  width:100%;-webkit-appearance:none;height:4px;
+  background:linear-gradient(90deg,var(--purple) var(--v,50%),var(--border) var(--v,50%));
+  border-radius:2px;outline:none;padding:0;cursor:pointer;border:none;box-shadow:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;
+  background:var(--dark);border-radius:50%;cursor:pointer;
+  border:3px solid white;box-shadow:0 0 0 1.5px var(--border);
+}
+.range-row{display:flex;justify-content:space-between;font-size:11px;color:var(--gray);margin-top:6px}
+.range-val{
+  text-align:center;font-size:13px;font-weight:600;
+  color:var(--purple);margin-top:8px;
+}
+
+/* ── DIVIDER ── */
+hr.div{border:none;border-top:1px solid var(--border);margin:28px 0}
+
+/* ── SCORE VISUAL ── */
+.score-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;margin-bottom:16px}
+.score-label{font-size:14px;color:var(--dark)}
+.score-stars{display:flex;gap:6px}
+.star-btn{
+  width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--lav-light);cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.star-btn.active{background:rgba(120,111,212,.12);border-color:var(--purple)}
+.star-btn:hover{border-color:var(--lav-mid)}
+
+/* ── REVIEW ── */
+.review-section{margin-bottom:20px}
+.review-section-title{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gray);font-weight:700;margin-bottom:10px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+.review-item{
+  display:grid;grid-template-columns:140px 1fr;gap:8px;
+  font-size:13px;padding:8px 0;border-bottom:1px solid rgba(226,221,240,.5);
+}
+.review-item:last-child{border-bottom:none}
+.review-key{color:var(--gray);font-weight:500}
+.review-val{color:var(--dark);word-break:break-word}
+@media(max-width:500px){.review-item{grid-template-columns:1fr;gap:2px}}
+
+/* ── NAVIGATION ── */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;border-top:1px solid var(--border);
+}
+@media(max-width:600px){.nav{padding:18px 22px}}
+.btn-back{
+  background:none;border:none;font-family:var(--font);font-size:13px;
+  color:var(--gray);cursor:pointer;padding:8px 0;display:flex;align-items:center;
+  gap:5px;transition:color .2s;
+}
+.btn-back:hover{color:var(--dark)}
+.btn-back.hidden{visibility:hidden;pointer-events:none}
+.btn-next{
+  background:var(--grad);color:#fff;border:none;border-radius:10px;
+  padding:13px 28px;font-family:var(--font);font-size:14px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+  transition:all .2s;letter-spacing:.01em;
+}
+.btn-next:hover{box-shadow:var(--sh2);transform:translateY(-1px)}
+.btn-next:active{transform:translateY(0)}
+.btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── SUCCESS ── */
+.success{display:none;text-align:center;padding:72px 48px}
+.success.active{display:block}
+.suc-ring{
+  width:72px;height:72px;border-radius:50%;background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;font-size:32px;
+  box-shadow:0 8px 32px rgba(120,111,212,.35);
+}
+.success h2{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+.success p{color:var(--gray);font-size:15px;max-width:380px;margin:0 auto;line-height:1.75}
+.success .confetti{font-size:28px;margin-bottom:16px;display:block}
+
+/* ── SPINNER ── */
+.spin{
+  display:inline-block;width:14px;height:14px;
+  border:2px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── ERROR ── */
+.err-msg{
+  background:var(--red-bg);border:1px solid #FECACA;color:#991B1B;
+  border-radius:10px;padding:12px 16px;font-size:13px;margin:16px 48px;display:none;
+}
+.err-msg.vis{display:block}
+@media(max-width:600px){.err-msg{margin:12px 22px}}
+
+/* ── COND ── */
+.cond{display:none}
+.cond.vis{display:block}
+
+/* ── CHAR COUNTER ── */
+.char-counter{font-size:11px;color:var(--gray);text-align:right;margin-top:4px}
+.char-counter.warn{color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Victória Assad</div>
+  <span class="header-badge">Briefing Completo</span>
+</header>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="eyebrow">Vamos começar do zero</p>
+    <h1>Me conta tudo sobre <em>o seu negócio</em></h1>
+    <p>Não precisa saber nada de marketing — eu traduzo tudo depois. Quanto mais você contar, mais certeiro fica o trabalho. Leva uns 8 minutinhos. ☕</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="pips" id="pips"></div>
+    <div class="prog-meta">
+      <span id="stepLabel">Seus dados</span>
+      <span class="prog-pct" id="stepCount">Etapa 1 de 7</span>
+    </div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- ═══ SEC 1 — DADOS PESSOAIS ═══ -->
+    <div class="sec active" data-s="1">
+      <div class="sec-header">
+        <div class="sec-num">1</div>
+        <div class="sec-title">Seus dados</div>
+        <div class="sec-desc">Preciso saber como te chamar e como entrar em contato depois.</div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Seu nome <span class="req">*</span></label>
+          <input type="text" id="nome" placeholder="Maria Silva" autocomplete="name">
+        </div>
+        <div class="fg">
+          <label class="fl">Nome da empresa / marca</label>
+          <input type="text" id="empresa" placeholder="Studio Bloom (ou deixe em branco)">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">E-mail <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="maria@email.com" autocomplete="email">
+        </div>
+        <div class="fg">
+          <label class="fl">WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="whatsapp" placeholder="(11) 99999-9999" autocomplete="tel">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Instagram (se tiver)</label>
+          <input type="text" id="instagram" placeholder="@seuarroba">
+        </div>
+        <div class="fg">
+          <label class="fl">Site atual (se tiver)</label>
+          <input type="url" id="site" placeholder="https://seusite.com.br">
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 2 — O NEGÓCIO ═══ -->
+    <div class="sec" data-s="2">
+      <div class="sec-header">
+        <div class="sec-num">2</div>
+        <div class="sec-title">Sobre o seu negócio</div>
+        <div class="sec-desc">Quero entender o que você faz antes de falar sobre marketing.</div>
+      </div>
+
+      <div class="hint">
+        <span class="hint-ico">💡</span>
+        <span>Não precisa ser perfeito — escreva como se estivesse me explicando no WhatsApp. Isso me ajuda muito mais do que texto formal.</span>
+      </div>
+
+      <div class="fg">
+        <label class="fl">O que você faz? Me conta em 1-2 frases. <span class="req">*</span></label>
+        <textarea id="negocio_desc" placeholder="Ex: Sou nutricionista e atendo mulheres que querem emagrecer sem dieta restritiva. Faço consultas online e presenciais em São Paulo." style="min-height:90px" oninput="charCount(this,'cc_neg',200)"></textarea>
+        <div class="char-counter" id="cc_neg">0 / 200 caracteres</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Há quanto tempo esse negócio existe?</label>
+        <div class="opt-grid">
+          <div class="opt-item"><input type="radio" name="tempo" id="tm1" value="Estou começando agora"><label class="opt-lbl" for="tm1"><span class="opt-ico">🌱</span>Estou começando</label></div>
+          <div class="opt-item"><input type="radio" name="tempo" id="tm2" value="Menos de 1 ano"><label class="opt-lbl" for="tm2"><span class="opt-ico">📅</span>Menos de 1 ano</label></div>
+          <div class="opt-item"><input type="radio" name="tempo" id="tm3" value="1 a 3 anos"><label class="opt-lbl" for="tm3"><span class="opt-ico">🏃</span>1 a 3 anos</label></div>
+          <div class="opt-item"><input type="radio" name="tempo" id="tm4" value="Mais de 3 anos"><label class="opt-lbl" for="tm4"><span class="opt-ico">🏆</span>Mais de 3 anos</label></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Qual é o seu modelo de venda principal?</label>
+        <div class="opt-grid wide">
+          <div class="opt-item"><input type="radio" name="modelo" id="mv1" value="Atendimento / serviço presencial"><label class="opt-lbl" for="mv1"><span class="opt-ico">🏢</span>Atendimento presencial</label></div>
+          <div class="opt-item"><input type="radio" name="modelo" id="mv2" value="Serviço online (consultas, aulas, mentorias)"><label class="opt-lbl" for="mv2"><span class="opt-ico">💻</span>Serviço online</label></div>
+          <div class="opt-item"><input type="radio" name="modelo" id="mv3" value="Loja física / produtos"><label class="opt-lbl" for="mv3"><span class="opt-ico">🛍️</span>Loja / produtos</label></div>
+          <div class="opt-item"><input type="radio" name="modelo" id="mv4" value="E-commerce / loja online"><label class="opt-lbl" for="mv4"><span class="opt-ico">🛒</span>E-commerce</label></div>
+          <div class="opt-item"><input type="radio" name="modelo" id="mv5" value="Combinação de presencial e online"><label class="opt-lbl" for="mv5"><span class="opt-ico">🔄</span>Presencial + online</label></div>
+          <div class="opt-item"><input type="radio" name="modelo" id="mv6" value="Ainda estou definindo"><label class="opt-lbl" for="mv6"><span class="opt-ico">🤔</span>Ainda definindo</label></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Qual é o ticket médio do seu produto / serviço? (R$)</label>
+        <select id="ticket">
+          <option value="">Selecione uma faixa...</option>
+          <option>Até R$ 100</option>
+          <option>R$ 100 a R$ 500</option>
+          <option>R$ 500 a R$ 1.500</option>
+          <option>R$ 1.500 a R$ 5.000</option>
+          <option>Acima de R$ 5.000</option>
+          <option>Varia muito, depende do projeto</option>
+          <option>Prefiro não informar</option>
+        </select>
+        <p class="field-hint">Ticket médio = preço médio que seu cliente paga. Serve só pra eu entender o contexto, sem julgamento.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 3 — O CLIENTE IDEAL ═══ -->
+    <div class="sec" data-s="3">
+      <div class="sec-header">
+        <div class="sec-num">3</div>
+        <div class="sec-title">Quem é o seu cliente ideal?</div>
+        <div class="sec-desc">Quanto mais específico você for aqui, mais direcionada fica toda a estratégia.</div>
+      </div>
+
+      <div class="hint">
+        <span class="hint-ico">🎯</span>
+        <span>Tente descrever uma pessoa real, não um grupo genérico. "Mulheres de 30 anos" é diferente de "mães que trabalham, moram em cidade grande e não têm tempo para academia".</span>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Descreva o seu cliente ideal <span class="req">*</span></label>
+        <textarea id="cliente_ideal" placeholder="Ex: Homens de 35 a 50 anos, donos de pequenas empresas, que estão faturando mas sentindo que estão perdendo tempo em tarefas que poderiam ser automatizadas. Geralmente não têm equipe de TI e buscam soluções práticas." style="min-height:110px" oninput="charCount(this,'cc_cli',300)"></textarea>
+        <div class="char-counter" id="cc_cli">0 / 300 caracteres</div>
+      </div>
+
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Faixa etária principal</label>
+          <select id="faixa_etaria">
+            <option value="">Selecione...</option>
+            <option>Menos de 18 anos</option>
+            <option>18 a 25 anos</option>
+            <option>25 a 35 anos</option>
+            <option>35 a 50 anos</option>
+            <option>50 a 65 anos</option>
+            <option>65+ anos</option>
+            <option>Varia muito</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Gênero predominante</label>
+          <select id="genero">
+            <option value="">Selecione...</option>
+            <option>Majoritariamente feminino</option>
+            <option>Majoritariamente masculino</option>
+            <option>Equilibrado / diverso</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Qual é a maior dor / problema do seu cliente que você resolve?</label>
+        <textarea id="dor_cliente" placeholder="Ex: Eles ficam horas fazendo planilhas no Excel, cometem erros e perdem dinheiro por falta de controle financeiro." style="min-height:90px"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">O que seu cliente ganha ao trabalhar com você?</label>
+        <textarea id="resultado_cliente" placeholder="Ex: Tempo de volta, menos estresse e uma visão clara do que está acontecendo com o negócio."></textarea>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 4 — PRESENÇA DIGITAL ═══ -->
+    <div class="sec" data-s="4">
+      <div class="sec-header">
+        <div class="sec-num">4</div>
+        <div class="sec-title">Onde você está hoje na internet?</div>
+        <div class="sec-desc">Vou entender o ponto de partida antes de sugerir qualquer coisa.</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Quais canais você usa hoje? (pode marcar vários)</label>
+        <div class="check-group" id="canais-list">
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="Instagram"><span class="check-label">Instagram<span class="check-sublabel">Posts, Stories, Reels</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="TikTok"><span class="check-label">TikTok<span class="check-sublabel">Vídeos curtos</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="Facebook"><span class="check-label">Facebook<span class="check-sublabel">Página, grupos, marketplace</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="LinkedIn"><span class="check-label">LinkedIn<span class="check-sublabel">Rede profissional / B2B</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="YouTube"><span class="check-label">YouTube<span class="check-sublabel">Vídeos longos</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="WhatsApp / Grupo"><span class="check-label">WhatsApp / Grupos<span class="check-sublabel">Listas de transmissão, comunidades</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="Site próprio"><span class="check-label">Site próprio<span class="check-sublabel">Tenho um site no ar</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="E-mail marketing"><span class="check-label">E-mail marketing<span class="check-sublabel">Newsletter, lista de e-mails</span></span></label>
+          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="canal" value="Não uso nenhum ainda"><span class="check-label">Não uso nenhum ainda<span class="check-sublabel">Vou começar do zero</span></span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Você já investe em anúncios pagos? (Google Ads, Meta Ads etc.)</label>
+        <div class="opt-grid">
+          <div class="opt-item"><input type="radio" name="anuncios" id="an1" value="Sim, já rodo anúncios"><label class="opt-lbl" for="an1"><span class="opt-ico">✅</span>Sim, já rodo</label></div>
+          <div class="opt-item"><input type="radio" name="anuncios" id="an2" value="Já tentei mas parei"><label class="opt-lbl" for="an2"><span class="opt-ico">⏸️</span>Já tentei, parei</label></div>
+          <div class="opt-item"><input type="radio" name="anuncios" id="an3" value="Nunca fiz, quero começar"><label class="opt-lbl" for="an3"><span class="opt-ico">🚀</span>Nunca fiz</label></div>
+          <div class="opt-item"><input type="radio" name="anuncios" id="an4" value="Não sei se preciso"><label class="opt-lbl" for="an4"><span class="opt-ico">🤷</span>Não sei se preciso</label></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Como seus clientes te encontram hoje?</label>
+        <textarea id="como_encontra" placeholder="Ex: Quase todos vêm por indicação de amigos. Algumas pessoas me acham pelo Instagram. Raramente pelo Google." style="min-height:90px"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">O que você acha que está faltando na sua presença online?</label>
+        <textarea id="falta_presenca" placeholder="Ex: Minha frequência de posts é irregular, não sei o que postar, meu perfil não passa a imagem que quero..."></textarea>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 5 — O PROJETO ═══ -->
+    <div class="sec" data-s="5">
+      <div class="sec-header">
+        <div class="sec-num">5</div>
+        <div class="sec-title">O que você quer contratar?</div>
+        <div class="sec-desc">Me diz o que está buscando — e não precisa ter certeza absoluta, podemos definir juntos.</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Qual serviço você está procurando? <span class="req">*</span></label>
+        <div class="opt-grid wide" id="servico-grid">
+          <div class="opt-item"><input type="radio" name="servico" id="sv1" value="Social media — gestão das redes sociais"><label class="opt-lbl" for="sv1"><span class="opt-ico">📱</span>Gestão de redes sociais<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Posts, Stories, Reels</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv2" value="Tráfego pago — anúncios no Meta ou Google"><label class="opt-lbl" for="sv2"><span class="opt-ico">🎯</span>Anúncios pagos<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Meta Ads, Google Ads</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv3" value="Identidade visual — logo e branding"><label class="opt-lbl" for="sv3"><span class="opt-ico">🎨</span>Identidade visual<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Logo, cores, fonte</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv4" value="Landing page — página de captação ou vendas"><label class="opt-lbl" for="sv4"><span class="opt-ico">🌐</span>Landing page<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Página de vendas</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv5" value="Automação — integrar ferramentas e processos"><label class="opt-lbl" for="sv5"><span class="opt-ico">⚡</span>Automação<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Conectar ferramentas</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv6" value="Estratégia completa — não sei por onde começar"><label class="opt-lbl" for="sv6"><span class="opt-ico">🧭</span>Estratégia completa<span style="font-size:10px;color:var(--gray);display:block;margin-top:3px">Me orienta!</span></label></div>
+          <div class="opt-item"><input type="radio" name="servico" id="sv7" value="Outro"><label class="opt-lbl" for="sv7"><span class="opt-ico">💬</span>Outro</label></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Qual é o principal resultado que você espera com esse projeto?</label>
+        <textarea id="resultado_esperado" placeholder="Ex: Quero começar a vender pelo Instagram sem depender só de indicação. Se eu conseguir 5 novos clientes por mês, já seria ótimo." style="min-height:100px"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Você tem um prazo em mente?</label>
+        <div class="opt-grid">
+          <div class="opt-item"><input type="radio" name="prazo" id="pr1" value="Preciso urgente (essa semana)"><label class="opt-lbl" for="pr1"><span class="opt-ico">🔥</span>Urgente</label></div>
+          <div class="opt-item"><input type="radio" name="prazo" id="pr2" value="Nas próximas 2 semanas"><label class="opt-lbl" for="pr2"><span class="opt-ico">📆</span>2 semanas</label></div>
+          <div class="opt-item"><input type="radio" name="prazo" id="pr3" value="Esse mês"><label class="opt-lbl" for="pr3"><span class="opt-ico">🗓️</span>Esse mês</label></div>
+          <div class="opt-item"><input type="radio" name="prazo" id="pr4" value="Sem pressa, quero fazer certo"><label class="opt-lbl" for="pr4"><span class="opt-ico">🌿</span>Sem pressa</label></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Tem algum orçamento em mente? (mensal ou por projeto)</label>
+        <select id="budget">
+          <option value="">Prefiro não informar agora</option>
+          <option>Até R$ 500/mês</option>
+          <option>R$ 500 a R$ 1.500/mês</option>
+          <option>R$ 1.500 a R$ 3.000/mês</option>
+          <option>R$ 3.000 a R$ 6.000/mês</option>
+          <option>Acima de R$ 6.000/mês</option>
+          <option>Projeto único — valor fixo a combinar</option>
+        </select>
+        <p class="field-hint">Sem compromisso — serve pra eu entender o que é viável sugerir.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 6 — PERSONALIDADE DA MARCA ═══ -->
+    <div class="sec" data-s="6">
+      <div class="sec-header">
+        <div class="sec-num">6</div>
+        <div class="sec-title">A personalidade da sua marca</div>
+        <div class="sec-desc">Mesmo que você não tenha uma identidade visual definida, todo negócio tem uma personalidade. Vamos descobrir a sua.</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Como você quer que as pessoas se sintam quando interagem com a sua marca?</label>
+        <textarea id="sentimento_marca" placeholder="Ex: Quero que sintam que estão falando com alguém de confiança, que entende do assunto mas não é arrogante. Algo acolhedor, mas profissional." style="min-height:90px"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Escolha as palavras que mais combinam com a sua marca (até 3)</label>
+        <div class="opt-grid wide" id="palavras-grid">
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Profissional"><label class="opt-lbl" for="pw1"><span class="opt-ico">🤝</span>Profissional</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Acolhedor"><label class="opt-lbl" for="pw2"><span class="opt-ico">🌿</span>Acolhedor</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Moderno"><label class="opt-lbl" for="pw3"><span class="opt-ico">✦</span>Moderno</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Sofisticado"><label class="opt-lbl" for="pw4"><span class="opt-ico">💎</span>Sofisticado</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Descontraído"><label class="opt-lbl" for="pw5"><span class="opt-ico">😄</span>Descontraído</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Confiável"><label class="opt-lbl" for="pw6"><span class="opt-ico">🔒</span>Confiável</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Ousado"><label class="opt-lbl" for="pw7"><span class="opt-ico">🔥</span>Ousado</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Acessível"><label class="opt-lbl" for="pw8"><span class="opt-ico">🤗</span>Acessível</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Técnico"><label class="opt-lbl" for="pw9"><span class="opt-ico">📊</span>Técnico</label></div>
+          <div class="opt-item"><input type="checkbox" name="palavra" value="Criativo"><label class="opt-lbl" for="pw10"><span class="opt-ico">🎨</span>Criativo</label></div>
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <div class="fg">
+        <label class="fl">Alguma marca que você admira (não precisa ser do mesmo segmento)?</label>
+        <input type="text" id="marcas_admira" placeholder="Ex: Apple pelo minimalismo, Nubank pela comunicação clara, Starbucks pelo ambiente...">
+        <p class="field-hint">Pode ser uma marca nacional, internacional, do seu setor ou não. O que importa é o que você admira nelas.</p>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Tem algum concorrente direto que você acompanha?</label>
+        <textarea id="concorrentes" placeholder="Ex: Acompanho o perfil @tal e sinto que eles atraem mais clientes mesmo sendo mais caros. Não entendo o porquê." style="min-height:80px"></textarea>
+        <p class="field-hint">Pode ser Instagram, site, nome da empresa. Isso fica só entre a gente.</p>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 7 — IDENTIDADE VISUAL ═══ -->
+    <div class="sec" data-s="7">
+      <div class="sec-header">
+        <div class="sec-num">7</div>
+        <div class="sec-title">Identidade visual</div>
+        <div class="sec-desc">Vou entender o que já existe antes de sugerir qualquer coisa visual.</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Você já tem uma identidade visual? <span class="req">*</span></label>
+        <div class="opt-grid wide" id="idv-grid">
+          <div class="opt-item">
+            <input type="radio" name="tem_idv" id="idv1" value="Sim, tenho identidade visual" onchange="updIdv()">
+            <label class="opt-lbl" for="idv1"><span class="opt-ico">✅</span>Sim, tenho</label>
+          </div>
+          <div class="opt-item">
+            <input type="radio" name="tem_idv" id="idv2" value="Não tenho, vou precisar criar" onchange="updIdv()">
+            <label class="opt-lbl" for="idv2"><span class="opt-ico">🌱</span>Não tenho ainda</label>
+          </div>
+          <div class="opt-item">
+            <input type="radio" name="tem_idv" id="idv3" value="Não sei se o que tenho é suficiente" onchange="updIdv()">
+            <label class="opt-lbl" for="idv3"><span class="opt-ico">🤔</span>Não sei se preciso</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="cond" id="blk_idv_sim">
+        <hr class="div">
+        <div class="hint">
+          <span class="hint-ico">🎨</span>
+          <span>Ótimo! Me conta o que você tem em mãos. Isso ajuda a saber se precisa de alguma atualização ou se já está tudo pronto pra usar.</span>
+        </div>
+        <div class="fg">
+          <label class="fl">O que você já tem? (pode marcar vários)</label>
+          <div class="check-group">
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Logo / logotipo">
+              <span class="check-label">Logo / logotipo<span class="check-sublabel">Arquivo com o símbolo ou nome da marca</span></span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Paleta de cores definida">
+              <span class="check-label">Paleta de cores definida<span class="check-sublabel">Cores oficiais da marca com códigos</span></span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Tipografia / fontes definidas">
+              <span class="check-label">Tipografia / fontes definidas<span class="check-sublabel">Fontes que a marca usa</span></span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Manual de marca / brandbook">
+              <span class="check-label">Manual de marca (brandbook)<span class="check-sublabel">Documento com as regras de uso da identidade</span></span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Arquivos abertos / editáveis (AI, PSD, Figma)">
+              <span class="check-label">Arquivos abertos / editáveis<span class="check-sublabel">Tenho os arquivos em AI, PSD ou Figma</span></span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" name="idv_item" value="Só tenho PNG ou JPG (sem arquivo editável)">
+              <span class="check-label">Só tenho PNG / JPG<span class="check-sublabel">Não tenho o arquivo original</span></span>
+            </label>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Você está satisfeito com a identidade visual atual?</label>
+          <div class="opt-grid">
+            <div class="opt-item"><input type="radio" name="satisf_idv" id="si1" value="Sim, gosto e quero manter"><label class="opt-lbl" for="si1"><span class="opt-ico">❤️</span>Sim, quero manter</label></div>
+            <div class="opt-item"><input type="radio" name="satisf_idv" id="si2" value="Mais ou menos, poderia melhorar"><label class="opt-lbl" for="si2"><span class="opt-ico">😐</span>Mais ou menos</label></div>
+            <div class="opt-item"><input type="radio" name="satisf_idv" id="si3" value="Não gosto, quero renovar"><label class="opt-lbl" for="si3"><span class="opt-ico">🔄</span>Quero renovar</label></div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Onde posso ver a sua identidade visual hoje? (link do Drive, site, Instagram...)</label>
+          <input type="text" id="idv_link" placeholder="Ex: https://drive.google.com/... ou @instagram ou seusite.com">
+          <p class="field-hint">Não é obrigatório, mas facilita muito. Pode mandar depois pelo WhatsApp também.</p>
+        </div>
+        <div class="fg">
+          <label class="fl">Alguma observação sobre a identidade visual?</label>
+          <textarea id="idv_obs" placeholder="Ex: Minha logo foi feita por um amigo, não tenho os arquivos originais. As cores são roxo e dourado. Quero modernizar sem perder a essência."></textarea>
+        </div>
+      </div>
+
+      <div class="cond" id="blk_idv_nao">
+        <hr class="div">
+        <div class="hint">
+          <span class="hint-ico">✨</span>
+          <span>Tudo bem — criar do zero é sempre mais gostoso! As informações que você já preencheu sobre a personalidade da marca vão ajudar muito aqui.</span>
+        </div>
+        <div class="fg">
+          <label class="fl">Tem alguma referência visual que você admira? (marca, Instagram, Pinterest...)</label>
+          <textarea id="idv_refs" placeholder="Ex: Gosto muito da identidade da Reserva — cores neutras, tipografia limpa. Quero algo parecido mas com um toque mais feminino."></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Tem alguma cor que você imagina pra marca?</label>
+          <input type="text" id="idv_cores" placeholder="Ex: Tons de verde e bege. Nada muito berrante. Quero transmitir naturalidade.">
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEC 8 — REVISÃO ═══ -->
+    <div class="sec" data-s="8">
+      <div class="sec-header">
+        <div class="sec-num">8</div>
+        <div class="sec-title">Revisão final</div>
+        <div class="sec-desc">Confere se está tudo certo antes de enviar.</div>
+      </div>
+      <div id="review"></div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success" id="succ">
+      <span class="confetti">🎉</span>
+      <div class="suc-ring">✓</div>
+      <h2>Briefing recebido!</h2>
+      <p>Obrigada por preencher com tanto cuidado. Vou analisar tudo e te chamo no WhatsApp em breve. Mal posso esperar pra trabalhar no seu projeto. 🤍</p>
+    </div>
+
+    <div id="errMsg" class="err-msg">Ocorreu um erro ao enviar. Por favor, tente novamente ou me chame no WhatsApp.</div>
+
+    <!-- NAV -->
+    <div class="nav" id="nav">
+      <button class="btn-back hidden" id="btnBack" onclick="goBack()">← Voltar</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">Próximo →</button>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /page -->
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ─── CONFIGURAÇÕES — edite aqui ──────────────────────────────
+const EMAILJS_PUBLIC_KEY  = 'd0oqdGI83IZo_d634';
+const EMAILJS_SERVICE_ID  = 'service_2ixk7a7';
+const EMAILJS_TEMPLATE_ID = 'template_yuu6nno';
+const MAKE_WEBHOOK_URL    = 'https://hook.us2.make.com/wcxsjv4qen12hz7qctxe1v1ltvlsw6kf';
+const WORKER_URL          = 'https://old-darkness-641a.v-assad-creative.workers.dev/lead';
+// ─────────────────────────────────────────────────────────────
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+const TOTAL = 8;
+let cur = 1;
+const stepLabels = [
+  'Seus dados','Sobre o negócio','Seu cliente','Presença digital',
+  'O projeto','Personalidade','Identidade visual','Revisão'
+];
+
+// ── IDV CONDITIONAL ──────────────────────────────────────────
+function updIdv(){
+  const v = document.querySelector('input[name="tem_idv"]:checked')?.value || '';
+  const hasSim = v === 'Sim, tenho identidade visual';
+  const hasNao = v === 'Não tenho, vou precisar criar' || v === 'Não sei se o que tenho é suficiente';
+  document.getElementById('blk_idv_sim').classList.toggle('vis', hasSim);
+  document.getElementById('blk_idv_nao').classList.toggle('vis', hasNao);
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────
+function render(){
+  const pips = document.getElementById('pips');
+  pips.innerHTML = '';
+  for(let i = 1; i <= TOTAL; i++){
+    const d = document.createElement('div');
+    d.className = 'pip' + (i < cur ? ' done' : i === cur ? ' active' : '');
+    pips.appendChild(d);
+  }
+  document.getElementById('stepLabel').textContent = stepLabels[cur - 1];
+  document.getElementById('stepCount').textContent = 'Etapa ' + cur + ' de ' + TOTAL;
+  document.getElementById('btnBack').classList.toggle('hidden', cur === 1);
+  const bn = document.getElementById('btnNext');
+  if(cur === TOTAL){
+    bn.innerHTML = 'Enviar briefing <span class="spin" id="spin" style="display:none"></span>';
+    bn.onclick = submitForm;
+  } else {
+    bn.innerHTML = 'Próximo →';
+    bn.onclick = goNext;
+  }
+}
+
+function show(s){
+  document.querySelectorAll('.sec').forEach(x => x.classList.remove('active'));
+  document.querySelector('[data-s="' + s + '"]').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  render();
+}
+
+function goNext(){
+  if(!validate(cur)) return;
+  if(cur === TOTAL - 1) buildReview();
+  cur++;
+  show(cur);
+}
+function goBack(){ cur--; show(cur); }
+
+// ── VALIDATE ──────────────────────────────────────────────────
+function validate(s){
+  if(s === 1){
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const wpp   = document.getElementById('whatsapp').value.trim();
+    if(!nome || !email || !wpp){
+      toast('Preencha seu nome, e-mail e WhatsApp para continuar.'); return false;
+    }
+    if(!/\S+@\S+\.\S+/.test(email)){
+      toast('Digite um e-mail válido.'); return false;
+    }
+  }
+  if(s === 2 && !document.getElementById('negocio_desc').value.trim()){
+    toast('Conta um pouquinho sobre o seu negócio para continuar.'); return false;
+  }
+  if(s === 5 && !document.querySelector('input[name="servico"]:checked')){
+    toast('Selecione o serviço que está buscando.'); return false;
+  }
+  return true;
+}
+
+function toast(msg){
+  const el = document.getElementById('errMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.classList.add('vis');
+  setTimeout(() => { el.classList.remove('vis'); el.style.display = 'none'; }, 4000);
+}
+
+// ── CHECKBOX CHECK STYLE ──────────────────────────────────────
+function toggleCheck(lbl){
+  const cb = lbl.querySelector('input[type=checkbox]');
+  setTimeout(() => lbl.classList.toggle('checked', cb.checked), 0);
+}
+
+// ── CHAR COUNTER ──────────────────────────────────────────────
+function charCount(el, targetId, max){
+  const n = el.value.length;
+  const counter = document.getElementById(targetId);
+  counter.textContent = n + ' / ' + max + ' caracteres';
+  counter.classList.toggle('warn', n > max * 0.9);
+}
+
+// ── COLLECT ALL DATA ─────────────────────────────────────────
+function chk(name){ return [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(e => e.value).join(', '); }
+function rad(name){ return document.querySelector('input[name="' + name + '"]:checked')?.value || ''; }
+function val(id)  { return document.getElementById(id)?.value?.trim() || ''; }
+
+function collect(){
+  return {
+    // sec 1
+    nome:               val('nome'),
+    empresa:            val('empresa'),
+    email:              val('email'),
+    whatsapp:           val('whatsapp'),
+    instagram:          val('instagram'),
+    site:               val('site'),
+    // sec 2
+    negocio_desc:       val('negocio_desc'),
+    tempo_negocio:      rad('tempo'),
+    modelo_venda:       rad('modelo'),
+    ticket_medio:       val('ticket'),
+    // sec 3
+    cliente_ideal:      val('cliente_ideal'),
+    faixa_etaria:       val('faixa_etaria'),
+    genero_publico:     val('genero'),
+    dor_cliente:        val('dor_cliente'),
+    resultado_cliente:  val('resultado_cliente'),
+    // sec 4
+    canais_ativos:      chk('canal'),
+    ja_tem_anuncios:    rad('anuncios'),
+    como_encontra:      val('como_encontra'),
+    falta_presenca:     val('falta_presenca'),
+    // sec 5
+    servico:            rad('servico'),
+    resultado_esperado: val('resultado_esperado'),
+    prazo:              rad('prazo'),
+    budget:             val('budget'),
+    // sec 6
+    sentimento_marca:   val('sentimento_marca'),
+    palavras_marca:     chk('palavra'),
+    marcas_admira:      val('marcas_admira'),
+    concorrentes:       val('concorrentes'),
+    // sec 7
+    tem_idv:            rad('tem_idv'),
+    idv_itens:          chk('idv_item'),
+    satisf_idv:         rad('satisf_idv'),
+    idv_link:           val('idv_link'),
+    idv_obs:            val('idv_obs'),
+    idv_refs:           val('idv_refs'),
+    idv_cores:          val('idv_cores'),
+    // meta
+    formulario:         'briefing_completo',
+    data_envio:         new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}),
+  };
+}
+
+// ── LABELS PT ─────────────────────────────────────────────────
+const labels = {
+  nome:'Nome', empresa:'Empresa', email:'E-mail', whatsapp:'WhatsApp',
+  instagram:'Instagram', site:'Site',
+  negocio_desc:'O que faz', tempo_negocio:'Tempo de negócio',
+  modelo_venda:'Modelo de venda', ticket_medio:'Ticket médio',
+  cliente_ideal:'Cliente ideal', faixa_etaria:'Faixa etária',
+  genero_publico:'Gênero predominante', dor_cliente:'Dor do cliente',
+  resultado_cliente:'Resultado que entrega',
+  canais_ativos:'Canais ativos', ja_tem_anuncios:'Anúncios pagos',
+  como_encontra:'Como te encontram', falta_presenca:'O que falta na presença',
+  servico:'Serviço buscado', resultado_esperado:'Resultado esperado',
+  prazo:'Prazo', budget:'Orçamento',
+  sentimento_marca:'Sentimento da marca', palavras_marca:'Palavras da marca',
+  marcas_admira:'Marcas que admira', concorrentes:'Concorrentes',
+  tem_idv:'Tem identidade visual', idv_itens:'O que tem', satisf_idv:'Satisfação com IDV',
+  idv_link:'Link da identidade', idv_obs:'Observações IDV',
+  idv_refs:'Referências visuais', idv_cores:'Cores imagina',
+  formulario:'Formulário', data_envio:'Data/hora',
+};
+
+const sections = [
+  { title:'Dados de contato', keys:['nome','empresa','email','whatsapp','instagram','site'] },
+  { title:'O negócio', keys:['negocio_desc','tempo_negocio','modelo_venda','ticket_medio'] },
+  { title:'Cliente ideal', keys:['cliente_ideal','faixa_etaria','genero_publico','dor_cliente','resultado_cliente'] },
+  { title:'Presença digital', keys:['canais_ativos','ja_tem_anuncios','como_encontra','falta_presenca'] },
+  { title:'O projeto', keys:['servico','resultado_esperado','prazo','budget'] },
+  { title:'Personalidade da marca', keys:['sentimento_marca','palavras_marca','marcas_admira','concorrentes'] },
+  { title:'Identidade visual', keys:['tem_idv','idv_itens','satisf_idv','idv_link','idv_obs','idv_refs','idv_cores'] },
+];
+
+function buildReview(){
+  const data = collect();
+  let html = '';
+  sections.forEach(sec => {
+    const rows = sec.keys.filter(k => data[k]).map(k =>
+      `<div class="review-item"><span class="review-key">${labels[k]||k}</span><span class="review-val">${data[k]}</span></div>`
+    ).join('');
+    if(rows){
+      html += `<div class="review-section"><div class="review-section-title">${sec.title}</div>${rows}</div>`;
+    }
+  });
+  document.getElementById('review').innerHTML = html || '<p style="color:var(--gray);font-size:14px">Nada preenchido ainda.</p>';
+}
+
+function buildEmailBody(data){
+  return sections.flatMap(s => s.keys.filter(k => data[k]).map(k => `${labels[k]}: ${data[k]}`)).join('\n') +
+    '\n\nFormulário: ' + data.formulario + '\nEnviado em: ' + data.data_envio;
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────
+async function submitForm(){
+  const btn = document.getElementById('btnNext');
+  const sp  = document.getElementById('spin');
+  btn.disabled = true;
+  if(sp) sp.style.display = 'inline-block';
+
+  const data = collect();
+
+  try {
+    // 1. Worker → Firebase + IA
+    fetch(WORKER_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data),
+    }).catch(e => console.warn('Worker:', e));
+
+    // 2. Make webhook
+    fetch(MAKE_WEBHOOK_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data),
+    }).catch(e => console.warn('Make:', e));
+
+    // 3. EmailJS
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      ...data,
+      message: buildEmailBody(data),
+    });
+
+    // SUCCESS
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+    document.getElementById('succ').classList.add('active');
+    document.getElementById('nav').style.display = 'none';
+    document.querySelector('.progress-wrap').style.display = 'none';
+
+  } catch(e){
+    console.error('Erro ao enviar:', e);
+    toast('Ocorreu um erro ao enviar. Por favor, tente novamente ou me chame no WhatsApp.');
+    btn.disabled = false;
+    if(sp) sp.style.display = 'none';
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
