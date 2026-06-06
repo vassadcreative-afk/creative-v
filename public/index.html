@@ -300,6 +300,25 @@ textarea{resize:vertical;min-height:72px}
 .bn-btn.active .bn-lbl{color:var(--purple)}
 .bn-btn.active .bn-icon{transform:scale(1.12);color:var(--purple)}
 
+.btn-form-link{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.75);font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  transition:all .18s;white-space:nowrap;flex-shrink:0;
+}
+.btn-form-link:hover{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)}
+@media(max-width:639px){.btn-form-link{display:none}}
+
+/* MODAL LINK FORMULÁRIO */
+.form-link-modal{background:var(--white);width:100%;max-width:460px;border-radius:24px 24px 0 0;padding:24px 24px 32px;box-shadow:0 -8px 40px rgba(26,22,40,.2)}
+.form-link-url-box{display:flex;gap:8px;align-items:center;background:var(--lav-light);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:16px}
+.form-link-url-text{flex:1;font-size:13px;color:var(--dark);font-weight:500;word-break:break-all;line-height:1.5;font-family:'Space Grotesk',sans-serif;background:none;border:none;outline:none;cursor:text;resize:none;min-height:36px}
+.copy-btn{background:var(--grad);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.copy-btn:hover{box-shadow:0 3px 12px rgba(120,111,212,.4)}
+.copy-btn.copied{background:linear-gradient(135deg,#70C4A8,#5AB090)}
+.form-link-tip{background:rgba(120,111,212,.07);border:1px solid rgba(120,111,212,.15);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--purple-dark);line-height:1.6;display:flex;gap:9px}
+
 .fab{display:none;position:fixed;bottom:calc(var(--bottom-h) + 14px);right:18px;width:52px;height:52px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;color:#fff;box-shadow:0 4px 20px rgba(120,111,212,.4);z-index:199;align-items:center;justify-content:center;transition:transform .15s;line-height:1}
 .fab:hover{transform:scale(1.08)}
 
@@ -839,6 +858,10 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
+  <button class="btn-form-link" onclick="openFormLinkModal()" title="Link do formulário de briefing">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    Link formulário
+  </button>
   <button class="btn-new" onclick="openNewTask()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova tarefa
@@ -4151,5 +4174,50 @@ window.setView=function(v,btn){if(typeof _ncOSV==='function')_ncOSV(v,btn);if(v=
 
 </script>
 </div><!-- /app-root -->
+<!-- MODAL LINK FORMULÁRIO -->
+<div class="overlay" id="form-link-overlay" onclick="closeFormLinkModal(event)">
+  <div class="form-link-modal">
+    <span class="modal-handle"></span>
+    <div class="modal-title">🔗 Link do formulário de briefing</div>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:16px;line-height:1.6">Copie e envie esse link pro cliente preencher o briefing completo. O lead cai direto no seu painel em <strong>Novos</strong>.</p>
+    <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);display:block;margin-bottom:7px;text-transform:uppercase">URL do formulário</label>
+    <div class="form-link-url-box">
+      <textarea class="form-link-url-text" id="form-link-url" readonly rows="2"></textarea>
+      <button class="copy-btn" id="copy-btn" onclick="copyFormLink()">Copiar</button>
+    </div>
+    <div class="form-link-tip">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <span>Ao enviar o link pro cliente, ele vai ver <strong>apenas o formulário</strong> — sem acesso ao seu painel ou aos dados de outros clientes.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MODAL LINK FORMULÁRIO ─────────────────────────────────────
+const FORM_BASE_URL = window.location.origin + '/briefing_completo.html';
+
+function openFormLinkModal(){
+  document.getElementById('form-link-url').value = FORM_BASE_URL;
+  document.getElementById('copy-btn').textContent = 'Copiar';
+  document.getElementById('copy-btn').classList.remove('copied');
+  document.getElementById('form-link-overlay').classList.add('open');
+}
+function closeFormLinkModal(e){
+  if(!e||e.target===document.getElementById('form-link-overlay'))
+    document.getElementById('form-link-overlay').classList.remove('open');
+}
+function copyFormLink(){
+  const url = document.getElementById('form-link-url').value;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copiado!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copiar'; btn.classList.remove('copied'); }, 2500);
+  }).catch(()=>{
+    document.getElementById('form-link-url').select();
+    document.execCommand('copy');
+  });
+}
+</script>
 </body>
 </html>
