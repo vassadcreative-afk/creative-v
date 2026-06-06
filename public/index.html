@@ -1070,7 +1070,6 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
       </div>
       <div id="dv-gcal-invite" style="display:none;margin-top:2px"></div>
       <div id="dv-block-section" style="display:none;margin-top:2px"></div>
-      <div id="dv-criativos" style="display:none;margin-top:2px"></div>
       <!-- COMENTÁRIOS CHAT -->
       <div style="margin-top:14px">
         <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);margin-bottom:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px">
@@ -2677,7 +2676,6 @@ function switchToView(){
   document.getElementById('dv-notes').textContent=t.notes||'—';
   renderInviteBox(t);
   renderBlockSection(t);
-  renderCriativosSection(t);
   renderDetailComments(t);
 }
 
@@ -3771,135 +3769,6 @@ function ncSaveToFirebase(item){
   if(!_ncUid)return Promise.resolve();
   return setDoc(doc(db,'users',_ncUid,'pending_clients',item.id),item).catch(e=>console.error('NC:',e));
 }
-// ── CRIATIVOS — SEÇÃO NO DETALHE DA TASK ────────────────────────────
-const CRIATIVO_FORMATOS_VALIDOS=[
-  'Google Display_template01_300x250px',
-  'Google Display_template01_728x90px',
-  'Google Display_template01_160x600px',
-  'Google Display_template01_970x250px',
-  'Meta ads_template01_1080x1080px',
-  'Meta ads_template01_1080x1920px',
-  'Meta ads_template01_1200x628px',
-  'Insta_template01_1080x1080px',
-  'Insta_template01_1080x1350px',
-  'Insta_template01_1080x1920px',
-];
-
-function isCriativosTask(t){
-  const title=(t.title||'').toLowerCase();
-  return title.includes('criativo')||title.includes('creative');
-}
-
-function renderCriativosSection(t){
-  const sec=document.getElementById('dv-criativos');
-  if(!sec)return;
-  if(!isCriativosTask(t)){sec.style.display='none';return;}
-  sec.style.display='block';
-
-  const criativos=t.criativos||[];
-  const temCriativos=criativos.length>0;
-
-  const statusLabel={pendente:'Pendente',gerado:'✓ Gerado'};
-  const statusColor={pendente:'var(--orange)',gerado:'var(--green)'};
-
-  const listHTML=temCriativos
-    ?criativos.map((c,i)=>`
-      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--lav-light);border-radius:8px;margin-bottom:6px">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:11px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(c.campanha||'Campanha '+(i+1))}</div>
-          <div style="font-size:10px;color:var(--gray);margin-top:2px">${escHtml(c.formato||'')}</div>
-          <div style="font-size:10px;color:var(--dark);margin-top:3px;font-style:italic">"${escHtml(c.headline||'')}"</div>
-        </div>
-        <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:${statusColor[c.status]||'var(--gray)'}22;color:${statusColor[c.status]||'var(--gray)'};flex-shrink:0">${statusLabel[c.status]||c.status||'pendente'}</span>
-      </div>`).join('')
-    :`<div style="font-size:12px;color:var(--gray);font-style:italic;padding:10px 0">Nenhum criativo gerado ainda.</div>`;
-
-  sec.innerHTML=`
-    <div style="margin-top:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);text-transform:uppercase;display:flex;align-items:center;gap:5px">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          Criativos (${criativos.length})
-        </label>
-        <button id="btn-regen-criativos" onclick="regenerarCriativos(${t.id})"
-          style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;border:1.5px solid var(--purple);background:transparent;color:var(--purple);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:Space Grotesk,sans-serif">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          ${temCriativos?'Regenerar':'Gerar criativos'}
-        </button>
-      </div>
-      <div id="dv-criativos-list">${listHTML}</div>
-    </div>`;
-}
-
-window.regenerarCriativos=async function(taskId){
-  const t=S.tasks.find(x=>x.id===taskId);if(!t)return;
-  const c=S.clients.find(cl=>cl.id===t.clientId);
-  const btn=document.getElementById('btn-regen-criativos');
-  if(btn){btn.disabled=true;btn.textContent='Gerando...';}
-
-  // Monta prompt focado apenas nos criativos
-  const clientName=c?c.name:'Cliente';
-  const scope=c?c.scope:'';
-  const prompt=
-    'Voce e um Estrategista Senior de Marketing Digital.\n'+
-    'Gere criativos para o cliente abaixo.\n\n'+
-    'Cliente: '+clientName+'\n'+
-    'Escopo/Estrategia: '+(scope||t.notes||'nao informado')+'\n\n'+
-    'REGRA CRITICA: responda APENAS com um array JSON valido, sem texto antes ou depois.\n'+
-    'Os formatos disponiveis sao EXCLUSIVAMENTE:\n'+
-    CRIATIVO_FORMATOS_VALIDOS.map(f=>'  "'+f+'"').join(',\n')+'\n\n'+
-    'Gere entre 4 e 6 criativos cobrindo formatos variados (feed, stories, display).\n'+
-    'Para cada criativo use EXATAMENTE esta estrutura:\n'+
-    '{\n'+
-    '  "campanha": "Nome da campanha",\n'+
-    '  "variacao": "V1",\n'+
-    '  "formato": "<um dos formatos acima — copia exato>",\n'+
-    '  "headline": "Texto principal (max 8 palavras)",\n'+
-    '  "subheadline": "Texto de apoio (max 12 palavras)",\n'+
-    '  "cta_label": "Texto do botao (max 4 palavras)",\n'+
-    '  "bg_color": "<hex cor de fundo>",\n'+
-    '  "cta_color": "<hex cor do botao>",\n'+
-    '  "product_image": "",\n'+
-    '  "badge_texto": "",\n'+
-    '  "status": "pendente"\n'+
-    '}\n'+
-    'Adapte headline ao tamanho: pequenos (728x90, 300x250) = muito curto; quadrados = medio; verticais = elaborado.\n'+
-    'Responda SOMENTE com o array JSON, sem markdown, sem explicacao.';
-
-  try{
-    const resp=await fetch(NC_WORKER_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:[{role:'user',content:prompt}]})
-    });
-    if(!resp.ok)throw new Error('Worker '+resp.status);
-    const data=await resp.json();
-    const fullText=(data._full_text||data.content?.filter(b=>b.type==='text').map(b=>b.text).join('\n')||'').trim();
-
-    // Parse do JSON — aceita com ou sem markdown
-    const clean=fullText.replace(/```json|```/g,'').trim();
-    const m=clean.match(/\[[\s\S]*\]/);
-    if(!m)throw new Error('JSON nao encontrado na resposta');
-    const criativos=JSON.parse(m[0]);
-    if(!Array.isArray(criativos)||!criativos.length)throw new Error('Array vazio');
-
-    // Valida formatos — descarta inválidos silenciosamente
-    const valid=criativos.filter(cr=>CRIATIVO_FORMATOS_VALIDOS.includes(cr.formato));
-    if(!valid.length)throw new Error('Nenhum formato valido retornado');
-
-    t.criativos=valid;
-    setSyncStatus('loading');
-    await saveTaskDB(t);
-    renderCriativosSection(t);
-    const lbl=document.getElementById('fb-lbl');
-    if(lbl){lbl.innerHTML='✅ <strong>'+valid.length+' criativos</strong> gerados!';setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos na nuvem ✓';},4000);}
-  }catch(e){
-    console.error('regenerarCriativos erro:',e.message);
-    alert('Erro ao gerar criativos: '+e.message);
-    if(btn){btn.disabled=false;btn.textContent='Tentar novamente';}
-  }
-};
-
 function ncStartListener(){
   if(_ncUnsub)_ncUnsub();
   if(!_ncUid)return;
@@ -3949,38 +3818,84 @@ async function ncGerarEstrategia(item){
   const ig=b.instagram?b.instagram.replace('@',''):'';
   const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
 
+  // ── Monta contexto rico — compatível com ambos os formulários ──
+  const negocioCtx  = b.negocio_desc || b.negocio_frase || b.descricao_geral || 'nao informado';
+  const publicoCtx  = b.cliente_ideal || b.publico_alvo || 'nao informado';
+  const servicoCtx  = b.servico || b.tipo_projeto || 'nao informado';
+  const budgetCtx   = b.budget || 'nao informado';
+  const anunciosCtx = b.ja_tem_anuncios || b.anuncios || 'nao informado';
+  const tomCtx      = b.sentimento_marca || b.tom || 'nao informado';
+  const urgenciaCtx = b.prazo || b.urgencia || 'nao informado';
+  const idvNaoTem   = !b.tem_idv || b.tem_idv.startsWith('N') || (!b.tem_idv && !b.tem_identidade);
+  const idvStatus   = b.tem_idv
+    ? b.tem_idv + (b.idv_itens ? ' | Tem: ' + b.idv_itens : '') + (b.satisf_idv ? ' | Satisfacao: ' + b.satisf_idv : '')
+    : (b.tem_identidade ? 'Ja tem identidade visual' : 'Ainda nao tem');
+
   const prompt=
     'Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\n'+
     'Crie um diagnostico e estrategia BASEADOS EXCLUSIVAMENTE nas informacoes do briefing abaixo.\n'+
     'NAO invente dados, NAO suponha segmento sem base no briefing.\n\n'+
+
     '=== BRIEFING DO CLIENTE ===\n'+
+    '-- SOBRE O NEGOCIO --\n'+
     'Nome/Empresa: '+nome+'\n'+
+    'O que faz: '+negocioCtx+'\n'+
+    (b.tempo_negocio    ? 'Tempo de existencia: '+b.tempo_negocio+'\n' : '')+
+    (b.modelo_venda     ? 'Modelo de venda: '+b.modelo_venda+'\n' : '')+
+    (b.ticket_medio     ? 'Ticket medio: '+b.ticket_medio+'\n' : '')+
+
+    '\n-- CLIENTE IDEAL --\n'+
+    'Perfil: '+publicoCtx+'\n'+
+    (b.faixa_etaria     ? 'Faixa etaria: '+b.faixa_etaria+'\n' : '')+
+    (b.genero_publico   ? 'Genero predominante: '+b.genero_publico+'\n' : '')+
+    (b.dor_cliente      ? 'Principal dor que resolve: '+b.dor_cliente+'\n' : '')+
+    (b.resultado_cliente? 'Resultado que entrega ao cliente: '+b.resultado_cliente+'\n' : '')+
+
+    '\n-- PRESENCA DIGITAL ATUAL --\n'+
     'Instagram: '+(ig?('@'+ig):'nao informado')+'\n'+
     'Site: '+(b.site||'nao informado')+'\n'+
-    'Tipo de projeto: '+b.tipo_projeto+'\n'+
-    'Plataformas: '+(b.plataformas||'nao informado')+'\n'+
-    'Objetivo: '+(b.objetivo||b.descricao_geral||'nao informado')+'\n'+
-    'Publico-alvo: '+(b.publico_alvo||'nao informado')+'\n'+
-    'Budget mensal: '+(b.budget||'nao informado')+'\n'+
-    'Anuncios atuais: '+(b.anuncios||'nao informado')+'\n'+
-    'Frequencia desejada: '+(b.frequencia||'nao informado')+'\n'+
-    'Tom de comunicacao: '+(b.tom||'nao informado')+'\n'+
-    'Negocio em uma frase: '+(b.negocio_frase||'nao informado')+'\n'+
-    'Palavras da marca: '+(b.palavras_marca||'nao informado')+'\n'+
-    'Urgencia: '+(b.urgencia||'nao informado')+'\n'+
-    'Observacoes: '+(b.observacoes||'nenhuma')+'\n'+
-    'Identidade visual: '+(b.tem_identidade?'Ja tem':'Ainda nao tem')+'\n'+
+    (b.canais_ativos    ? 'Canais em uso hoje: '+b.canais_ativos+'\n' : '')+
+    'Anuncios pagos: '+anunciosCtx+'\n'+
+    (b.como_encontra    ? 'Como clientes te encontram: '+b.como_encontra+'\n' : '')+
+    (b.falta_presenca   ? 'O que sente que falta: '+b.falta_presenca+'\n' : '')+
+    (b.plataformas      ? 'Plataformas desejadas: '+b.plataformas+'\n' : '')+
+    (b.frequencia       ? 'Frequencia desejada: '+b.frequencia+'\n' : '')+
+
+    '\n-- O PROJETO --\n'+
+    'Servico contratado: '+servicoCtx+'\n'+
+    'Resultado esperado: '+(b.resultado_esperado||b.objetivo||'nao informado')+'\n'+
+    'Urgencia/prazo: '+urgenciaCtx+'\n'+
+    'Budget mensal: '+budgetCtx+'\n'+
+
+    '\n-- PERSONALIDADE DA MARCA --\n'+
+    'Tom e sentimento: '+tomCtx+'\n'+
+    (b.palavras_marca   ? 'Palavras da marca: '+b.palavras_marca+'\n' : '')+
+    (b.marcas_admira    ? 'Marcas que admira: '+b.marcas_admira+'\n' : '')+
+    (b.concorrentes     ? 'Concorrentes diretos: '+b.concorrentes+'\n' : '')+
+
+    '\n-- IDENTIDADE VISUAL --\n'+
+    'Status: '+idvStatus+'\n'+
+    (b.idv_link         ? 'Link da identidade: '+b.idv_link+'\n' : '')+
+    (b.idv_obs          ? 'Observacoes IDV: '+b.idv_obs+'\n' : '')+
+    (b.idv_refs||b.refs_branding ? 'Referencias visuais: '+(b.idv_refs||b.refs_branding)+'\n' : '')+
+    (b.idv_cores        ? 'Cores imaginadas: '+b.idv_cores+'\n' : '')+
+    (b.observacoes      ? '\nObservacoes gerais: '+b.observacoes+'\n' : '')+
     '===========================\n\n'+
+
     'PASSO 1 - DIAGNOSTICO:\n'+
     'Com base APENAS no briefing acima, gere diagnostico com:\n'+
-    '- Situacao atual estimada por canal (Instagram, Google, Site) — nota 1-10 baseada no que foi informado\n'+
-    '- Pontos fortes do negocio (baseado no briefing)\n'+
+    '- Situacao atual estimada por canal — nota 1-10 baseada no que foi informado\n'+
+    '- Pontos fortes do negocio\n'+
     '- Pontos fracos e oportunidades\n'+
-    '- Posicionamento atual vs ideal\n\n'+
+    '- Posicionamento atual vs ideal\n'+
+    '- Analise do cliente ideal: dores, desejos, onde busca solucao\n\n'+
+
     'PASSO 2 - ESTRATEGIA:\n'+
     'Framework: '+fw+'\n'+
-    'Gere estrategia completa: posicionamento, mix de canais, calendario 30 dias semana a semana, '+
-    'copies (3 headlines + 2 CTAs especificos para o negocio), KPIs, orcamento sugerido.\n\n'+
+    'Gere estrategia completa: posicionamento, mix de canais priorizados pelo perfil do cliente, '+
+    'calendario 30 dias semana a semana, copies (3 headlines + 2 CTAs especificos para o negocio e seu publico), '+
+    'KPIs relevantes para o modelo de venda, orcamento sugerido compativel com o budget informado.\n\n'+
+
     'PASSO 3 - TASKS:\n'+
     'Gere tasks especificas e acionaveis para este cliente.\n'+
     'Ao final da resposta, adicione exatamente:\n\n'+
@@ -3991,45 +3906,11 @@ async function ncGerarEstrategia(item){
     '    "status": "todo",\n'+
     '    "priority": "alta",\n'+
     '    "portalVisible": true,\n'+
-    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies — tudo que o executor precisa",\n'+
-    '    "criativos": []\n'+
+    '    "notes": "Descricao completa: o que fazer, quantidade, formatos, canais, copies — tudo que o executor precisa"\n'+
     '  }\n'+
     ']\n\n'+
-    'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.\n'+
-    (b.tem_identidade?'':'\nIncluir task de criacao de identidade visual.\n')+
-    '\nREGRA CRITICA PARA O CAMPO "criativos":\n'+
-    '- APENAS a task cujo title contenha "Geracao de criativos" ou "Criacao de criativos" deve ter o array "criativos" preenchido.\n'+
-    '- Todas as outras tasks devem ter "criativos": [].\n'+
-    '- Os formatos disponiveis sao EXCLUSIVAMENTE os listados abaixo — NUNCA invente outro nome:\n'+
-    '  "Google Display_template01_300x250px"\n'+
-    '  "Google Display_template01_728x90px"\n'+
-    '  "Google Display_template01_160x600px"\n'+
-    '  "Google Display_template01_970x250px"\n'+
-    '  "Meta ads_template01_1080x1080px"\n'+
-    '  "Meta ads_template01_1080x1920px"\n'+
-    '  "Meta ads_template01_1200x628px"\n'+
-    '  "Insta_template01_1080x1080px"\n'+
-    '  "Insta_template01_1080x1350px"\n'+
-    '  "Insta_template01_1080x1920px"\n'+
-    '\nPara cada criativo, use EXATAMENTE esta estrutura JSON:\n'+
-    '{\n'+
-    '  "campanha": "Nome da campanha (ex: Clareamento Dental - Novembro)",\n'+
-    '  "variacao": "V1",\n'+
-    '  "formato": "<um dos formatos acima — copia exato>",\n'+
-    '  "headline": "Texto principal impactante (max 8 palavras)",\n'+
-    '  "subheadline": "Texto de apoio (max 12 palavras)",\n'+
-    '  "cta_label": "Texto do botao (max 4 palavras)",\n'+
-    '  "bg_color": "<hex da cor de fundo da marca>",\n'+
-    '  "cta_color": "<hex da cor do botao>",\n'+
-    '  "product_image": "",\n'+
-    '  "badge_texto": "",\n'+
-    '  "status": "pendente"\n'+
-    '}\n'+
-    '\nGere entre 3 e 6 criativos cobrindo formatos variados (feed, stories, display).\n'+
-    'Adapte headline/subheadline ao tamanho do formato:\n'+
-    '- Pequenos (728x90, 300x250): textos muito curtos\n'+
-    '- Quadrados (1080x1080): textos medios\n'+
-    '- Verticais (1080x1920, 1080x1350): textos mais elaborados';
+    'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.'+
+    (idvNaoTem ? '\nIncluir task de criacao de identidade visual.' : '');
 
   try{
     const resp=await fetch(NC_WORKER_URL,{
@@ -4071,8 +3952,6 @@ async function ncGerarEstrategia(item){
         const m=tasksRaw.match(/\[[\s\S]*\]/);
         if(m){
           item.tasks_ia=JSON.parse(m[0]);
-          // Garante que todas as tasks tenham o campo criativos
-          item.tasks_ia=item.tasks_ia.map(t=>({...t,criativos:t.criativos||[]}));
           console.log('Tasks parseadas:',item.tasks_ia.length);
         }
       }catch(e){console.warn('Tasks parse erro:',e.message);}
@@ -4084,7 +3963,7 @@ async function ncGerarEstrategia(item){
         if(m){
           const parsed=JSON.parse(m[0]);
           if(Array.isArray(parsed)&&parsed[0]&&parsed[0].title){
-            item.tasks_ia=parsed.map(t=>({...t,criativos:t.criativos||[]}));
+            item.tasks_ia=parsed;
             // Remove o JSON da estratégia para não poluir
             item.estrategia=fullText.substring(0,fullText.lastIndexOf(m[0])).trim();
             console.log('Tasks extraídas do final:',item.tasks_ia.length);
@@ -4136,8 +4015,7 @@ window.ncAprovar=async function(id){
       ownerName:MY_NAME,
       code:generateTaskCode(c.id),
       createdAt:new Date().toISOString(),
-      comments:[],
-      criativos:tpl.criativos||[]
+      comments:[]
     };
     await saveTaskDB(t);S.tasks.push(t);
   }
