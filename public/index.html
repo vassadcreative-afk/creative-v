@@ -300,25 +300,6 @@ textarea{resize:vertical;min-height:72px}
 .bn-btn.active .bn-lbl{color:var(--purple)}
 .bn-btn.active .bn-icon{transform:scale(1.12);color:var(--purple)}
 
-.btn-form-link{
-  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
-  color:rgba(255,255,255,.75);font-family:'Space Grotesk',sans-serif;
-  font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;
-  cursor:pointer;display:flex;align-items:center;gap:6px;
-  transition:all .18s;white-space:nowrap;flex-shrink:0;
-}
-.btn-form-link:hover{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)}
-@media(max-width:639px){.btn-form-link{display:none}}
-
-/* MODAL LINK FORMULÁRIO */
-.form-link-modal{background:var(--white);width:100%;max-width:460px;border-radius:24px 24px 0 0;padding:24px 24px 32px;box-shadow:0 -8px 40px rgba(26,22,40,.2)}
-.form-link-url-box{display:flex;gap:8px;align-items:center;background:var(--lav-light);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:16px}
-.form-link-url-text{flex:1;font-size:13px;color:var(--dark);font-weight:500;word-break:break-all;line-height:1.5;font-family:'Space Grotesk',sans-serif;background:none;border:none;outline:none;cursor:text;resize:none;min-height:36px}
-.copy-btn{background:var(--grad);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
-.copy-btn:hover{box-shadow:0 3px 12px rgba(120,111,212,.4)}
-.copy-btn.copied{background:linear-gradient(135deg,#70C4A8,#5AB090)}
-.form-link-tip{background:rgba(120,111,212,.07);border:1px solid rgba(120,111,212,.15);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--purple-dark);line-height:1.6;display:flex;gap:9px}
-
 .fab{display:none;position:fixed;bottom:calc(var(--bottom-h) + 14px);right:18px;width:52px;height:52px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;color:#fff;box-shadow:0 4px 20px rgba(120,111,212,.4);z-index:199;align-items:center;justify-content:center;transition:transform .15s;line-height:1}
 .fab:hover{transform:scale(1.08)}
 
@@ -858,10 +839,6 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <button class="btn-form-link" onclick="openFormLinkModal()" title="Link do formulário de briefing">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-    Link formulário
-  </button>
   <button class="btn-new" onclick="openNewTask()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova tarefa
@@ -1305,6 +1282,10 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
         Escopo
       </button>
+      <button class="cp-tab" onclick="switchProfileTab('voice',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Tom de Voz
+      </button>
       <button class="cp-tab" onclick="switchProfileTab('portal',this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Portal
@@ -1363,6 +1344,51 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
         <div style="font-size:11px;color:var(--gray);margin-top:8px;display:flex;align-items:center;gap:5px" id="cp-scope-saved">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
           Salvo automaticamente
+        </div>
+      </div>
+
+      <!-- ABA: TOM DE VOZ -->
+      <div class="cp-tab-panel" id="cp-panel-voice">
+        <div class="cp-section-lbl">Documento de referência (opcional)</div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:6px">Cole aqui trechos de doc/Word com infos da marca. Isso é somado ao briefing original do cliente na hora de estruturar.</div>
+        <textarea class="cp-scope-box" id="cp-voice-raw" placeholder="Cole aqui o conteúdo relevante do documento da marca..." oninput="autoSaveVoiceRaw()" rows="6"></textarea>
+        <div style="font-size:11px;color:var(--gray);margin-top:6px;display:flex;align-items:center;gap:5px" id="cp-voice-raw-saved">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          Salvo automaticamente
+        </div>
+
+        <button class="btn btn-primary" id="cp-voice-gerar-btn" style="width:100%;justify-content:center;gap:8px;margin-top:16px" onclick="gerarTomDeVoz()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>
+          Estruturar com IA
+        </button>
+        <div id="cp-voice-status" style="font-size:12px;color:var(--gray);margin-top:8px"></div>
+
+        <div id="cp-voice-fields" style="display:none;margin-top:18px">
+          <div class="cp-section-lbl">Tom de voz estruturado</div>
+          <div class="cp-field-group">
+            <span class="cp-field-label">Tom</span>
+            <input class="cp-edit-field" id="cp-voice-tom" type="text" placeholder="Ex: direto, confiante, sem jargão">
+          </div>
+          <div class="cp-field-group">
+            <span class="cp-field-label">Palavras-chave (separadas por vírgula)</span>
+            <input class="cp-edit-field" id="cp-voice-palavras" type="text" placeholder="Ex: confiança, naturalidade, cuidado">
+          </div>
+          <div class="cp-field-group">
+            <span class="cp-field-label">Evitar (separadas por vírgula)</span>
+            <input class="cp-edit-field" id="cp-voice-evitar" type="text" placeholder="Ex: gírias, promessas exageradas">
+          </div>
+          <div class="cp-field-group">
+            <span class="cp-field-label">Diferenciais (separados por vírgula)</span>
+            <input class="cp-edit-field" id="cp-voice-diferenciais" type="text" placeholder="Ex: atendimento humanizado, 15 anos de mercado">
+          </div>
+          <div class="cp-field-group">
+            <span class="cp-field-label">Exemplos de copy aprovados (um por linha)</span>
+            <textarea class="cp-edit-field" id="cp-voice-exemplos" rows="3" placeholder="Headlines ou frases que já performaram bem..."></textarea>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;gap:8px;margin-top:8px" onclick="salvarTomDeVoz()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>
+            Salvar Tom de Voz
+          </button>
         </div>
       </div>
 
@@ -2890,6 +2916,12 @@ window.openClientProfile=function(id){
   document.getElementById('cp-scope-textarea').value=c.scope||'';
   document.getElementById('cp-scope-saved').style.opacity='0';
 
+  // Tom de Voz
+  document.getElementById('cp-voice-raw').value=c.brandVoiceRaw||'';
+  document.getElementById('cp-voice-raw-saved').style.opacity='0';
+  document.getElementById('cp-voice-status').textContent='';
+  renderTomDeVozFields(c);
+
   // Ativa aba info
   switchProfileTab('info', document.querySelector('.cp-tab'));
 
@@ -3103,6 +3135,126 @@ window.autoSaveScope=function(){
     const saved=document.getElementById('cp-scope-saved');
     if(saved){saved.style.opacity='1';}
   },800);
+};
+
+// ── TOM DE VOZ ─────────────────────────────────────────────────────
+let _voiceRawSaveTimer=null;
+
+// Auto-save do documento bruto colado (debounce, igual ao escopo)
+window.autoSaveVoiceRaw=function(){
+  clearTimeout(_voiceRawSaveTimer);
+  document.getElementById('cp-voice-raw-saved').style.opacity='0';
+  _voiceRawSaveTimer=setTimeout(()=>{
+    const c=S.clients.find(cl=>cl.id===_profileClientId);if(!c)return;
+    c.brandVoiceRaw=document.getElementById('cp-voice-raw').value;
+    saveClientDB(c);
+    const saved=document.getElementById('cp-voice-raw-saved');
+    if(saved){saved.style.opacity='1';}
+  },800);
+};
+
+// Renderiza os campos estruturados a partir de c.brandVoice (se já existir)
+function renderTomDeVozFields(c){
+  const wrap=document.getElementById('cp-voice-fields');
+  const v=c.brandVoice;
+  if(!v){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  document.getElementById('cp-voice-tom').value=v.tom||'';
+  document.getElementById('cp-voice-palavras').value=(v.palavras_chave||[]).join(', ');
+  document.getElementById('cp-voice-evitar').value=(v.evitar||[]).join(', ');
+  document.getElementById('cp-voice-diferenciais').value=(v.diferenciais||[]).join(', ');
+  document.getElementById('cp-voice-exemplos').value=(v.exemplos_aprovados||[]).join('\n');
+}
+
+// Chama a IA combinando o briefing original do cliente + o doc colado,
+// e preenche os campos estruturados para revisão (não salva sozinho).
+window.gerarTomDeVoz=async function(){
+  const c=S.clients.find(cl=>cl.id===_profileClientId);if(!c)return;
+  const btn=document.getElementById('cp-voice-gerar-btn');
+  const statusEl=document.getElementById('cp-voice-status');
+  const rawDoc=document.getElementById('cp-voice-raw').value.trim();
+  const bo=c.briefingOriginal||{};
+
+  const temBriefing=bo.negocio_frase||bo.publico_alvo||bo.palavras_marca||bo.tom||bo.refs_branding;
+  if(!temBriefing&&!rawDoc){
+    statusEl.textContent='Cole um documento ou preencha o briefing do cliente antes de estruturar.';
+    return;
+  }
+
+  btn.disabled=true;
+  statusEl.textContent='⚙️ Estruturando tom de voz...';
+
+  const prompt=
+    'Voce e um especialista em brand voice e comunicacao de marcas.\n'+
+    'Gere um "tom de voz" estruturado para esta marca, combinando as duas fontes abaixo.\n'+
+    'Se houver conflito entre as fontes, o DOCUMENTO ADICIONAL (mais recente) tem prioridade sobre o briefing original.\n'+
+    'NAO invente informacoes que nao aparecam em nenhuma das fontes.\n\n'+
+    '=== BRIEFING ORIGINAL DO CLIENTE ===\n'+
+    'Negocio em uma frase: '+(bo.negocio_frase||'nao informado')+'\n'+
+    'Publico-alvo: '+(bo.publico_alvo||'nao informado')+'\n'+
+    'Palavras da marca: '+(bo.palavras_marca||'nao informado')+'\n'+
+    'Tom desejado: '+(bo.tom||'nao informado')+'\n'+
+    'Referencias visuais/marca: '+(bo.refs_branding||'nao informado')+'\n'+
+    'Objetivo: '+(bo.objetivo||'nao informado')+'\n\n'+
+    '=== DOCUMENTO ADICIONAL (colado pelo freelancer) ===\n'+
+    (rawDoc||'(nenhum documento adicional)')+'\n\n'+
+    'Responda APENAS em JSON, sem texto antes ou depois, sem markdown e sem crases, exatamente neste formato:\n'+
+    '{"tom":"...","palavras_chave":["...","..."],"evitar":["...","..."],"diferenciais":["...","..."],"exemplos_aprovados":["...","..."]}';
+
+  try{
+    const resp=await fetch(NC_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:prompt}]})
+    });
+    if(!resp.ok){
+      statusEl.textContent='❌ Erro '+resp.status+' ao gerar. Tente novamente.';
+      btn.disabled=false;return;
+    }
+    const data=await resp.json();
+    let fullText='';
+    if(data._full_text){
+      fullText=data._full_text;
+    }else if(data.content&&Array.isArray(data.content)){
+      fullText=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+    }
+    fullText=fullText.replace(/```json|```/g,'').trim();
+
+    let parsed=null;
+    try{ parsed=JSON.parse(fullText); }
+    catch(e){
+      const m=fullText.match(/\{[\s\S]*\}/);
+      if(m){ try{ parsed=JSON.parse(m[0]); }catch(e2){} }
+    }
+    if(!parsed){
+      statusEl.textContent='❌ Não consegui interpretar a resposta. Tente novamente.';
+      btn.disabled=false;return;
+    }
+
+    c.brandVoice=parsed; // ainda em memória — só persiste quando ela clicar "Salvar"
+    renderTomDeVozFields(c);
+    statusEl.textContent='✅ Revise os campos abaixo e clique em "Salvar Tom de Voz".';
+  }catch(e){
+    console.error('gerarTomDeVoz erro:',e.message);
+    statusEl.textContent='❌ Erro de rede. Tente novamente.';
+  }
+  btn.disabled=false;
+};
+
+// Salva os campos estruturados (editados ou não) no cliente
+window.salvarTomDeVoz=function(){
+  const c=S.clients.find(cl=>cl.id===_profileClientId);if(!c)return;
+  const splitList=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
+  c.brandVoice={
+    tom:document.getElementById('cp-voice-tom').value.trim(),
+    palavras_chave:splitList(document.getElementById('cp-voice-palavras').value),
+    evitar:splitList(document.getElementById('cp-voice-evitar').value),
+    diferenciais:splitList(document.getElementById('cp-voice-diferenciais').value),
+    exemplos_aprovados:document.getElementById('cp-voice-exemplos').value.split('\n').map(x=>x.trim()).filter(Boolean),
+  };
+  setSyncStatus('loading');
+  saveClientDB(c);
+  document.getElementById('cp-voice-status').textContent='✅ Tom de voz salvo!';
 };
 
 // Upload de foto — converte para base64 e salva no cliente
@@ -3841,84 +3993,38 @@ async function ncGerarEstrategia(item){
   const ig=b.instagram?b.instagram.replace('@',''):'';
   const fw=NC_FRAMEWORK_MAP[b.tipo_projeto]||NC_FRAMEWORK_MAP['Outro'];
 
-  // ── Monta contexto rico — compatível com ambos os formulários ──
-  const negocioCtx  = b.negocio_desc || b.negocio_frase || b.descricao_geral || 'nao informado';
-  const publicoCtx  = b.cliente_ideal || b.publico_alvo || 'nao informado';
-  const servicoCtx  = b.servico || b.tipo_projeto || 'nao informado';
-  const budgetCtx   = b.budget || 'nao informado';
-  const anunciosCtx = b.ja_tem_anuncios || b.anuncios || 'nao informado';
-  const tomCtx      = b.sentimento_marca || b.tom || 'nao informado';
-  const urgenciaCtx = b.prazo || b.urgencia || 'nao informado';
-  const idvNaoTem   = !b.tem_idv || b.tem_idv.startsWith('N') || (!b.tem_idv && !b.tem_identidade);
-  const idvStatus   = b.tem_idv
-    ? b.tem_idv + (b.idv_itens ? ' | Tem: ' + b.idv_itens : '') + (b.satisf_idv ? ' | Satisfacao: ' + b.satisf_idv : '')
-    : (b.tem_identidade ? 'Ja tem identidade visual' : 'Ainda nao tem');
-
   const prompt=
     'Voce e um Estrategista Senior de Marketing Digital com 15+ anos de experiencia.\n'+
     'Crie um diagnostico e estrategia BASEADOS EXCLUSIVAMENTE nas informacoes do briefing abaixo.\n'+
     'NAO invente dados, NAO suponha segmento sem base no briefing.\n\n'+
-
     '=== BRIEFING DO CLIENTE ===\n'+
-    '-- SOBRE O NEGOCIO --\n'+
     'Nome/Empresa: '+nome+'\n'+
-    'O que faz: '+negocioCtx+'\n'+
-    (b.tempo_negocio    ? 'Tempo de existencia: '+b.tempo_negocio+'\n' : '')+
-    (b.modelo_venda     ? 'Modelo de venda: '+b.modelo_venda+'\n' : '')+
-    (b.ticket_medio     ? 'Ticket medio: '+b.ticket_medio+'\n' : '')+
-
-    '\n-- CLIENTE IDEAL --\n'+
-    'Perfil: '+publicoCtx+'\n'+
-    (b.faixa_etaria     ? 'Faixa etaria: '+b.faixa_etaria+'\n' : '')+
-    (b.genero_publico   ? 'Genero predominante: '+b.genero_publico+'\n' : '')+
-    (b.dor_cliente      ? 'Principal dor que resolve: '+b.dor_cliente+'\n' : '')+
-    (b.resultado_cliente? 'Resultado que entrega ao cliente: '+b.resultado_cliente+'\n' : '')+
-
-    '\n-- PRESENCA DIGITAL ATUAL --\n'+
     'Instagram: '+(ig?('@'+ig):'nao informado')+'\n'+
     'Site: '+(b.site||'nao informado')+'\n'+
-    (b.canais_ativos    ? 'Canais em uso hoje: '+b.canais_ativos+'\n' : '')+
-    'Anuncios pagos: '+anunciosCtx+'\n'+
-    (b.como_encontra    ? 'Como clientes te encontram: '+b.como_encontra+'\n' : '')+
-    (b.falta_presenca   ? 'O que sente que falta: '+b.falta_presenca+'\n' : '')+
-    (b.plataformas      ? 'Plataformas desejadas: '+b.plataformas+'\n' : '')+
-    (b.frequencia       ? 'Frequencia desejada: '+b.frequencia+'\n' : '')+
-
-    '\n-- O PROJETO --\n'+
-    'Servico contratado: '+servicoCtx+'\n'+
-    'Resultado esperado: '+(b.resultado_esperado||b.objetivo||'nao informado')+'\n'+
-    'Urgencia/prazo: '+urgenciaCtx+'\n'+
-    'Budget mensal: '+budgetCtx+'\n'+
-
-    '\n-- PERSONALIDADE DA MARCA --\n'+
-    'Tom e sentimento: '+tomCtx+'\n'+
-    (b.palavras_marca   ? 'Palavras da marca: '+b.palavras_marca+'\n' : '')+
-    (b.marcas_admira    ? 'Marcas que admira: '+b.marcas_admira+'\n' : '')+
-    (b.concorrentes     ? 'Concorrentes diretos: '+b.concorrentes+'\n' : '')+
-
-    '\n-- IDENTIDADE VISUAL --\n'+
-    'Status: '+idvStatus+'\n'+
-    (b.idv_link         ? 'Link da identidade: '+b.idv_link+'\n' : '')+
-    (b.idv_obs          ? 'Observacoes IDV: '+b.idv_obs+'\n' : '')+
-    (b.idv_refs||b.refs_branding ? 'Referencias visuais: '+(b.idv_refs||b.refs_branding)+'\n' : '')+
-    (b.idv_cores        ? 'Cores imaginadas: '+b.idv_cores+'\n' : '')+
-    (b.observacoes      ? '\nObservacoes gerais: '+b.observacoes+'\n' : '')+
+    'Tipo de projeto: '+b.tipo_projeto+'\n'+
+    'Plataformas: '+(b.plataformas||'nao informado')+'\n'+
+    'Objetivo: '+(b.objetivo||b.descricao_geral||'nao informado')+'\n'+
+    'Publico-alvo: '+(b.publico_alvo||'nao informado')+'\n'+
+    'Budget mensal: '+(b.budget||'nao informado')+'\n'+
+    'Anuncios atuais: '+(b.anuncios||'nao informado')+'\n'+
+    'Frequencia desejada: '+(b.frequencia||'nao informado')+'\n'+
+    'Tom de comunicacao: '+(b.tom||'nao informado')+'\n'+
+    'Negocio em uma frase: '+(b.negocio_frase||'nao informado')+'\n'+
+    'Palavras da marca: '+(b.palavras_marca||'nao informado')+'\n'+
+    'Urgencia: '+(b.urgencia||'nao informado')+'\n'+
+    'Observacoes: '+(b.observacoes||'nenhuma')+'\n'+
+    'Identidade visual: '+(b.tem_identidade?'Ja tem':'Ainda nao tem')+'\n'+
     '===========================\n\n'+
-
     'PASSO 1 - DIAGNOSTICO:\n'+
     'Com base APENAS no briefing acima, gere diagnostico com:\n'+
-    '- Situacao atual estimada por canal — nota 1-10 baseada no que foi informado\n'+
-    '- Pontos fortes do negocio\n'+
+    '- Situacao atual estimada por canal (Instagram, Google, Site) — nota 1-10 baseada no que foi informado\n'+
+    '- Pontos fortes do negocio (baseado no briefing)\n'+
     '- Pontos fracos e oportunidades\n'+
-    '- Posicionamento atual vs ideal\n'+
-    '- Analise do cliente ideal: dores, desejos, onde busca solucao\n\n'+
-
+    '- Posicionamento atual vs ideal\n\n'+
     'PASSO 2 - ESTRATEGIA:\n'+
     'Framework: '+fw+'\n'+
-    'Gere estrategia completa: posicionamento, mix de canais priorizados pelo perfil do cliente, '+
-    'calendario 30 dias semana a semana, copies (3 headlines + 2 CTAs especificos para o negocio e seu publico), '+
-    'KPIs relevantes para o modelo de venda, orcamento sugerido compativel com o budget informado.\n\n'+
-
+    'Gere estrategia completa: posicionamento, mix de canais, calendario 30 dias semana a semana, '+
+    'copies (3 headlines + 2 CTAs especificos para o negocio), KPIs, orcamento sugerido.\n\n'+
     'PASSO 3 - TASKS:\n'+
     'Gere tasks especificas e acionaveis para este cliente.\n'+
     'Ao final da resposta, adicione exatamente:\n\n'+
@@ -3933,7 +4039,7 @@ async function ncGerarEstrategia(item){
     '  }\n'+
     ']\n\n'+
     'Minimo 4 tasks, maximo 10. Seja especifico e acionavel.'+
-    (idvNaoTem ? '\nIncluir task de criacao de identidade visual.' : '');
+    (b.tem_identidade?'':'\nIncluir task de criacao de identidade visual.');
 
   try{
     const resp=await fetch(NC_WORKER_URL,{
@@ -4018,7 +4124,19 @@ window.ncAprovar=async function(id){
   const c={id:S.nextC++,name:b.empresa||b.nome,color:COLORS[Math.floor(Math.random()*6)],
     portalEnabled:false,portalPassword:'',wpp:b.whatsapp||'',email:b.email||'',
     contact:b.nome||'',scope:item.editando?item.estrategiaEdit:(item.estrategia||''),
-    driveInfo:'',driveDelivery:'',figma:'',photoURL:null,createdAt:new Date().toISOString()};
+    driveInfo:'',driveDelivery:'',figma:'',photoURL:null,createdAt:new Date().toISOString(),
+    // Preserva o briefing original do lead — usado depois para gerar o Tom de Voz
+    // e qualquer copy de IA sem precisar redigitar o que o cliente já informou.
+    briefingOriginal:{
+      negocio_frase:b.negocio_frase||'',
+      publico_alvo:b.publico_alvo||'',
+      palavras_marca:b.palavras_marca||'',
+      tom:b.tom||'',
+      refs_branding:b.refs_branding||'',
+      objetivo:b.objetivo||b.descricao_geral||'',
+    },
+    brandVoice:null, // preenchido depois via "Estruturar com IA" na aba Tom de Voz
+    brandVoiceRaw:''};
   await saveClientDB(c);S.clients.push(c);
   // Usar tasks da IA se disponíveis, senão usar padrão
   const tasksToCreate=item.tasks_ia&&item.tasks_ia.length>0
@@ -4174,50 +4292,5 @@ window.setView=function(v,btn){if(typeof _ncOSV==='function')_ncOSV(v,btn);if(v=
 
 </script>
 </div><!-- /app-root -->
-<!-- MODAL LINK FORMULÁRIO -->
-<div class="overlay" id="form-link-overlay" onclick="closeFormLinkModal(event)">
-  <div class="form-link-modal">
-    <span class="modal-handle"></span>
-    <div class="modal-title">🔗 Link do formulário de briefing</div>
-    <p style="font-size:13px;color:var(--gray);margin-bottom:16px;line-height:1.6">Copie e envie esse link pro cliente preencher o briefing completo. O lead cai direto no seu painel em <strong>Novos</strong>.</p>
-    <label style="font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--gray);display:block;margin-bottom:7px;text-transform:uppercase">URL do formulário</label>
-    <div class="form-link-url-box">
-      <textarea class="form-link-url-text" id="form-link-url" readonly rows="2"></textarea>
-      <button class="copy-btn" id="copy-btn" onclick="copyFormLink()">Copiar</button>
-    </div>
-    <div class="form-link-tip">
-      <span style="font-size:16px;flex-shrink:0">💡</span>
-      <span>Ao enviar o link pro cliente, ele vai ver <strong>apenas o formulário</strong> — sem acesso ao seu painel ou aos dados de outros clientes.</span>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── MODAL LINK FORMULÁRIO ─────────────────────────────────────
-const FORM_BASE_URL = window.location.origin + '/briefing_completo.html';
-
-function openFormLinkModal(){
-  document.getElementById('form-link-url').value = FORM_BASE_URL;
-  document.getElementById('copy-btn').textContent = 'Copiar';
-  document.getElementById('copy-btn').classList.remove('copied');
-  document.getElementById('form-link-overlay').classList.add('open');
-}
-function closeFormLinkModal(e){
-  if(!e||e.target===document.getElementById('form-link-overlay'))
-    document.getElementById('form-link-overlay').classList.remove('open');
-}
-function copyFormLink(){
-  const url = document.getElementById('form-link-url').value;
-  navigator.clipboard.writeText(url).then(()=>{
-    const btn = document.getElementById('copy-btn');
-    btn.textContent = '✓ Copiado!';
-    btn.classList.add('copied');
-    setTimeout(()=>{ btn.textContent='Copiar'; btn.classList.remove('copied'); }, 2500);
-  }).catch(()=>{
-    document.getElementById('form-link-url').select();
-    document.execCommand('copy');
-  });
-}
-</script>
 </body>
 </html>
