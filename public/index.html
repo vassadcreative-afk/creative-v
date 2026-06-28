@@ -1916,14 +1916,23 @@ async function saveTaskDB(t){
   try{
     await setDoc(doc(db,'users',currentUser.uid,'tasks',String(t.id)),t);
     setSyncStatus('ok');
+    refreshPortalSnapshotIfNeeded(t.clientId);
   }catch(e){setSyncStatus('error');console.error(e);}
 }
 async function deleteTaskDB(id){
   if(!currentUser)return;
+  const old=S.tasks.find(x=>x.id===id); // captura o clientId antes de apagar
   try{
     await deleteDoc(doc(db,'users',currentUser.uid,'tasks',String(id)));
     setSyncStatus('ok');
+    if(old) refreshPortalSnapshotIfNeeded(old.clientId);
   }catch(e){setSyncStatus('error');console.error(e);}
+}
+// Só atualiza o snapshot público se o cliente da task tiver portal ativo
+function refreshPortalSnapshotIfNeeded(clientId){
+  if(!clientId)return;
+  const c=S.clients.find(cl=>cl.id===clientId);
+  if(c&&c.portalEnabled) savePortalSnapshot(clientId);
 }
 async function saveClientDB(c){
   if(!currentUser)return;
@@ -1936,6 +1945,7 @@ async function deleteClientDB(id){
   if(!currentUser)return;
   try{
     await deleteDoc(doc(db,'users',currentUser.uid,'clients',String(id)));
+    await deleteDoc(doc(db,'portalSnapshots',currentUser.uid+'__'+id)).catch(()=>{});
     setSyncStatus('ok');
   }catch(e){setSyncStatus('error');console.error(e);}
 }
@@ -2296,7 +2306,7 @@ function toggleSidebar(){
 })();
 
 // ── PORTAL STATE (declarado aqui para evitar erro de inicialização) ──
-const PORTAL = { clientId:null, taskId:null, ownerId:null, pendingToken:null };
+const PORTAL = { clientId:null, taskId:null, ownerId:null, pendingToken:null, password:null };
 const MY_NAME = 'Victória';
 let portalOwnerFilter=null;
 window.setPortalOwnerFilter=function(name){
@@ -3488,28 +3498,34 @@ async function bootstrapPortal(token){
   PORTAL.ownerId=uid;
 
   try{
-    const {doc:doc2,getDoc:getDoc2,collection:col2,getDocs:getDocs2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const {doc:doc2,getDoc:getDoc2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
 
-    // Lê o cliente direto pelo path exato
-    const clientRef=doc2(db,'users',uid,'clients',String(clientId));
-    const clientDoc=await getDoc2(clientRef);
+    // Lê SÓ o snapshot público e já filtrado deste cliente — nunca a
+    // coleção inteira de tasks/clients (isso vazaria dados de outros clientes).
+    const snapRef=doc2(db,'portalSnapshots',uid+'__'+clientId);
+    const snapDoc=await getDoc2(snapRef);
 
-    if(!clientDoc.exists()||!clientDoc.data().portalEnabled){
+    if(!snapDoc.exists()){
       showPortalError('Portal não encontrado ou desativado.');return;
     }
 
-    const clientData=clientDoc.data();
-    S.clients=[clientData];
+    const snap=snapDoc.data();
+    const clientData=snap.client;
+    if(!clientData||!clientData.portalEnabled){
+      showPortalError('Portal não encontrado ou desativado.');return;
+    }
 
-    // Lê todas as tarefas do user (só as portalVisible passam pelo filtro)
-    const tasksSnap=await getDocs2(col2(db,'users',uid,'tasks'));
-    S.tasks=tasksSnap.docs.map(d=>d.data());
+    S.clients=[clientData];
+    S.tasks=snap.tasks||[]; // já vem filtrado: só este cliente + portalVisible
 
     document.getElementById('portal-client-name-title').textContent=clientData.name;
     document.getElementById('portal-login-screen').style.display='flex';
 
     const sess=sessionStorage.getItem('portal_client');
-    if(sess&&parseInt(sess)===clientId) showPortalMain(clientData);
+    if(sess&&parseInt(sess)===clientId){
+      PORTAL.password=sessionStorage.getItem('portal_pw')||'';
+      showPortalMain(clientData);
+    }
 
   }catch(e){
     console.error('Portal bootstrap error:',e);
@@ -3517,15 +3533,22 @@ async function bootstrapPortal(token){
   }
 }
 
-// Salva task diretamente na coleção do owner (via portal)
-async function saveTaskDBPortal(t){
-  if(!PORTAL.ownerId)return;
-  const idx=S.tasks.findIndex(x=>x.id===t.id);
-  if(idx>-1)S.tasks[idx]=t; else S.tasks.push(t);
+const CRV_WORKER_BASE='https://old-darkness-641a.v-assad-creative.workers.dev';
+
+// Único ponto de escrita do portal — chama o Worker, que valida token,
+// senha e propriedade da task no servidor antes de gravar qualquer coisa.
+// O navegador do cliente NUNCA escreve direto no Firestore.
+async function portalAction(action,taskId,extra){
   try{
-    const {doc:doc2,setDoc:setDoc2}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    await setDoc2(doc2(db,'users',PORTAL.ownerId,'tasks',String(t.id)),t);
-  }catch(e){console.error('saveTaskDBPortal:',e);}
+    const resp=await fetch(CRV_WORKER_BASE+'/portal_action',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token:PORTAL.pendingToken,password:PORTAL.password||'',action,taskId,...(extra||{})})
+    });
+    const data=await resp.json();
+    if(!resp.ok||data.erro){console.error('portalAction:',data.erro||resp.status);return null;}
+    return data.task;
+  }catch(e){console.error('portalAction erro:',e);return null;}
 }
 
 function togglePortalLinkDisplay(clientOverride){
@@ -3566,7 +3589,9 @@ function doPortalAuth(typedPw){
   }
   if(!c.portalPassword || typedPw===c.portalPassword){
     err.classList.remove('show');
+    PORTAL.password=typedPw||'';
     sessionStorage.setItem('portal_client',c.id);
+    sessionStorage.setItem('portal_pw',typedPw||'');
     showPortalMain(c);
   } else {
     err.textContent='Senha incorreta. Tente novamente.';
@@ -3578,6 +3603,8 @@ function doPortalAuth(typedPw){
 
 window.portalLogout=function(){
   sessionStorage.removeItem('portal_client');
+  sessionStorage.removeItem('portal_pw');
+  PORTAL.password=null;
   document.getElementById('portal-login-screen').style.display='flex';
   document.getElementById('portal-main').style.display='none';
   document.getElementById('portal-pw-input').value='';
@@ -3744,37 +3771,38 @@ function renderPortalComments(t){
     </div>`).join('');
 }
 
-window.submitPortalComment=function(){
+window.submitPortalComment=async function(){
   const input=document.getElementById('portal-comment-input');
   const text=input.value.trim();
   if(!text||_portalDetailId===null) return;
   const t=S.tasks.find(t=>t.id===_portalDetailId);if(!t)return;
-  if(!t.comments)t.comments=[];
-  const c=S.clients.find(cl=>cl.id===t.clientId);
-  const now=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  t.comments.push({text,author:c?c.name:'Cliente',ts:now});
   input.value='';
-  renderPortalComments(t);
-  saveTaskDBPortal(t);
+  const updated=await portalAction('add_comment',t.id,{commentText:text});
+  if(updated){
+    Object.assign(t,updated);
+    renderPortalComments(t);
+  } else {
+    alert('Não foi possível enviar o comentário. Tente novamente.');
+  }
   // Atualiza portal renderizado em background
   const cl=S.clients.find(cl=>cl.id===PORTAL.clientId);
   if(cl) renderPortal(cl);
 };
 
-window.portalToggleDone=function(){
+window.portalToggleDone=async function(){
   if(_portalDetailId===null)return;
   const t=S.tasks.find(t=>t.id===_portalDetailId);if(!t)return;
-  t.status=t.status==='done'?'todo':'done';
-  saveTaskDBPortal(t);
+  const updated=await portalAction('toggle_done',t.id);
+  if(updated) Object.assign(t,updated);
   openPortalDetail(_portalDetailId);
   const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
   if(c)renderPortal(c);
 };
 
-window.portalToggleDoneInline=function(id){
+window.portalToggleDoneInline=async function(id){
   const t=S.tasks.find(t=>t.id===id);if(!t)return;
-  t.status=t.status==='done'?'todo':'done';
-  saveTaskDBPortal(t);
+  const updated=await portalAction('toggle_done',t.id);
+  if(updated) Object.assign(t,updated);
   const c=S.clients.find(cl=>cl.id===PORTAL.clientId);
   if(c)renderPortal(c);
 };
