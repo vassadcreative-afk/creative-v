@@ -57,6 +57,8 @@ header{height:var(--header-h);background:var(--grad-dark);display:flex;align-ite
 .nav-btn.active{color:#fff;background:rgba(120,111,212,.42)}
 .btn-new{background:var(--grad);color:#fff;border:none;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;border-radius:10px;cursor:pointer;transition:all .18s;white-space:nowrap;display:flex;align-items:center;gap:6px}
 .btn-new:hover{box-shadow:0 4px 16px rgba(120,111,212,.4);transform:translateY(-1px)}
+.btn-campanha{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.18);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;cursor:pointer;transition:all .18s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.btn-campanha:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32)}
 #menu-btn{display:none;background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:8px;line-height:1}
 
 .app-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - var(--header-h))}
@@ -372,6 +374,7 @@ textarea{resize:vertical;min-height:72px}
   aside{display:none}
   .hdr-center{display:none}
   .btn-new{display:none}
+  .btn-campanha{display:none}
   #menu-btn{display:block}
   main{padding:14px 14px calc(var(--bottom-h) + 20px)}
   .hero{padding:16px 18px;gap:12px}
@@ -843,6 +846,10 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova tarefa
   </button>
+  <button class="btn-campanha" onclick="openAddCampaign()" title="Subir documento de campanha e gerar tarefas com IA">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r="1"/><circle cx="13" cy="10" r="1"/></svg>
+    Campanha
+  </button>
   <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
     <img id="user-avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none" src="" alt="">
     <span id="user-name" style="color:rgba(255,255,255,.6);font-size:12px;font-weight:600;display:none;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" class="hdr-center"></span>
@@ -1048,6 +1055,48 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
         Salvar tarefa
       </button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL: ADICIONAR CAMPANHA -->
+<div class="overlay" id="modal-campaign">
+  <div class="modal">
+    <span class="modal-handle"></span>
+
+    <div id="camp-step-upload">
+      <div class="modal-title">Adicionar campanha</div>
+      <div class="fg"><label>Cliente</label><select id="camp-client"></select></div>
+      <div class="fg">
+        <label>Documento da campanha (.docx ou .pdf)</label>
+        <input type="file" id="camp-file-input" accept=".docx,.pdf" onchange="onCampaignFileSelected(event)">
+        <div id="camp-file-name" style="font-size:12px;color:var(--gray);margin-top:6px"></div>
+      </div>
+      <div id="camp-status" style="font-size:12px;color:var(--gray);margin:8px 0;min-height:16px"></div>
+      <div class="modal-acts">
+        <button class="btn btn-ghost" onclick="closeModal('campaign')">Cancelar</button>
+        <button class="btn btn-primary" id="camp-gerar-btn" onclick="gerarCampanha()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 7h7l-5.5 4.5 2 7-6-4.5-6 4.5 2-7-5.5-4.5h7z"/></svg>
+          Gerar com IA
+        </button>
+      </div>
+    </div>
+
+    <div id="camp-step-review" style="display:none">
+      <div class="modal-title">Revisar campanha</div>
+      <div class="fg"><label>Resumo</label><textarea id="camp-review-resumo" style="min-height:140px"></textarea></div>
+      <div class="fg">
+        <label>Tarefas que serão criadas</label>
+        <div class="nc-tasks-preview" id="camp-review-tasks"></div>
+      </div>
+      <div class="modal-acts">
+        <button class="btn btn-ghost" onclick="regenerarCampanha()">← Voltar</button>
+        <button class="btn btn-primary" id="camp-aprovar-btn" onclick="aprovarCampanha()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>
+          Aprovar e criar tarefas
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1453,6 +1502,9 @@ aside.collapsed .aside-toggle-bottom svg{transform:rotate(180deg)}
   </div>
 </div>
 
+<!-- Libs de extração de texto p/ aba "Adicionar Campanha" (.docx e .pdf) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.7.0/mammoth.browser.min.js"></script>
 <script type="module">
 // ── FIREBASE ────────────────────────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -2658,6 +2710,9 @@ function closeModal(type){
       if(b){b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v2"/></svg> Excluir';b.classList.remove('btn-danger-confirm');b.classList.add('btn-danger');}
     });
   }
+  if(type==='campaign'){
+    _campaignFile=null;_campaignText='';_campaignDraft=null;
+  }
 }
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
 
@@ -2679,7 +2734,210 @@ function openNewTask(){
   openModal('task');
 }
 
-function saveTask(){
+// ── ADICIONAR CAMPANHA ────────────────────────────────────────────────
+// Fluxo: escolher cliente → subir .docx/.pdf → extrair texto no navegador
+// → IA gera resumo + tasks (mesma rota /ai já usada em todo o resto do
+// painel) → tela de revisão → aprovar cria a campanha + as tasks.
+if(typeof pdfjsLib!=='undefined'){
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+let _campaignFile=null, _campaignText='', _campaignDraft=null;
+
+window.openAddCampaign=function(){
+  document.getElementById('camp-client').innerHTML=S.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('camp-file-input').value='';
+  document.getElementById('camp-file-name').textContent='';
+  document.getElementById('camp-status').textContent='';
+  document.getElementById('camp-gerar-btn').disabled=false;
+  document.getElementById('camp-step-upload').style.display='block';
+  document.getElementById('camp-step-review').style.display='none';
+  _campaignFile=null;_campaignText='';_campaignDraft=null;
+  openModal('campaign');
+};
+
+window.onCampaignFileSelected=function(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!/\.(docx|pdf)$/i.test(file.name)){
+    alert('Envie um arquivo .docx ou .pdf.');
+    event.target.value='';return;
+  }
+  if(file.size>15*1024*1024){
+    alert('Arquivo muito grande. Use até 15MB.');
+    event.target.value='';return;
+  }
+  _campaignFile=file;
+  document.getElementById('camp-file-name').textContent='📎 '+file.name;
+};
+
+async function extractTextFromCampaignFile(file){
+  const name=file.name.toLowerCase();
+  if(name.endsWith('.docx')){
+    const buf=await file.arrayBuffer();
+    const result=await mammoth.extractRawText({arrayBuffer:buf});
+    return (result.value||'').trim();
+  }
+  if(name.endsWith('.pdf')){
+    const buf=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+    let text='';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i);
+      const content=await page.getTextContent();
+      text+=content.items.map(it=>it.str).join(' ')+'\n';
+    }
+    return text.trim();
+  }
+  throw new Error('Formato não suportado.');
+}
+
+window.gerarCampanha=async function(){
+  const clientId=parseInt(document.getElementById('camp-client').value)||null;
+  const statusEl=document.getElementById('camp-status');
+  const btn=document.getElementById('camp-gerar-btn');
+  if(!clientId){statusEl.textContent='Selecione um cliente.';return;}
+  if(!_campaignFile){statusEl.textContent='Selecione um arquivo .docx ou .pdf.';return;}
+
+  btn.disabled=true;
+  statusEl.textContent='📄 Lendo o documento...';
+
+  try{
+    _campaignText=await extractTextFromCampaignFile(_campaignFile);
+  }catch(e){
+    statusEl.textContent='❌ Não consegui ler o arquivo: '+e.message;
+    btn.disabled=false;return;
+  }
+  if(!_campaignText||_campaignText.length<30){
+    statusEl.textContent='❌ Não consegui extrair texto suficiente deste arquivo.';
+    btn.disabled=false;return;
+  }
+
+  const c=S.clients.find(cl=>cl.id===clientId);
+  const bo=(c&&c.briefingOriginal)||{};
+  const bv=c&&c.brandVoice;
+
+  statusEl.textContent='⚙️ Gerando resumo e tarefas com IA...';
+
+  const prompt=
+    'Voce e um estrategista de marketing analisando um documento de campanha enviado por um freelancer.\n'+
+    'NAO invente informacoes que nao estejam no documento abaixo.\n\n'+
+    '=== CONTEXTO DO CLIENTE ===\n'+
+    'Negocio: '+(bo.negocio_frase||'nao informado')+'\n'+
+    'Tom de voz: '+((bv&&bv.tom)||'nao informado')+'\n\n'+
+    '=== DOCUMENTO DA CAMPANHA ===\n'+
+    _campaignText.slice(0,12000)+'\n\n'+
+    'TAREFA 1 - Escreva um RESUMO curto (5-8 linhas) com: nome da campanha, periodo, '+
+    'objetivo, orcamento e principais canais, baseado APENAS no documento.\n\n'+
+    'TAREFA 2 - Gere uma lista de tarefas executaveis (minimo 4, maximo 12) cobrindo as '+
+    'acoes descritas no documento. Quando houver data ou fase associada, preencha o campo '+
+    '"date" (formato AAAA-MM-DD) com a data de inicio daquela fase.\n\n'+
+    'Ao final da resposta, adicione exatamente:\n\n'+
+    '---TASKS---\n'+
+    '[\n'+
+    '  {"title":"...","status":"todo","priority":"alta|normal|baixa","portalVisible":true,"date":"AAAA-MM-DD ou vazio","notes":"..."}\n'+
+    ']';
+
+  try{
+    const resp=await fetch(NC_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:prompt}]})
+    });
+    if(!resp.ok){
+      statusEl.textContent='❌ Erro '+resp.status+' ao gerar. Tente novamente.';
+      btn.disabled=false;return;
+    }
+    const data=await resp.json();
+    let fullText='';
+    if(data._full_text) fullText=data._full_text;
+    else if(data.content&&Array.isArray(data.content)) fullText=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+
+    if(!fullText.trim()){
+      statusEl.textContent='❌ Resposta vazia. Tente novamente.';
+      btn.disabled=false;return;
+    }
+
+    let resumo=fullText, tasks=[];
+    const marker='---TASKS---';
+    const mi=fullText.indexOf(marker);
+    if(mi>=0){
+      resumo=fullText.substring(0,mi).trim();
+      const tasksRaw=fullText.substring(mi+marker.length).trim();
+      const m=tasksRaw.match(/\[[\s\S]*\]/);
+      if(m){ try{ tasks=JSON.parse(m[0]); }catch(e){console.warn('Tasks parse erro:',e.message);} }
+    }
+
+    _campaignDraft={
+      clientId, resumo, tasks,
+      sourceFileName:_campaignFile.name,
+      title:(c?c.name:'')+' — Campanha',
+    };
+    renderCampaignReview();
+
+  }catch(e){
+    console.error('gerarCampanha erro:',e);
+    statusEl.textContent='❌ Erro de rede. Tente novamente.';
+  }
+  btn.disabled=false;
+};
+
+function renderCampaignReview(){
+  const d=_campaignDraft;if(!d)return;
+  document.getElementById('camp-step-upload').style.display='none';
+  document.getElementById('camp-step-review').style.display='block';
+  document.getElementById('camp-review-resumo').value=d.resumo;
+  const tv=document.getElementById('camp-review-tasks');
+  tv.innerHTML=(d.tasks||[]).map(t=>
+    '<div class="nc-task-row"><div class="nc-task-dot"></div><div class="nc-task-name">'+ncEsc(t.title||'Tarefa')+'</div>'+
+    (t.date?'<span class="nc-task-tag manual">'+ncEsc(t.date)+'</span>':'')+'</div>'
+  ).join('')||'<div style="font-size:12px;color:var(--gray)">Nenhuma tarefa gerada — edite o resumo e clique em "Voltar" para tentar de novo.</div>';
+}
+
+window.regenerarCampanha=function(){
+  document.getElementById('camp-step-upload').style.display='block';
+  document.getElementById('camp-step-review').style.display='none';
+  document.getElementById('camp-status').textContent='';
+};
+
+window.aprovarCampanha=async function(){
+  const d=_campaignDraft;if(!d||!currentUser)return;
+  const btn=document.getElementById('camp-aprovar-btn');
+  if(btn){btn.disabled=true;btn.textContent='Criando...';}
+
+  d.resumo=document.getElementById('camp-review-resumo').value;
+
+  const campId='camp_'+Date.now();
+  const campDoc={
+    id:campId, clientId:d.clientId, title:d.title,
+    resumo:d.resumo, sourceFileName:d.sourceFileName,
+    status:'aprovada', createdAt:new Date().toISOString(),
+  };
+  try{
+    await setDoc(doc(db,'users',currentUser.uid,'campaigns',campId),campDoc);
+  }catch(e){console.error('saveCampaignDB:',e);}
+
+  for(const tpl of (d.tasks||[])){
+    const t={
+      id:S.nextT++, clientId:d.clientId, campaignId:campId,
+      title:tpl.title||'Tarefa', status:tpl.status||'todo',
+      priority:tpl.priority||'normal',
+      portalVisible:tpl.portalVisible!==false,
+      date:tpl.date||'', notes:tpl.notes||'', link:'',
+      ownerName:MY_NAME, code:generateTaskCode(d.clientId),
+      createdAt:new Date().toISOString(), comments:[],
+    };
+    await saveTaskDB(t); S.tasks.push(t);
+  }
+
+  closeModal('campaign');
+  renderAll();
+  const lbl=document.getElementById('fb-lbl');
+  if(lbl){lbl.innerHTML='✅ Campanha <strong>'+ncEsc(d.title)+'</strong> criada com '+(d.tasks||[]).length+' tarefa(s)!';setTimeout(()=>{if(lbl)lbl.textContent='Dados salvos ✓';},4000);}
+  if(btn){btn.disabled=false;btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg> Aprovar e criar tarefas';}
+};
+
+
   const title=document.getElementById('t-title').value.trim();
   if(!title){document.getElementById('t-title').focus();return}
   const clientId=parseInt(document.getElementById('t-client').value)||null;
