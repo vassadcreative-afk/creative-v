@@ -2938,6 +2938,7 @@ window.aprovarCampanha=async function(){
 };
 
 
+function saveTask(){
   const title=document.getElementById('t-title').value.trim();
   if(!title){document.getElementById('t-title').focus();return}
   const clientId=parseInt(document.getElementById('t-client').value)||null;
